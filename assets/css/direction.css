@@ -1,0 +1,66 @@
+/* RTL Specific Styles */
+[dir="rtl"] body {
+  font-family: 'Cairo', 'Segoe UI', Tahoma, sans-serif;
+}
+
+[dir="rtl"] .rtl-flip {
+  transform: scaleX(-1);
+}
+
+[dir="ltr"] .rtl-flip {
+  transform: scaleX(1);
+}
+
+/* Ensure proper text alignment */
+[dir="rtl"] {
+  text-align: right;
+}
+
+[dir="ltr"] {
+  text-align: left;
+}
+
+/* Flexbox and grid adjustments */
+[dir="rtl"] .rtl-flex-row-reverse {
+  flex-direction: row-reverse;
+}
+
+/* Margin and padding swapping */
+[dir="rtl"] .rtl-ml-auto {
+  margin-left: 0;
+  margin-right: auto;
+}
+
+[dir="rtl"] .rtl-mr-auto {
+  margin-right: 0;
+  margin-left: auto;
+}
+
+/* Improved direction change transitions */
+html {
+  transition: background-color 0.3s;
+}
+
+/* Prevent FOUC during direction changes */
+[data-direction-change] * {
+  transition: none !important;
+}
+
+/* Smooth transition for layout elements */
+body > div > main,
+header,
+footer,
+.layout-container {
+  transition: opacity 0.3s ease-out;
+}
+
+/* Special handling for direction change transitions */
+[data-direction-change="ltr-to-rtl"] body > div > main,
+[data-direction-change="rtl-to-ltr"] body > div > main {
+  opacity: 0.85;
+}
+
+/* Prevent text shifting during transitions */
+[data-direction-change] {
+  overflow-x: hidden;
+}

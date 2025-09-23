@@ -1,0 +1,13 @@
+export default defineNuxtPlugin(async (nuxtApp) => {
+  // Only run on client side
+  if (process.client) {
+    const { checkAuth } = useAuth()
+    
+    // Check authentication status on app initialization
+    try {
+      await checkAuth()
+    } catch (error) {
+      console.warn('Initial auth check failed:', error)
+    }
+  }
+})

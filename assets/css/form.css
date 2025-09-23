@@ -1,0 +1,17 @@
+/* Form input normalization */
+input[type="email"],
+input[type="text"],
+input[type="tel"] {
+  -webkit-appearance: none;
+  -moz-appearance: none;
+  appearance: none;
+}
+
+/* Remove browser-specific styling */
+input:-webkit-autofill,
+input:-webkit-autofill:hover,
+input:-webkit-autofill:focus {
+  -webkit-box-shadow: 0 0 0px 1000px #F9FAFB inset;
+  -webkit-text-fill-color: #374151;
+  transition: background-color 5000s ease-in-out 0s;
+}

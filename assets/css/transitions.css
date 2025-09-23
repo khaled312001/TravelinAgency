@@ -1,0 +1,348 @@
+/* Base transitions */
+::view-transition-group(*) {
+  animation-duration: 800ms;
+  animation-timing-function: cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+/* Shared element transitions */
+::view-transition-old(package-image),
+::view-transition-new(package-image) {
+  mix-blend-mode: normal;
+  height: 100%;
+  width: 100%;
+  object-fit: cover;
+  animation-duration: 1000ms;
+  animation-timing-function: cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+::view-transition-old(package-title),
+::view-transition-new(package-title) {
+  height: auto;
+  animation-duration: 800ms;
+  animation-timing-function: cubic-bezier(0.4, 0, 0.2, 1);
+  animation-delay: 100ms;
+}
+
+::view-transition-old(package-description),
+::view-transition-new(package-description) {
+  height: auto;
+  animation-duration: 800ms;
+  animation-timing-function: cubic-bezier(0.4, 0, 0.2, 1);
+  animation-delay: 200ms;
+}
+
+::view-transition-old(package-price),
+::view-transition-new(package-price) {
+  height: auto;
+  animation-duration: 800ms;
+  animation-timing-function: cubic-bezier(0.4, 0, 0.2, 1);
+  animation-delay: 150ms;
+}
+
+::view-transition-old(package-destination),
+::view-transition-new(package-destination) {
+  height: auto;
+  animation-duration: 800ms;
+  animation-timing-function: cubic-bezier(0.4, 0, 0.2, 1);
+  animation-delay: 50ms;
+}
+
+/* Forward navigation animations */
+@keyframes scale-up {
+  from { 
+    opacity: 0;
+    transform: scale(0.8);
+  }
+  to {
+    opacity: 1;
+    transform: scale(1);
+  }
+}
+
+@keyframes scale-down {
+  from {
+    opacity: 1;
+    transform: scale(1);
+  }
+  to { 
+    opacity: 0;
+    transform: scale(1.2);
+  }
+}
+
+/* Backward navigation animations */
+@keyframes scale-down-reverse {
+  from {
+    opacity: 1;
+    transform: scale(1);
+  }
+  to { 
+    opacity: 0;
+    transform: scale(0.8);
+  }
+}
+
+@keyframes scale-up-reverse {
+  from { 
+    opacity: 0;
+    transform: scale(1.2);
+  }
+  to {
+    opacity: 1;
+    transform: scale(1);
+  }
+}
+
+/* Root transitions for forward navigation */
+html[data-direction="forward"] ::view-transition-old(root) {
+  animation: 800ms cubic-bezier(0.4, 0, 0.2, 1) both scale-down;
+}
+
+html[data-direction="forward"] ::view-transition-new(root) {
+  animation: 800ms cubic-bezier(0.4, 0, 0.2, 1) both scale-up;
+}
+
+/* Root transitions for backward navigation */
+html[data-direction="backward"] ::view-transition-old(root) {
+  animation: 800ms cubic-bezier(0.4, 0, 0.2, 1) both scale-down-reverse;
+}
+
+html[data-direction="backward"] ::view-transition-new(root) {
+  animation: 800ms cubic-bezier(0.4, 0, 0.2, 1) both scale-up-reverse;
+}
+
+/* Add smooth transition for content */
+.content-transition {
+  transition: all 800ms cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+/* Card hover effects */
+.package-card {
+  transition: transform 800ms cubic-bezier(0.4, 0, 0.2, 1),
+              box-shadow 800ms cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.package-card:hover {
+  transform: translateY(-4px);
+}
+
+/* Magical hover effect for cards */
+.card-hover {
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.card-hover:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 10px 20px rgba(0,0,0,0.1);
+}
+
+/* Sparkle animation */
+@keyframes sparkle {
+  0% { opacity: 0; }
+  50% { opacity: 1; }
+  100% { opacity: 0; }
+}
+
+.sparkle {
+  animation: sparkle 2s infinite;
+}
+
+/* Blur-up image transition */
+.blur-up {
+  filter: blur(20px);
+  transition: filter 0.3s ease-out;
+}
+
+.blur-up.loaded {
+  filter: blur(0);
+}
+
+/* Image loading transition */
+.image-fade-in {
+  opacity: 0;
+  transition: opacity 0.5s ease-in;
+}
+
+.image-fade-in.loaded {
+  opacity: 1;
+}
+
+/* Locale transition animations */
+.locale-transition-enter-active,
+.locale-transition-leave-active {
+  transition: opacity 0.3s ease;
+}
+
+.locale-transition-enter-from,
+.locale-transition-leave-to {
+  opacity: 0;
+}
+
+/* For smoother locale transitions */
+html {
+  transition: all 0.3s ease;
+}
+
+/* Ensure smooth content transitions during locale switch */
+html.locale-transitioning {
+  transition: opacity 0.3s ease;
+}
+
+/* Prevents FOUC (Flash of Unstyled Content) during locale changes */
+html.locale-transitioning * {
+  transition: opacity 0.3s ease !important;
+}
+
+/* Page transition animations */
+.page-enter-active,
+.page-leave-active {
+  transition: all 0.4s ease;
+}
+
+.page-enter-from,
+.page-leave-to {
+  opacity: 0;
+  transform: translateX(20px);
+}
+
+/* RTL-specific transitions */
+:root[dir="rtl"] .page-enter-from,
+:root[dir="rtl"] .page-leave-to {
+  transform: translateX(-20px);
+}
+
+/* Ensure the body doesn't shift during transitions */
+body {
+  overflow-x: hidden;
+}
+
+/* Direction-aware language transitions */
+html[data-locale-transition="ltr-to-rtl"] {
+  --slide-direction: 20px;
+}
+
+html[data-locale-transition="rtl-to-ltr"] {
+  --slide-direction: -20px;
+}
+
+/* Ensure view transitions are smooth for locale changes */
+html[data-locale-transition] ::view-transition-group(*) {
+  animation-duration: 0.5s;
+  animation-timing-function: cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+/* Apply view transition names to main layout elements */
+html.locale-transitioning body > div > main {
+  view-transition-name: locale-main;
+  contain: paint;
+}
+
+html.locale-transitioning header {
+  view-transition-name: locale-header;
+  contain: paint;
+}
+
+html.locale-transitioning footer {
+  view-transition-name: locale-footer;
+  contain: paint;
+}
+
+/* Custom animations for locale transitions */
+::view-transition-old(locale-main),
+::view-transition-new(locale-main) {
+  mix-blend-mode: normal;
+  isolation: isolate;
+  backface-visibility: hidden;
+  will-change: transform, opacity;
+}
+
+::view-transition-old(locale-header),
+::view-transition-new(locale-header),
+::view-transition-old(locale-footer),
+::view-transition-new(locale-footer) {
+  mix-blend-mode: normal;
+  will-change: opacity;
+}
+
+/* Direction-specific animations */
+html[data-locale-transition="ltr-to-rtl"] ::view-transition-old(locale-main) {
+  animation: 0.4s cubic-bezier(0.4, 0, 0.2, 1) both slide-left-out;
+}
+
+html[data-locale-transition="ltr-to-rtl"] ::view-transition-new(locale-main) {
+  animation: 0.4s cubic-bezier(0.4, 0, 0.2, 1) both slide-right-in;
+}
+
+html[data-locale-transition="rtl-to-ltr"] ::view-transition-old(locale-main) {
+  animation: 0.4s cubic-bezier(0.4, 0, 0.2, 1) both slide-right-out;
+}
+
+html[data-locale-transition="rtl-to-ltr"] ::view-transition-new(locale-main) {
+  animation: 0.4s cubic-bezier(0.4, 0, 0.2, 1) both slide-left-in;
+}
+
+/* Header and footer just fade */
+::view-transition-old(locale-header),
+::view-transition-old(locale-footer) {
+  animation: 0.3s ease both fade-out;
+}
+
+::view-transition-new(locale-header),
+::view-transition-new(locale-footer) {
+  animation: 0.3s ease 0.1s both fade-in;
+}
+
+/* Keyframes for smoother direction transitions */
+@keyframes slide-left-out {
+  from {
+    opacity: 1;
+    transform: translateX(0);
+  }
+  to {
+    opacity: 0;
+    transform: translateX(-30px);
+  }
+}
+
+@keyframes slide-right-in {
+  from {
+    opacity: 0;
+    transform: translateX(30px);
+  }
+  to {
+    opacity: 1;
+    transform: translateX(0);
+  }
+}
+
+@keyframes slide-right-out {
+  from {
+    opacity: 1;
+    transform: translateX(0);
+  }
+  to {
+    opacity: 0;
+    transform: translateX(30px);
+  }
+}
+
+@keyframes slide-left-in {
+  from {
+    opacity: 0;
+    transform: translateX(-30px);
+  }
+  to {
+    opacity: 1;
+    transform: translateX(0);
+  }
+}
+
+@keyframes fade-out {
+  from { opacity: 1; }
+  to { opacity: 0.2; }
+}
+
+@keyframes fade-in {
+  from { opacity: 0.2; }
+  to { opacity: 1; }
+}

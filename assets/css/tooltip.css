@@ -1,0 +1,11 @@
+/* Unify floating-vue tooltip arrow and box background color */
+.v-popper__arrow-inner,
+.v-popper__arrow-outer {
+  background: #181E25 !important; /* matches Tailwind bg-gray-900 */
+  border: none !important;
+}
+
+.v-popper--theme-tooltip .v-popper__inner {
+  background: #181E25 !important;
+  color: #fff !important;
+}

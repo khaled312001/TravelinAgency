@@ -1,0 +1,217 @@
+// https://nuxt.com/docs/api/configuration/nuxt-config
+const productionURL = 'https://wonderland1.com'
+export default defineNuxtConfig({
+  devtools: { enabled: false },
+
+  modules: [
+    '@nuxt/image',
+    '@nuxtjs/tailwindcss',
+    '@vueuse/nuxt',
+    'nuxt-schema-org',
+    'nuxt-simple-sitemap',
+    '@nuxtjs/i18n',
+    'nuxt-aos',
+    '@nuxt/icon'
+  ],
+
+  icon: {
+    collections: ['material-symbols']
+  },
+
+  
+  // AOS configuration
+  aos: {
+    offset: 15,
+    duration: 600,
+    easing: 'ease-out-quad',
+    once: true,
+    delay: 100,
+    mirror: true
+  },
+
+  runtimeConfig: {
+    // MySQL Database configuration
+    dbHost: process.env.DB_HOST || 'localhost',
+    dbPort: process.env.DB_PORT || 3306,
+    dbUser: process.env.DB_USER || 'wonderland_user',
+    dbPassword: process.env.DB_PASSWORD || 'wonderland_pass',
+    dbName: process.env.DB_NAME || 'wonderland_travel',
+    
+    // JWT configuration
+    jwtSecret: process.env.JWT_SECRET || 'your-super-secret-jwt-key-here',
+    
+    // Twilio configuration for WhatsApp notifications
+    twilioAccountSid: process.env.TWILIO_ACCOUNT_SID || '',
+    twilioAuthToken: process.env.TWILIO_AUTH_TOKEN || '',
+    twilioPhoneNumber: process.env.TWILIO_PHONE_NUMBER || '',
+    salesManagerPhone: process.env.SALES_MANAGER_PHONE || '',
+    
+    public: {
+      siteUrl: process.env.PUBLIC_SITE_URL || (process.env.NODE_ENV === 'production'
+        ? productionURL
+        : 'http://localhost:3000'),
+      
+      // Public site URL for links in notifications
+      publicSiteUrl: process.env.PUBLIC_SITE_URL || 'https://wonderland1.com'
+    }
+  },
+
+  image: {
+    provider: 'ipx',
+    dir: 'public',
+    domains: ['images.unsplash.com', 'images.pexels.com'],
+    format: ['webp'],
+    screens: {
+      xs: 320,
+      sm: 640,
+      md: 768,
+      lg: 1024,
+      xl: 1280,
+      xxl: 1536,
+    },
+    presets: {
+      destination: {
+        modifiers: {
+          format: 'webp',
+          width: 800,
+          height: 600,
+          quality: 90
+        }
+      }
+    }
+  },
+
+  i18n: {
+    vueI18n: './i18n.config.ts',
+    defaultLocale: 'ar-SA',
+    locales: [
+      {
+        code: 'en-US',
+        language: 'en-US',
+        name: 'English',
+        dir: 'ltr'
+      },
+      {
+        code: 'ar-SA',
+        language: 'ar-SA',
+        name: 'العربية',
+        dir: 'rtl'
+      }
+    ],
+    strategy: 'prefix_except_default',
+    detectBrowserLanguage: false,
+    trailingSlash: true,
+    differentDomains: false,
+    lazy: true
+  },
+  // Configure sitemap for multiple languages
+  sitemap: {
+    urls: async () => {
+      // Your sitemap URLs generation logic here
+      return []
+    },
+    sitemapI18n: {
+      locales: ['en-US', 'ar-SA'],
+      routesNameSeparator: '___'
+    }
+  },
+
+  // Schema.org configuration for multiple languages
+  schemaOrg: {
+    siteUrl: process.env.NODE_ENV === 'production'
+      ? productionURL
+      : 'http://localhost:3000'
+  },
+
+  css: [
+    '~/assets/css/transitions.css',
+    '~/assets/css/form.css',
+    '~/assets/css/direction.css',
+    '~/assets/css/tooltip.css'
+  ],
+
+  plugins: [
+    // AOS plugin removed as it's now handled by the nuxt-aos module
+    '~/plugins/i18n.client.ts',
+    '~/plugins/language-direction.ts',
+    '~/plugins/initial-direction.server.ts'
+  ],
+
+  nitro: {
+    preset: 'cloudflare_pages',
+    compressPublicAssets: {
+      gzip: true,
+      brotli: true
+    },
+    minify: true,
+    // Improve static asset handling
+    publicAssets: [
+      {
+        dir: 'public',
+        maxAge: 60 * 60 * 24 * 365, // Cache for 1 year
+        baseURL: '/'
+      }
+    ],
+    routeRules: {
+      '/images/**': { static: true },
+      '/icons/**': { static: true },
+      // Disable caching for API routes to prevent workbox conflicts
+      '/api/**': { 
+        headers: { 
+          'Cache-Control': 'no-cache, no-store, must-revalidate',
+          'Pragma': 'no-cache',
+          'Expires': '0'
+        }
+      }
+    }
+  },
+
+  experimental: {
+    viewTransition: true
+  },
+
+  app: {
+    head: {
+      title: 'Wonder Land',
+      htmlAttrs: {
+        lang: 'ar-SA',
+        dir: 'rtl'
+      },
+      meta: [
+        { charset: 'utf-8' },
+        { name: 'viewport', content: 'width=device-width, initial-scale=1' },
+        {
+          name: 'description',
+          content: 'Your trusted travel partner for unforgettable experiences'
+        }
+      ],
+      link: [
+        { rel: 'preconnect', href: 'https://fonts.googleapis.com' },
+        { rel: 'preconnect', href: 'https://fonts.gstatic.com', crossorigin: '' },
+        {
+          rel: 'stylesheet',
+          href: 'https://fonts.googleapis.com/css2?family=Cairo:wght@200;300;400;500;600;700;800;900&display=swap'
+        }
+      ]
+    },
+    pageTransition: {
+      name: 'page',
+      mode: 'out-in'
+    }
+  },
+
+  build: {
+    transpile: []
+  },
+
+  vite: {
+    build: {
+      cssMinify: true,
+      minify: true
+    },
+    css: {
+      devSourcemap: false
+    }
+  },
+  compatibilityDate: '2025-02-07'
+})
