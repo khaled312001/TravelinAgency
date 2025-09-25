@@ -113,6 +113,7 @@ const { startLocaleTransition } = useViewTransition()
 const navItems = [
   { to: '/', label: 'nav.home' },
   { to: '/packages', label: 'nav.packages' },
+  { to: '/custom-package', label: 'nav.custom_package' },
   { to: '/about', label: 'nav.about' },
   // { to: '/contact', label: 'nav.contact' }
 ]

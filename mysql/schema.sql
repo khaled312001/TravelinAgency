@@ -66,39 +66,28 @@ CREATE TABLE IF NOT EXISTS activity_logs (
 -- Create packages table
 CREATE TABLE IF NOT EXISTS packages (
     id VARCHAR(36) PRIMARY KEY DEFAULT (UUID()),
-    title VARCHAR(255) NOT NULL,
-    description TEXT,
+    title_ar VARCHAR(255) NOT NULL,
+    title_en VARCHAR(255) NOT NULL,
+    description_ar TEXT,
+    description_en TEXT,
     price DECIMAL(10,2) NOT NULL CHECK (price >= 0),
-    duration INTEGER, -- in days
-    category ENUM('domestic', 'international', 'religious', 'adventure', 'cultural') DEFAULT 'general',
-    status ENUM('active', 'inactive', 'draft') DEFAULT 'active',
-    image TEXT,
-    images JSON DEFAULT '[]', -- array of images
+    duration_days INTEGER DEFAULT 1, -- in days
+    travel_period VARCHAR(255),
+    max_persons INTEGER DEFAULT 10,
+    category ENUM('domestic', 'international', 'religious', 'adventure', 'cultural') DEFAULT 'domestic',
+    active BOOLEAN DEFAULT TRUE,
+    featured BOOLEAN DEFAULT FALSE,
+    image_url TEXT,
     features JSON DEFAULT '[]', -- array of features
     itinerary JSON DEFAULT '[]', -- trip itinerary
     included JSON DEFAULT '[]', -- what's included in price
     excluded JSON DEFAULT '[]', -- what's not included
-    location VARCHAR(255),
-    coordinates JSON, -- {lat, lng}
-    max_guests INTEGER DEFAULT 1,
-    min_guests INTEGER DEFAULT 1,
-    departure_dates JSON DEFAULT '[]', -- departure dates
-    booking_deadline INTEGER DEFAULT 7, -- booking deadline in days
-    cancellation_policy TEXT,
-    views INTEGER DEFAULT 0,
-    rating DECIMAL(2,1) DEFAULT 0 CHECK (rating >= 0 AND rating <= 5),
-    reviews_count INTEGER DEFAULT 0,
-    is_featured BOOLEAN DEFAULT FALSE,
-    seo_title VARCHAR(255),
-    seo_description TEXT,
-    seo_keywords TEXT,
-    created_by VARCHAR(36),
     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
     updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
-    INDEX idx_packages_status (status),
+    INDEX idx_packages_active (active),
     INDEX idx_packages_category (category),
     INDEX idx_packages_created_at (created_at),
-    INDEX idx_packages_is_featured (is_featured)
+    INDEX idx_packages_featured (featured)
 );
 
 -- Create destinations table
@@ -254,7 +243,7 @@ INSERT INTO admin_settings (settings) VALUES (
 
 -- Create admin user with default credentials
 -- Password: admin123 (hashed with bcrypt)
-INSERT IGNORE INTO users (name, email, password, email_verified_at) VALUES (
+INSERT IGNORE INTO users (full_name, email, password, email_verified_at) VALUES (
     'System Administrator',
     'admin@wonderland.com',
     '$2b$12$MBczo9oAOYkNyxvn4Th.BubTtKJ..xOBkpAK5HBpRJWbRmL53McAm', -- admin123 hashed
@@ -282,10 +271,10 @@ INSERT IGNORE INTO destinations (name, description, country, city, type, status,
 ('العلا', 'متحف طبيعي مفتوح يحتضن آثار الحضارات القديمة', 'السعودية', 'العلا', 'landmark', 'active', '/images/destinations/alula.jpg', TRUE);
 
 -- Sample packages
-INSERT IGNORE INTO packages (title, description, price, duration, category, status, location, is_featured) VALUES
-('رحلة العلا الاستكشافية', 'اكتشف عجائب العلا وآثارها التاريخية في رحلة لا تُنسى', 2500.00, 3, 'domestic', 'active', 'العلا، السعودية', TRUE),
-('جولة الرياض الحضارية', 'استكشف معالم الرياض الحديثة والتراثية', 1800.00, 2, 'domestic', 'active', 'الرياض، السعودية', TRUE),
-('رحلة جدة التاريخية', 'تجول في أحياء جدة التاريخية واستمتع بجمال البحر الأحمر', 2200.00, 3, 'domestic', 'active', 'جدة، السعودية', FALSE);
+INSERT IGNORE INTO packages (title_ar, title_en, description_ar, description_en, price, duration_days, travel_period, category, active, featured) VALUES
+('رحلة العلا الاستكشافية', 'AlUla Exploration Trip', 'اكتشف عجائب العلا وآثارها التاريخية في رحلة لا تُنسى', 'Discover the wonders of AlUla and its historical monuments in an unforgettable trip', 2500.00, 3, 'العلا، السعودية', 'domestic', TRUE, TRUE),
+('جولة الرياض الحضارية', 'Riyadh Cultural Tour', 'استكشف معالم الرياض الحديثة والتراثية', 'Explore the modern and heritage landmarks of Riyadh', 1800.00, 2, 'الرياض، السعودية', 'domestic', TRUE, TRUE),
+('رحلة جدة التاريخية', 'Historic Jeddah Trip', 'تجول في أحياء جدة التاريخية واستمتع بجمال البحر الأحمر', 'Stroll through the historic neighborhoods of Jeddah and enjoy the beauty of the Red Sea', 2200.00, 3, 'جدة، السعودية', 'domestic', TRUE, FALSE);
 
 -- =============================================
 -- CMS Tables for Content Management

@@ -4,79 +4,32 @@
     <div class="h-16"></div>
     
     <!-- رأس الصفحة -->
-    <div class="flex flex-col sm:flex-row sm:items-center sm:justify-between">
-      <div>
-        <h1 class="text-2xl font-bold text-gray-900">إدارة المستخدمين</h1>
-        <p class="mt-1 text-sm text-gray-600">إدارة وتحرير المستخدمين المسجلين</p>
-      </div>
-      <div class="mt-4 sm:mt-0 flex space-x-3 space-x-reverse">
+    <AdminPageHeader 
+      title="إدارة المستخدمين"
+      description="إدارة وتحرير المستخدمين المسجلين"
+    >
+      <template #actions>
         <button
           @click="exportUsers"
-          class="inline-flex items-center px-4 py-2 bg-green-600 text-white rounded-lg hover:bg-green-700 transition-colors"
+          class="inline-flex items-center px-3 sm:px-4 py-2 bg-green-600 text-white rounded-lg hover:bg-green-700 transition-colors text-sm"
         >
-          <Icon name="material-symbols:download" class="h-5 w-5 ml-2" />
-          تصدير البيانات
+          <Icon name="material-symbols:download" class="h-4 w-4 sm:h-5 sm:w-5 ml-2" />
+          <span class="hidden sm:inline">تصدير البيانات</span>
+          <span class="sm:hidden">تصدير</span>
         </button>
         <NuxtLink
           to="/admin/users/create"
-          class="inline-flex items-center px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors"
+          class="inline-flex items-center px-3 sm:px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors text-sm"
         >
-          <Icon name="material-symbols:add" class="h-5 w-5 ml-2" />
-          إضافة مستخدم جديد
+          <Icon name="material-symbols:add" class="h-4 w-4 sm:h-5 sm:w-5 ml-2" />
+          <span class="hidden sm:inline">إضافة مستخدم جديد</span>
+          <span class="sm:hidden">إضافة</span>
         </NuxtLink>
-      </div>
-    </div>
+      </template>
+    </AdminPageHeader>
 
     <!-- إحصائيات سريعة -->
-    <div class="grid grid-cols-1 md:grid-cols-4 gap-4">
-      <div class="bg-white rounded-lg shadow-sm border border-gray-200 p-6">
-        <div class="flex items-center">
-          <div class="p-2 bg-blue-100 rounded-lg">
-            <Icon name="material-symbols:people" class="h-6 w-6 text-blue-600" />
-          </div>
-          <div class="mr-3">
-            <p class="text-sm font-medium text-gray-600">إجمالي المستخدمين</p>
-            <p class="text-2xl font-bold text-gray-900">{{ totalUsers }}</p>
-          </div>
-        </div>
-      </div>
-      
-      <div class="bg-white rounded-lg shadow-sm border border-gray-200 p-6">
-        <div class="flex items-center">
-          <div class="p-2 bg-green-100 rounded-lg">
-            <Icon name="material-symbols:check-circle" class="h-6 w-6 text-green-600" />
-          </div>
-          <div class="mr-3">
-            <p class="text-sm font-medium text-gray-600">نشط</p>
-            <p class="text-2xl font-bold text-gray-900">{{ activeUsers }}</p>
-          </div>
-        </div>
-      </div>
-      
-      <div class="bg-white rounded-lg shadow-sm border border-gray-200 p-6">
-        <div class="flex items-center">
-          <div class="p-2 bg-orange-100 rounded-lg">
-            <Icon name="material-symbols:schedule" class="h-6 w-6 text-orange-600" />
-          </div>
-          <div class="mr-3">
-            <p class="text-sm font-medium text-gray-600">غير مفعل</p>
-            <p class="text-2xl font-bold text-gray-900">{{ inactiveUsers }}</p>
-          </div>
-        </div>
-      </div>
-      
-      <div class="bg-white rounded-lg shadow-sm border border-gray-200 p-6">
-        <div class="flex items-center">
-          <div class="p-2 bg-purple-100 rounded-lg">
-            <Icon name="material-symbols:today" class="h-6 w-6 text-purple-600" />
-          </div>
-          <div class="mr-3">
-            <p class="text-sm font-medium text-gray-600">اليوم</p>
-            <p class="text-2xl font-bold text-gray-900">{{ todayUsers }}</p>
-          </div>
-        </div>
-      </div>
-    </div>
+    <AdminStats :stats="userStats" />
 
     <!-- شريط البحث والتصفية -->
     <div class="bg-white rounded-lg shadow-sm border border-gray-200 p-6">
@@ -412,11 +365,7 @@ const totalItems = computed(() => {
 
 const totalPages = computed(() => Math.ceil(totalItems.value / itemsPerPage))
 
-// إحصائيات
-const totalUsers = computed(() => userStats.value.total)
-const activeUsers = computed(() => userStats.value.active)
-const inactiveUsers = computed(() => userStats.value.inactive)
-const todayUsers = computed(() => userStats.value.newToday)
+// userStats is imported from useUsers() composable
 
 // تحميل المستخدمين
 const loadUsers = async () => {

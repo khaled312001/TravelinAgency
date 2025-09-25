@@ -58,7 +58,7 @@ export function exportBookingsToExcel(bookings: any[]) {
     { key: 'customer_name', label: 'اسم العميل' },
     { key: 'customer_email', label: 'البريد الإلكتروني' },
     { key: 'customer_phone', label: 'رقم الهاتف' },
-    { key: 'package_title', label: 'اسم الحزمة' },
+    { key: 'package_title', label: 'اسم الباقة' },
     { key: 'travel_date', label: 'تاريخ السفر' },
     { key: 'return_date', label: 'تاريخ العودة' },
     { key: 'adults', label: 'عدد البالغين' },
@@ -75,7 +75,7 @@ export function exportBookingsToExcel(bookings: any[]) {
 }
 
 /**
- * تصدير الحزم إلى Excel
+ * تصدير الباقات إلى Excel
  */
 export function exportPackagesToExcel(packages: any[]) {
   const columns: ExportColumn[] = [

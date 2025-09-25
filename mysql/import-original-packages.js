@@ -148,9 +148,9 @@ async function importOriginalPackages() {
         INSERT INTO packages (
           id, title_ar, title_en, description_ar, description_en, 
           price, duration_days, travel_period, image_url, 
-          featured, active, max_persons, category, views
+          featured, active, max_persons, category
         ) VALUES (
-          UUID(), ?, ?, ?, ?, ?, ?, ?, ?, ?, 1, 10, 'international', 0
+          UUID(), ?, ?, ?, ?, ?, ?, ?, ?, ?, 1, 10, 'international'
         )
       `, [
         pkg.title_ar,

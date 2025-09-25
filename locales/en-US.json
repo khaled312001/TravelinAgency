@@ -2,6 +2,7 @@
   "nav": {
     "home": "Home",
     "packages": "Packages",
+    "custom_package": "Custom Package",
     "about": "About",
     "contact": "Contact"
   },
@@ -100,6 +101,7 @@
       "title": "Search Results",
       "count": "{count} packages found",
       "empty": "No packages found matching your criteria",
+      "empty_description": "Try adjusting your search criteria or clearing filters to find more packages.",
       "no_results": "No packages found"
     },
     "travelers": "Travelers",
@@ -185,7 +187,9 @@
       "tourism_consultation": "Expert Travel Advisory",
       "tourism_consultation_desc": "Personalized travel planning with our expert consultants who craft the perfect itinerary based on your preferences and dreams.",
       "support_24_7": "Round-the-Clock Assistance",
-      "support_24_7_desc": "Dedicated 24/7 support team ready to assist you anywhere, anytime. Your peace of mind is our top priority."
+      "support_24_7_desc": "Dedicated 24/7 support team ready to assist you anywhere, anytime. Your peace of mind is our top priority.",
+      "custom_package": "Design Your Perfect Package",
+      "custom_package_desc": "Do you want to customize this package or create your own special package? Our travel experts are here to help you plan your perfect vacation."
     },
     "newsletter": {
       "title": "Subscribe to Our Newsletter",
@@ -317,6 +321,11 @@
   "packages": {
     "title": "Travel Packages",
     "subtitle": "Discover our curated travel packages",
+    "no_packages": "No packages available at the moment",
+    "no_packages_description": "We're working on adding new packages soon. Please check back later.",
+    "not_found": "Package not found",
+    "not_found_description": "Sorry, the package you're looking for doesn't exist or has been removed.",
+    "view_all": "View All Packages",
     "filter": {
       "sort": "Sort by",
       "price_low_high": "Price: Low to High",
@@ -328,6 +337,11 @@
       "overview": "Overview",
       "package_info": "Package Information",
       "included_services": "Included Services",
+      "excluded_services": "Excluded Services",
+      "features": "Features",
+      "no_included_services": "No included services",
+      "no_excluded_services": "No excluded services",
+      "no_features": "No features available",
       "duration": "{count} Days",
       "price": "Price",
       "travel_period": "Travel Period",
@@ -425,10 +439,45 @@
     },
     "copyright": "© {year} Wonderland Travel Agency. All rights reserved."
   },
+  "contact": {
+    "title": "Contact Us",
+    "description": "We're here to help you plan your perfect trip",
+    "free": "for free",
+    "subDescription": "Our team of travel experts is ready to answer all your questions",
+    "form": {
+      "fullName": {
+        "label": "Full Name",
+        "placeholder": "Enter your full name"
+      },
+      "email": {
+        "label": "Email Address",
+        "placeholder": "Enter your email address",
+        "error": "Please enter a valid email address"
+      },
+      "phone": {
+        "label": "Phone Number",
+        "placeholder": "Enter your phone number",
+        "error": "Please enter a valid phone number"
+      },
+      "message": {
+        "label": "Message",
+        "placeholder": "Write your message here..."
+      },
+      "submit": "Send Message"
+    },
+    "success": {
+      "title": "Message Sent Successfully!",
+      "message": "Thank you! Your message has been sent and we will contact you soon."
+    },
+    "error": {
+      "title": "Error Occurred",
+      "message": "Sorry, there was an error sending your message. Please try again."
+    }
+  },
   "error": {
     "404": {
       "title": "Page Not Found",
-      "description": "Sorry, the page you are looking for does not exist. You may have mistyped the address or the page may have moved. Let’s get you back on track!",
+      "description": "Sorry, the page you are looking for does not exist. You may have mistyped the address or the page may have moved. Let's get you back on track!",
       "back_home": "Back to Home"
     }
   }

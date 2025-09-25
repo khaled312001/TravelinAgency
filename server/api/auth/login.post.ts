@@ -39,15 +39,16 @@ export default defineEventHandler(async (event) => {
       role: user.role
     }
     
-    const token = generateJWT(tokenPayload)
+    const token = generateJWT(tokenPayload, '7d') // Match cookie expiration
 
     // Set token in HTTP-only cookie
     setCookie(event, 'auth-token', token, {
       httpOnly: true,
       secure: process.env.NODE_ENV === 'production',
       sameSite: 'lax',
-      maxAge: 60 * 60 * 24, // 24 hours
+      maxAge: 60 * 60 * 24 * 7, // 7 days
       path: '/'
+      // Remove domain setting to work with localhost
     })
 
     // Log login activity (simplified)

@@ -63,25 +63,57 @@
     <!-- Included Services Section -->
     <div class="mb-12">
       <h2 class="text-2xl font-bold mb-6">{{ t('packages.details.included_services') }}</h2>
-      <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
-        <div v-if="package_?.included_options.flight" class="flex items-center gap-3 bg-gray-50 p-4 rounded-xl">
-          <FlightIcon :size="24" class="text-primary" />
-          <span class="font-medium">{{ t('packages.details.flight') }}</span>
+      <div v-if="package_?.included && package_.included.length > 0" class="grid grid-cols-1 md:grid-cols-2 gap-4">
+        <div 
+          v-for="(item, index) in package_.included" 
+          :key="index"
+          class="flex items-center gap-3 bg-gray-50 p-4 rounded-xl"
+        >
+          <Icon name="material-symbols:check-circle" class="h-6 w-6 text-green-500" />
+          <span class="font-medium">{{ item }}</span>
         </div>
-        <div v-if="package_?.included_options.hotel" class="flex flex-col gap-1 bg-gray-50 p-4 rounded-xl">
-          <div class="flex items-center gap-3">
-            <Icon name="material-symbols:hotel-outline" class="h-6 w-6 text-primary" />
-            <span class="font-medium">{{ t('packages.details.hotel') }}</span>
-          </div>
-          <div v-if="package_?.included_options.hotelGrade" class="flex items-center gap-1 mt-1">
-            <Icon v-for="n in package_.included_options.hotelGrade" :key="n" name="material-symbols:star" class="w-4 h-4 text-yellow-400" aria-label="star" />
-            <span class="text-xs text-gray-700">{{ t('packages.details.hotel_grade', {grade: package_.included_options.hotelGrade}) }}</span>
-          </div>
+      </div>
+      <div v-else class="text-gray-500 text-center py-8">
+        <Icon name="material-symbols:info-outline" class="h-12 w-12 mx-auto mb-4 text-gray-400" />
+        <p>{{ t('packages.details.no_included_services') }}</p>
+      </div>
+    </div>
+
+    <!-- Excluded Services Section -->
+    <div class="mb-12">
+      <h2 class="text-2xl font-bold mb-6">{{ t('packages.details.excluded_services') }}</h2>
+      <div v-if="package_?.excluded && package_.excluded.length > 0" class="grid grid-cols-1 md:grid-cols-2 gap-4">
+        <div 
+          v-for="(item, index) in package_.excluded" 
+          :key="index"
+          class="flex items-center gap-3 bg-gray-50 p-4 rounded-xl"
+        >
+          <Icon name="material-symbols:cancel" class="h-6 w-6 text-red-500" />
+          <span class="font-medium">{{ item }}</span>
         </div>
-        <div v-if="package_?.included_options.transportation" class="flex items-center gap-3 bg-gray-50 p-4 rounded-xl">
-          <Icon name="material-symbols:directions-car-outline" class="h-6 w-6 text-primary" />
-          <span class="font-medium">{{ t('packages.details.transportation') }}</span>
+      </div>
+      <div v-else class="text-gray-500 text-center py-8">
+        <Icon name="material-symbols:info-outline" class="h-12 w-12 mx-auto mb-4 text-gray-400" />
+        <p>{{ t('packages.details.no_excluded_services') }}</p>
+      </div>
+    </div>
+
+    <!-- Features Section -->
+    <div class="mb-12">
+      <h2 class="text-2xl font-bold mb-6">{{ t('packages.details.features') }}</h2>
+      <div v-if="package_?.features && package_.features.length > 0" class="grid grid-cols-1 md:grid-cols-2 gap-4">
+        <div 
+          v-for="(feature, index) in package_.features" 
+          :key="index"
+          class="flex items-center gap-3 bg-gray-50 p-4 rounded-xl"
+        >
+          <Icon name="material-symbols:star" class="h-6 w-6 text-yellow-500" />
+          <span class="font-medium">{{ feature }}</span>
         </div>
+      </div>
+      <div v-else class="text-gray-500 text-center py-8">
+        <Icon name="material-symbols:info-outline" class="h-12 w-12 mx-auto mb-4 text-gray-400" />
+        <p>{{ t('packages.details.no_features') }}</p>
       </div>
     </div>
 
@@ -93,7 +125,7 @@
           <p class="text-gray-600 mb-6">{{ t('packages.details.custom_package.description') }}</p>
           <div class="flex flex-col sm:flex-row gap-4">
             <button 
-              @click="showContactForm = true"
+              @click="$emit('contact')"
               class="rounded-full bg-primary-500 px-8 py-3 text-white hover:bg-primary-800 transition-colors flex items-center justify-center gap-2"
             >
               <Icon name="material-symbols:chat" class="h-5 w-5" />
@@ -114,25 +146,18 @@
     </div>
 
   </div>
-
-  <!-- Contact Form Modal -->
-  <PackageContactFormModal 
-    v-if="showContactForm"
-    :package_="package_"
-    @close="showContactForm = false"
-  />
 </template>
 
 <script setup lang="ts">
-import { ref } from 'vue'
 import { useI18n } from 'vue-i18n'
 import FlightIcon from '~/components/ui/icons/FlightIcon.vue'
 import SaudiRyialSymbol from '~/components/ui/icons/SaudiRyialSymbol.vue'
-import PackageContactFormModal from '~/components/ui/modals/PackageContactFormModal.vue'
 import { useWhatsApp } from '~/composables/useWhatsApp'
 
 const props = defineProps(['package_'])
-const showContactForm = ref(false)
 const { t, locale } = useI18n()
 const { getWhatsAppUrl } = useWhatsApp()
+
+// Define emits
+defineEmits(['contact'])
 </script>

@@ -30,11 +30,18 @@ export default defineEventHandler(async (event) => {
       return acc
     }, {})
 
+    // Convert flat settings to object for easy access
+    const flatObject = settings.reduce((acc: any, setting: any) => {
+      acc[setting.setting_key] = setting.setting_value
+      return acc
+    }, {})
+
     return {
       success: true,
       data: {
         settings: groupedSettings,
-        flat: settings
+        flat: settings,
+        flatObject: flatObject
       }
     }
 

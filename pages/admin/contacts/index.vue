@@ -4,79 +4,32 @@
     <div class="h-16"></div>
     
     <!-- رأس الصفحة -->
-    <div class="flex flex-col sm:flex-row sm:items-center sm:justify-between">
-      <div>
-        <h1 class="text-2xl font-bold text-gray-900">إدارة الرسائل</h1>
-        <p class="mt-1 text-sm text-gray-600">عرض وإدارة رسائل العملاء</p>
-      </div>
-      <div class="mt-4 sm:mt-0 flex space-x-3 space-x-reverse">
+    <AdminPageHeader 
+      title="إدارة الرسائل"
+      description="عرض وإدارة رسائل العملاء"
+    >
+      <template #actions>
         <button
           @click="markAllAsRead"
-          class="inline-flex items-center px-4 py-2 bg-green-600 text-white rounded-lg hover:bg-green-700 transition-colors"
+          class="inline-flex items-center px-3 sm:px-4 py-2 bg-green-600 text-white rounded-lg hover:bg-green-700 transition-colors text-sm"
         >
-          <Icon name="material-symbols:mark-email-read" class="h-5 w-5 ml-2" />
-          تعيين الكل كمقروء
+          <Icon name="material-symbols:mark-email-read" class="h-4 w-4 sm:h-5 sm:w-5 ml-2" />
+          <span class="hidden sm:inline">تعيين الكل كمقروء</span>
+          <span class="sm:hidden">مقروء</span>
         </button>
         <button
           @click="exportContacts"
-          class="inline-flex items-center px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors"
+          class="inline-flex items-center px-3 sm:px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors text-sm"
         >
-          <Icon name="material-symbols:download" class="h-5 w-5 ml-2" />
-          تصدير البيانات
+          <Icon name="material-symbols:download" class="h-4 w-4 sm:h-5 sm:w-5 ml-2" />
+          <span class="hidden sm:inline">تصدير البيانات</span>
+          <span class="sm:hidden">تصدير</span>
         </button>
-      </div>
-    </div>
+      </template>
+    </AdminPageHeader>
 
     <!-- إحصائيات سريعة -->
-    <div class="grid grid-cols-1 md:grid-cols-4 gap-4">
-      <div class="bg-white rounded-lg shadow-sm border border-gray-200 p-6">
-        <div class="flex items-center">
-          <div class="p-2 bg-blue-100 rounded-lg">
-            <Icon name="material-symbols:mail" class="h-6 w-6 text-blue-600" />
-          </div>
-          <div class="mr-3">
-            <p class="text-sm font-medium text-gray-600">إجمالي الرسائل</p>
-            <p class="text-2xl font-bold text-gray-900">{{ totalMessages }}</p>
-          </div>
-        </div>
-      </div>
-      
-      <div class="bg-white rounded-lg shadow-sm border border-gray-200 p-6">
-        <div class="flex items-center">
-          <div class="p-2 bg-green-100 rounded-lg">
-            <Icon name="material-symbols:mark-email-read" class="h-6 w-6 text-green-600" />
-          </div>
-          <div class="mr-3">
-            <p class="text-sm font-medium text-gray-600">مقروء</p>
-            <p class="text-2xl font-bold text-gray-900">{{ readMessages }}</p>
-          </div>
-        </div>
-      </div>
-      
-      <div class="bg-white rounded-lg shadow-sm border border-gray-200 p-6">
-        <div class="flex items-center">
-          <div class="p-2 bg-orange-100 rounded-lg">
-            <Icon name="material-symbols:mark-email-unread" class="h-6 w-6 text-orange-600" />
-          </div>
-          <div class="mr-3">
-            <p class="text-sm font-medium text-gray-600">غير مقروء</p>
-            <p class="text-2xl font-bold text-gray-900">{{ unreadMessages }}</p>
-          </div>
-        </div>
-      </div>
-      
-      <div class="bg-white rounded-lg shadow-sm border border-gray-200 p-6">
-        <div class="flex items-center">
-          <div class="p-2 bg-purple-100 rounded-lg">
-            <Icon name="material-symbols:today" class="h-6 w-6 text-purple-600" />
-          </div>
-          <div class="mr-3">
-            <p class="text-sm font-medium text-gray-600">اليوم</p>
-            <p class="text-2xl font-bold text-gray-900">{{ todayMessages }}</p>
-          </div>
-        </div>
-      </div>
-    </div>
+    <AdminStats :stats="messageStats" />
 
     <!-- شريط البحث والتصفية -->
     <div class="bg-white rounded-lg shadow-sm border border-gray-200 p-6">
@@ -165,6 +118,10 @@
                     </span>
                   </div>
                   <p class="text-sm text-gray-600 mt-1">{{ message.email }}</p>
+                  <p v-if="message.phone" class="text-sm text-gray-600 mt-1">
+                    <Icon name="material-symbols:phone" class="h-4 w-4 inline ml-1" />
+                    {{ message.phone }}
+                  </p>
                   <p class="text-sm text-gray-700 mt-2">{{ truncateText(message.message, 100) }}</p>
                 </div>
               </div>
@@ -356,6 +313,54 @@ const todayMessages = computed(() => {
   return messages.value.filter(msg => new Date(msg.created_at) >= today).length
 })
 
+const messagesWithPhone = computed(() => {
+  return messages.value.filter(msg => msg.phone && msg.phone.trim() !== '').length
+})
+
+// إحصائيات الرسائل
+const messageStats = computed(() => [
+  {
+    key: 'total',
+    label: 'إجمالي الرسائل',
+    value: totalMessages.value,
+    icon: 'material-symbols:mail',
+    iconBg: 'bg-blue-100',
+    iconColor: 'text-blue-600'
+  },
+  {
+    key: 'read',
+    label: 'مقروء',
+    value: readMessages.value,
+    icon: 'material-symbols:mark-email-read',
+    iconBg: 'bg-green-100',
+    iconColor: 'text-green-600'
+  },
+  {
+    key: 'unread',
+    label: 'غير مقروء',
+    value: unreadMessages.value,
+    icon: 'material-symbols:mark-email-unread',
+    iconBg: 'bg-orange-100',
+    iconColor: 'text-orange-600'
+  },
+  {
+    key: 'today',
+    label: 'اليوم',
+    value: todayMessages.value,
+    icon: 'material-symbols:today',
+    iconBg: 'bg-purple-100',
+    iconColor: 'text-purple-600'
+  },
+  {
+    key: 'phone',
+    label: 'مع رقم هاتف',
+    value: messagesWithPhone.value,
+    icon: 'material-symbols:phone',
+    iconBg: 'bg-teal-100',
+    iconColor: 'text-teal-600'
+  }
+])
+
 // تحميل الرسائل
 const loadMessages = async () => {
   try {
@@ -364,6 +369,11 @@ const loadMessages = async () => {
     
     if (result.messages) {
       messages.value = result.messages
+      
+      // Update message counter
+      const { updateCounts } = useMessageCounter()
+      const unreadCount = messages.value.filter(msg => !msg.is_read).length
+      updateCounts(messages.value.length, unreadCount)
     } else {
       messages.value = []
     }
@@ -408,13 +418,29 @@ const toggleReadStatus = async (message) => {
   try {
     const newStatus = !message.is_read
     
-    // TODO: Add API endpoint for updating message status
-    const index = messages.value.findIndex(m => m.id === message.id)
-    if (index !== -1) {
-      messages.value[index].is_read = newStatus
+    // Update in database
+    const result = await $fetch(`/api/contact-messages/${message.id}`, {
+      method: 'PUT',
+      body: {
+        is_read: newStatus,
+        status: newStatus ? 'read' : 'new'
+      }
+    })
+    
+    if (result.success) {
+      // Update local state
+      const index = messages.value.findIndex(m => m.id === message.id)
+      if (index !== -1) {
+        messages.value[index].status = newStatus ? 'read' : 'new'
+        messages.value[index].is_read = newStatus
+      }
+      
+      // Update message counter
+      const { fetchMessageCounts } = useMessageCounter()
+      await fetchMessageCounts()
+      
+      console.log(`تم ${newStatus ? 'تعيين' : 'إلغاء تعيين'} الرسالة كمقروءة`)
     }
-
-    console.log(`تم ${newStatus ? 'تعيين' : 'إلغاء تعيين'} الرسالة كمقروءة`)
   } catch (error) {
     console.error('خطأ في تغيير حالة الرسالة:', error)
   }
@@ -439,12 +465,24 @@ const deleteMessage = async (message) => {
 // تعيين الكل كمقروء
 const markAllAsRead = async () => {
   try {
-    // TODO: Add API endpoint for marking all as read
-    messages.value.forEach(msg => {
-      msg.is_read = true
+    // Update in database
+    const result = await $fetch('/api/contact-messages/mark-all-read', {
+      method: 'PUT'
     })
     
-    console.log('تم تعيين جميع الرسائل كمقروءة')
+    if (result.success) {
+      // Update local state
+      messages.value.forEach(msg => {
+        msg.status = 'read'
+        msg.is_read = true
+      })
+      
+      // Update message counter
+      const { fetchMessageCounts } = useMessageCounter()
+      await fetchMessageCounts()
+      
+      console.log(`تم تعيين ${result.affectedRows} رسالة كمقروءة`)
+    }
   } catch (error) {
     console.error('خطأ في تعيين الرسائل كمقروءة:', error)
   }
@@ -500,8 +538,22 @@ watch([searchQuery, typeFilter, statusFilter, dateFilter], () => {
 })
 
 // تحميل البيانات عند تحميل الصفحة
-onMounted(() => {
+onMounted(async () => {
   loadMessages()
+  
+  // إعداد الإشعارات في الوقت الفعلي
+  const { requestNotificationPermission, startRealTimeChecking } = useRealTimeNotifications()
+  
+  // طلب إذن الإشعارات
+  await requestNotificationPermission()
+  
+  // بدء فحص الرسائل الجديدة
+  const cleanup = startRealTimeChecking()
+  
+  // تنظيف عند إلغاء تحميل الصفحة
+  onUnmounted(() => {
+    if (cleanup) cleanup()
+  })
 })
 
 // SEO والميتا

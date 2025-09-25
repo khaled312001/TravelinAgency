@@ -4,141 +4,55 @@
     <div class="h-16"></div>
     
     <!-- رأس الصفحة -->
-    <div class="flex flex-col sm:flex-row sm:items-center sm:justify-between">
-      <div>
-        <h1 class="text-2xl font-bold text-gray-900">إدارة الحجوزات</h1>
-        <p class="mt-1 text-sm text-gray-600">عرض وإدارة حجوزات العملاء</p>
-      </div>
-      <div class="mt-4 sm:mt-0 flex space-x-3 space-x-reverse">
+    <AdminPageHeader 
+      title="إدارة الحجوزات"
+      description="عرض وإدارة حجوزات العملاء"
+    >
+      <template #actions>
         <button
           @click="exportBookings"
-          class="inline-flex items-center px-4 py-2 bg-green-600 text-white rounded-lg hover:bg-green-700 transition-colors"
+          class="inline-flex items-center px-3 sm:px-4 py-2 bg-green-600 text-white rounded-lg hover:bg-green-700 transition-colors text-sm"
         >
-          <Icon name="material-symbols:download" class="h-5 w-5 ml-2" />
-          تصدير البيانات
+          <Icon name="material-symbols:download" class="h-4 w-4 sm:h-5 sm:w-5 ml-2" />
+          <span class="hidden sm:inline">تصدير البيانات</span>
+          <span class="sm:hidden">تصدير</span>
         </button>
         <NuxtLink
           to="/admin/bookings/create"
-          class="inline-flex items-center px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors"
+          class="inline-flex items-center px-3 sm:px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors text-sm"
         >
-          <Icon name="material-symbols:add" class="h-5 w-5 ml-2" />
-          إضافة حجز جديد
+          <Icon name="material-symbols:add" class="h-4 w-4 sm:h-5 sm:w-5 ml-2" />
+          <span class="hidden sm:inline">إضافة حجز جديد</span>
+          <span class="sm:hidden">إضافة</span>
         </NuxtLink>
-      </div>
-    </div>
+      </template>
+    </AdminPageHeader>
 
     <!-- إحصائيات سريعة -->
-    <div class="grid grid-cols-1 md:grid-cols-5 gap-4">
-      <div class="bg-white rounded-lg shadow-sm border border-gray-200 p-6">
-        <div class="flex items-center">
-          <div class="p-2 bg-blue-100 rounded-lg">
-            <Icon name="material-symbols:book-online" class="h-6 w-6 text-blue-600" />
-          </div>
-          <div class="mr-3">
-            <p class="text-sm font-medium text-gray-600">إجمالي الحجوزات</p>
-            <p class="text-2xl font-bold text-gray-900">{{ totalBookings }}</p>
-          </div>
-        </div>
-      </div>
-      
-      <div class="bg-white rounded-lg shadow-sm border border-gray-200 p-6">
-        <div class="flex items-center">
-          <div class="p-2 bg-green-100 rounded-lg">
-            <Icon name="material-symbols:check-circle" class="h-6 w-6 text-green-600" />
-          </div>
-          <div class="mr-3">
-            <p class="text-sm font-medium text-gray-600">مؤكدة</p>
-            <p class="text-2xl font-bold text-gray-900">{{ confirmedBookings }}</p>
-          </div>
-        </div>
-      </div>
-      
-      <div class="bg-white rounded-lg shadow-sm border border-gray-200 p-6">
-        <div class="flex items-center">
-          <div class="p-2 bg-orange-100 rounded-lg">
-            <Icon name="material-symbols:schedule" class="h-6 w-6 text-orange-600" />
-          </div>
-          <div class="mr-3">
-            <p class="text-sm font-medium text-gray-600">في الانتظار</p>
-            <p class="text-2xl font-bold text-gray-900">{{ pendingBookings }}</p>
-          </div>
-        </div>
-      </div>
-      
-      <div class="bg-white rounded-lg shadow-sm border border-gray-200 p-6">
-        <div class="flex items-center">
-          <div class="p-2 bg-red-100 rounded-lg">
-            <Icon name="material-symbols:cancel" class="h-6 w-6 text-red-600" />
-          </div>
-          <div class="mr-3">
-            <p class="text-sm font-medium text-gray-600">ملغية</p>
-            <p class="text-2xl font-bold text-gray-900">{{ cancelledBookings }}</p>
-          </div>
-        </div>
-      </div>
-      
-      <div class="bg-white rounded-lg shadow-sm border border-gray-200 p-6">
-        <div class="flex items-center">
-          <div class="p-2 bg-purple-100 rounded-lg">
-            <Icon name="material-symbols:attach-money" class="h-6 w-6 text-purple-600" />
-          </div>
-          <div class="mr-3">
-            <p class="text-sm font-medium text-gray-600">إجمالي المبيعات</p>
-            <p class="text-2xl font-bold text-gray-900">{{ formatPrice(totalRevenue) }}</p>
-          </div>
-        </div>
-      </div>
-    </div>
+    <AdminStats :stats="bookingStats" />
 
     <!-- شريط البحث والتصفية -->
-    <div class="bg-white rounded-lg shadow-sm border border-gray-200 p-6">
-      <div class="grid grid-cols-1 md:grid-cols-4 gap-4">
-        <!-- البحث -->
-        <div class="relative">
-          <Icon name="material-symbols:search" class="absolute right-3 top-1/2 transform -translate-y-1/2 h-5 w-5 text-gray-400" />
-          <input
-            v-model="searchQuery"
-            type="text"
-            placeholder="البحث في الحجوزات..."
-            class="w-full pr-10 pl-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
-          />
-        </div>
-
-        <!-- تصفية حسب الحالة -->
-        <select
-          v-model="statusFilter"
-          class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
-        >
-          <option value="">جميع الحالات</option>
-          <option value="confirmed">مؤكدة</option>
-          <option value="pending">في الانتظار</option>
-          <option value="cancelled">ملغية</option>
-          <option value="completed">مكتملة</option>
-        </select>
-
-        <!-- تصفية حسب نوع الدفع -->
-        <select
-          v-model="paymentFilter"
-          class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
-        >
-          <option value="">جميع أنواع الدفع</option>
-          <option value="paid">مدفوع</option>
-          <option value="pending">في الانتظار</option>
-          <option value="failed">فشل</option>
-        </select>
-
-        <!-- تصفية حسب التاريخ -->
-        <select
-          v-model="dateFilter"
-          class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
-        >
-          <option value="">جميع التواريخ</option>
-          <option value="today">اليوم</option>
-          <option value="week">هذا الأسبوع</option>
-          <option value="month">هذا الشهر</option>
-        </select>
-      </div>
-    </div>
+    <AdminFilters>
+      <AdminSearchInput
+        v-model="searchQuery"
+        placeholder="البحث في الحجوزات..."
+      />
+      <AdminSelect
+        v-model="statusFilter"
+        :options="statusOptions"
+        placeholder="جميع الحالات"
+      />
+      <AdminSelect
+        v-model="paymentFilter"
+        :options="paymentOptions"
+        placeholder="جميع أنواع الدفع"
+      />
+      <AdminSelect
+        v-model="dateFilter"
+        :options="dateOptions"
+        placeholder="جميع التواريخ"
+      />
+    </AdminFilters>
 
     <!-- قائمة الحجوزات -->
     <div class="bg-white rounded-lg shadow-sm border border-gray-200">
@@ -160,7 +74,7 @@
                 العميل
               </th>
               <th class="px-6 py-3 text-right text-xs font-medium text-gray-500 uppercase tracking-wider">
-                الحزمة
+                الباقة
               </th>
               <th class="px-6 py-3 text-right text-xs font-medium text-gray-500 uppercase tracking-wider">
                 الحالة
@@ -200,7 +114,7 @@
                 <div class="text-sm text-gray-500">{{ booking.customer_phone }}</div>
               </td>
 
-              <!-- الحزمة -->
+              <!-- الباقة -->
               <td class="px-6 py-4 whitespace-nowrap">
                 <div class="text-sm font-medium text-gray-900">{{ booking.package_title }}</div>
                 <div class="text-sm text-gray-500">{{ booking.travel_date }}</div>
@@ -421,6 +335,70 @@ const confirmedBookings = computed(() => bookings.value.filter(booking => bookin
 const pendingBookings = computed(() => bookings.value.filter(booking => booking.status === 'pending').length)
 const cancelledBookings = computed(() => bookings.value.filter(booking => booking.status === 'cancelled').length)
 const totalRevenue = computed(() => bookings.value.reduce((sum, booking) => sum + (booking.total_amount || 0), 0))
+
+// إحصائيات الحجوزات
+const bookingStats = computed(() => [
+  {
+    key: 'total',
+    label: 'إجمالي الحجوزات',
+    value: totalBookings.value,
+    icon: 'material-symbols:book-online',
+    iconBg: 'bg-blue-100',
+    iconColor: 'text-blue-600'
+  },
+  {
+    key: 'confirmed',
+    label: 'مؤكدة',
+    value: confirmedBookings.value,
+    icon: 'material-symbols:check-circle',
+    iconBg: 'bg-green-100',
+    iconColor: 'text-green-600'
+  },
+  {
+    key: 'pending',
+    label: 'في الانتظار',
+    value: pendingBookings.value,
+    icon: 'material-symbols:schedule',
+    iconBg: 'bg-orange-100',
+    iconColor: 'text-orange-600'
+  },
+  {
+    key: 'cancelled',
+    label: 'ملغية',
+    value: cancelledBookings.value,
+    icon: 'material-symbols:cancel',
+    iconBg: 'bg-red-100',
+    iconColor: 'text-red-600'
+  },
+  {
+    key: 'revenue',
+    label: 'إجمالي المبيعات',
+    value: formatPrice(totalRevenue.value),
+    icon: 'material-symbols:attach-money',
+    iconBg: 'bg-purple-100',
+    iconColor: 'text-purple-600'
+  }
+])
+
+// خيارات التصفية
+const statusOptions = computed(() => [
+  { value: 'confirmed', label: 'مؤكدة' },
+  { value: 'pending', label: 'في الانتظار' },
+  { value: 'cancelled', label: 'ملغية' },
+  { value: 'completed', label: 'مكتملة' }
+])
+
+const paymentOptions = computed(() => [
+  { value: 'paid', label: 'مدفوع' },
+  { value: 'pending', label: 'في الانتظار' },
+  { value: 'failed', label: 'فشل' }
+])
+
+const dateOptions = computed(() => [
+  { value: 'today', label: 'اليوم' },
+  { value: 'week', label: 'هذا الأسبوع' },
+  { value: 'month', label: 'هذا الشهر' }
+])
 
 // تحميل الحجوزات
 const loadBookings = async () => {

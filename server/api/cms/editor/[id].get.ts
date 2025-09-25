@@ -57,19 +57,47 @@ export default defineEventHandler(async (event) => {
     `, [id])
 
     // Convert sections to components
-    const components = sections.map(section => ({
-      id: section.id,
-      type: section.section_type,
-      props: {
+    const components = sections.map(section => {
+      // Parse settings if it's a JSON string
+      let settings = {}
+      if (section.settings && typeof section.settings === 'string') {
+        try {
+          settings = JSON.parse(section.settings)
+        } catch (e) {
+          console.error('Error parsing settings:', e)
+        }
+      } else if (section.settings) {
+        settings = section.settings
+      }
+
+      // Create component props based on section type
+      const props = {
         title: section.title || '',
         subtitle: section.subtitle || '',
         content: section.content || '',
         backgroundImage: section.background_image || '',
         backgroundColor: section.background_color || '',
-        textColor: section.text_color || ''
-      },
-      classes: 'mb-6'
-    }))
+        textColor: section.text_color || '',
+        ...settings // Merge additional settings
+      }
+
+      // Add specific props based on component type
+      if (section.section_type === 'hero') {
+        props.buttonText = settings.buttonText || 'اكتشف الآن'
+        props.buttonLink = settings.buttonLink || '/packages'
+        props.videoBackground = settings.video_background || false
+        props.desktopVideo = settings.desktop_video || ''
+        props.mobileVideo = settings.mobile_video || ''
+        props.posterImage = settings.poster_image || ''
+      }
+
+      return {
+        id: section.id,
+        type: section.section_type,
+        props: props,
+        classes: 'mb-6'
+      }
+    })
 
     return {
       success: true,

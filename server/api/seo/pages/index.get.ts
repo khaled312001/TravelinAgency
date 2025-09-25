@@ -27,7 +27,7 @@ export default defineEventHandler(async (event) => {
         id: 3,
         name: 'الحزم السياحية',
         title: 'الحزم السياحية - Wonder Land',
-        description: 'استكشف أفضل الحزم السياحية والعروض',
+        description: 'استكشف أفضل الباقات السياحية والعروض',
         keywords: 'حزم، عروض، رحلات',
         ogImage: '',
         seoStatus: 'optimized',

@@ -32,7 +32,7 @@
           </button>
           
           <!-- الإشعارات -->
-          <AdminNotificationDropdown />
+          <NotificationDropdown />
 
           <!-- قائمة المستخدم -->
           <div class="relative" ref="userMenuRef">
@@ -160,11 +160,17 @@
 
           <NuxtLink
             to="/admin/contacts"
-            class="nav-link"
+            class="nav-link relative"
             :class="{ 'nav-link-active': $route.path.startsWith('/admin/contacts') }"
           >
             <Icon name="material-symbols:contact-mail-outline" class="nav-icon" />
             <span>رسائل التواصل</span>
+            <span 
+              v-if="unreadCount > 0" 
+              class="absolute left-2 top-2 bg-red-500 text-white text-xs rounded-full h-5 w-5 flex items-center justify-center font-bold animate-pulse"
+            >
+              {{ unreadCount > 99 ? '99+' : unreadCount }}
+            </span>
           </NuxtLink>
 
           <NuxtLink
@@ -225,14 +231,21 @@
 
     <!-- المحتوى الرئيسي -->
     <main class="flex-1 pt-16 md:pt-0 min-h-screen bg-gradient-to-br from-white via-pink-50 to-purple-50">
-      <div class="p-6">
+      <div class="p-3 sm:p-4 md:p-6">
         <slot />
       </div>
     </main>
   </div>
+  
+  <!-- حاوي الإشعارات -->
+  <NotificationContainer />
 </template>
 
 <script setup>
+// Import components
+import NotificationContainer from '~/components/ui/NotificationContainer.vue'
+import NotificationDropdown from '~/components/admin/NotificationDropdown.vue'
+
 // المتغيرات التفاعلية
 const sidebarOpen = ref(false)
 const userMenuOpen = ref(false)
@@ -240,6 +253,10 @@ const userMenuRef = ref(null)
 
 // Authentication
 const { user, logout } = useAuth()
+
+// Message counter and notifications
+const { unreadCount, fetchMessageCounts } = useMessageCounter()
+const { startNotificationSystem, stopNotificationSystem } = useNotificationSystem()
 
 // معلومات المستخدم
 const userEmail = computed(() => {
@@ -276,14 +293,27 @@ watch(() => useRoute().path, () => {
 // التحقق من تسجيل الدخول - تم إزالته لتجنب إعادة التوجيه المستمرة
 // يتم التعامل مع المصادقة في middleware بدلاً من ذلك
 
-// Disable service worker to prevent workbox conflicts
-onMounted(() => {
+// Initialize notification system and message counter
+onMounted(async () => {
   if (process.client) {
     // Load the service worker cleanup script
     const script = document.createElement('script')
     script.src = '/disable-sw.js'
     script.async = true
     document.head.appendChild(script)
+    
+    // Initialize message counter
+    await fetchMessageCounts()
+    
+    // Start notification system
+    await startNotificationSystem()
+  }
+})
+
+// Cleanup on unmount
+onUnmounted(() => {
+  if (process.client) {
+    stopNotificationSystem()
   }
 })
 </script>

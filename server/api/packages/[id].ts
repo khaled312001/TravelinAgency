@@ -1,4 +1,4 @@
-import { defineEventHandler, getRouterParam } from 'h3';
+import { defineEventHandler, getRouterParam, createError } from 'h3';
 import { executeQuery } from '~/utils/database';
 
 // GET /api/packages/[id] - Get single package
@@ -48,13 +48,31 @@ export default defineEventHandler(async (event) => {
 
     const packageData = packages[0];
 
+    // Helper function to get correct image path
+    const getImagePath = (imageUrl: string | null) => {
+      if (!imageUrl) return '/images/placeholder.svg';
+      
+      // If it's already a new path, return as is
+      if (imageUrl.includes('/imported/')) {
+        return imageUrl;
+      }
+      
+      // If it's an old path, try the new path first
+      if (imageUrl.includes('/images/packages/') && !imageUrl.includes('/imported/')) {
+        const filename = imageUrl.split('/').pop();
+        return `/images/packages/imported/${filename}`;
+      }
+      
+      return imageUrl;
+    };
+
     // Format to match expected structure
     return {
       success: true,
       package: {
         id: packageData.id,
-        image_url: packageData.image,
-        image: packageData.image,
+        image_url: getImagePath(packageData.image),
+        image: getImagePath(packageData.image),
         title_ar: packageData.title_ar,
         title_en: packageData.title_en,
         title: packageData.title_ar || packageData.title_en,

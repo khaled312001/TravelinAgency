@@ -10,72 +10,7 @@
     </div>
 
     <!-- إحصائيات سريعة -->
-    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-5 gap-6">
-      <!-- إجمالي الباقات -->
-      <div class="bg-white/80 backdrop-blur-sm rounded-xl p-6 shadow-sm border border-slate-200/60 hover:shadow-md transition-all duration-200">
-        <div class="flex items-center">
-          <div class="p-3 bg-slate-100 rounded-lg">
-            <Icon name="material-symbols:package-2" class="h-6 w-6 text-slate-600" />
-          </div>
-          <div class="mr-4">
-            <p class="text-sm font-medium text-slate-600">إجمالي الحزم</p>
-            <p class="text-2xl font-bold text-slate-800">{{ stats.totalPackages }}</p>
-          </div>
-        </div>
-      </div>
-
-      <!-- إجمالي الوجهات -->
-      <div class="bg-white/80 backdrop-blur-sm rounded-xl p-6 shadow-sm border border-slate-200/60 hover:shadow-md transition-all duration-200">
-        <div class="flex items-center">
-          <div class="p-3 bg-slate-100 rounded-lg">
-            <Icon name="material-symbols:location-on" class="h-6 w-6 text-slate-600" />
-          </div>
-          <div class="mr-4">
-            <p class="text-sm font-medium text-slate-600">إجمالي الوجهات</p>
-            <p class="text-2xl font-bold text-slate-800">{{ stats.totalDestinations }}</p>
-          </div>
-        </div>
-      </div>
-
-      <!-- الرسائل الجديدة -->
-      <div class="bg-white/80 backdrop-blur-sm rounded-xl p-6 shadow-sm border border-slate-200/60 hover:shadow-md transition-all duration-200">
-        <div class="flex items-center">
-          <div class="p-3 bg-slate-100 rounded-lg">
-            <Icon name="material-symbols:mail" class="h-6 w-6 text-slate-600" />
-          </div>
-          <div class="mr-4">
-            <p class="text-sm font-medium text-slate-600">رسائل جديدة</p>
-            <p class="text-2xl font-bold text-slate-800">{{ stats.newMessages }}</p>
-          </div>
-        </div>
-      </div>
-
-      <!-- المستخدمين المسجلين -->
-      <div class="bg-white/80 backdrop-blur-sm rounded-xl p-6 shadow-sm border border-slate-200/60 hover:shadow-md transition-all duration-200">
-        <div class="flex items-center">
-          <div class="p-3 bg-slate-100 rounded-lg">
-            <Icon name="material-symbols:group" class="h-6 w-6 text-slate-600" />
-          </div>
-          <div class="mr-4">
-            <p class="text-sm font-medium text-slate-600">المستخدمين</p>
-            <p class="text-2xl font-bold text-slate-800">{{ stats.totalUsers }}</p>
-          </div>
-        </div>
-      </div>
-
-      <!-- إجمالي الحجوزات -->
-      <div class="bg-white/80 backdrop-blur-sm rounded-xl p-6 shadow-sm border border-slate-200/60 hover:shadow-md transition-all duration-200">
-        <div class="flex items-center">
-          <div class="p-3 bg-slate-100 rounded-lg">
-            <Icon name="material-symbols:book-online" class="h-6 w-6 text-slate-600" />
-          </div>
-          <div class="mr-4">
-            <p class="text-sm font-medium text-slate-600">إجمالي الحجوزات</p>
-            <p class="text-2xl font-bold text-slate-800">{{ stats.totalBookings }}</p>
-          </div>
-        </div>
-      </div>
-    </div>
+    <AdminStats :stats="dashboardStats" />
 
     <!-- الرسوم البيانية والإحصائيات -->
     <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
@@ -186,47 +121,47 @@
     </div>
 
     <!-- الروابط السريعة -->
-    <div class="bg-white/80 backdrop-blur-sm rounded-xl shadow-sm border border-slate-200/60 p-6 hover:shadow-md transition-all duration-200">
+    <div class="bg-white/80 backdrop-blur-sm rounded-xl shadow-sm border border-slate-200/60 p-4 sm:p-6 hover:shadow-md transition-all duration-200">
       <h2 class="text-lg font-semibold text-slate-800 mb-4">الروابط السريعة</h2>
-      <div class="grid grid-cols-2 md:grid-cols-4 gap-4">
+      <div class="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-5 gap-3 sm:gap-4">
         <NuxtLink
           to="/admin/packages/create"
-          class="flex flex-col items-center p-4 bg-slate-50 rounded-lg hover:bg-slate-100 transition-all duration-200 group"
+          class="flex flex-col items-center p-3 sm:p-4 bg-slate-50 rounded-lg hover:bg-slate-100 transition-all duration-200 group"
         >
-          <Icon name="material-symbols:add-box" class="h-8 w-8 text-slate-600 mb-2 group-hover:scale-110 transition-transform" />
-          <span class="text-sm font-medium text-slate-700">إضافة حزمة</span>
+          <Icon name="material-symbols:add-box" class="h-6 w-6 sm:h-8 sm:w-8 text-slate-600 mb-2 group-hover:scale-110 transition-transform" />
+          <span class="text-xs sm:text-sm font-medium text-slate-700 text-center">إضافة باقة</span>
         </NuxtLink>
 
         <NuxtLink
           to="/admin/destinations/create"
-          class="flex flex-col items-center p-4 bg-slate-50 rounded-lg hover:bg-slate-100 transition-all duration-200 group"
+          class="flex flex-col items-center p-3 sm:p-4 bg-slate-50 rounded-lg hover:bg-slate-100 transition-all duration-200 group"
         >
-          <Icon name="material-symbols:add-location" class="h-8 w-8 text-slate-600 mb-2 group-hover:scale-110 transition-transform" />
-          <span class="text-sm font-medium text-slate-700">إضافة وجهة</span>
+          <Icon name="material-symbols:add-location" class="h-6 w-6 sm:h-8 sm:w-8 text-slate-600 mb-2 group-hover:scale-110 transition-transform" />
+          <span class="text-xs sm:text-sm font-medium text-slate-700 text-center">إضافة وجهة</span>
         </NuxtLink>
 
         <NuxtLink
           to="/admin/contacts"
-          class="flex flex-col items-center p-4 bg-slate-50 rounded-lg hover:bg-slate-100 transition-all duration-200 group"
+          class="flex flex-col items-center p-3 sm:p-4 bg-slate-50 rounded-lg hover:bg-slate-100 transition-all duration-200 group"
         >
-          <Icon name="material-symbols:mail-outline" class="h-8 w-8 text-slate-600 mb-2 group-hover:scale-110 transition-transform" />
-          <span class="text-sm font-medium text-slate-700">عرض الرسائل</span>
+          <Icon name="material-symbols:mail-outline" class="h-6 w-6 sm:h-8 sm:w-8 text-slate-600 mb-2 group-hover:scale-110 transition-transform" />
+          <span class="text-xs sm:text-sm font-medium text-slate-700 text-center">عرض الرسائل</span>
         </NuxtLink>
 
         <NuxtLink
           to="/admin/seo"
-          class="flex flex-col items-center p-4 bg-slate-50 rounded-lg hover:bg-slate-100 transition-all duration-200 group"
+          class="flex flex-col items-center p-3 sm:p-4 bg-slate-50 rounded-lg hover:bg-slate-100 transition-all duration-200 group"
         >
-          <Icon name="material-symbols:search" class="h-8 w-8 text-slate-600 mb-2 group-hover:scale-110 transition-transform" />
-          <span class="text-sm font-medium text-slate-700">إدارة SEO</span>
+          <Icon name="material-symbols:search" class="h-6 w-6 sm:h-8 sm:w-8 text-slate-600 mb-2 group-hover:scale-110 transition-transform" />
+          <span class="text-xs sm:text-sm font-medium text-slate-700 text-center">إدارة SEO</span>
         </NuxtLink>
 
         <NuxtLink
           to="/admin/settings"
-          class="flex flex-col items-center p-4 bg-slate-50 rounded-lg hover:bg-slate-100 transition-all duration-200 group"
+          class="flex flex-col items-center p-3 sm:p-4 bg-slate-50 rounded-lg hover:bg-slate-100 transition-all duration-200 group"
         >
-          <Icon name="material-symbols:settings" class="h-8 w-8 text-slate-600 mb-2 group-hover:scale-110 transition-transform" />
-          <span class="text-sm font-medium text-slate-700">الإعدادات</span>
+          <Icon name="material-symbols:settings" class="h-6 w-6 sm:h-8 sm:w-8 text-slate-600 mb-2 group-hover:scale-110 transition-transform" />
+          <span class="text-xs sm:text-sm font-medium text-slate-700 text-center">الإعدادات</span>
         </NuxtLink>
       </div>
     </div>
@@ -255,6 +190,50 @@ const recentActivities = ref([])
 const popularPackages = ref([])
 const loadingActivities = ref(true)
 const loadingPackages = ref(true)
+
+// إحصائيات لوحة التحكم
+const dashboardStats = computed(() => [
+  {
+    key: 'packages',
+    label: 'إجمالي الباقات',
+    value: stats.value.totalPackages,
+    icon: 'material-symbols:package-2',
+    iconBg: 'bg-slate-100',
+    iconColor: 'text-slate-600'
+  },
+  {
+    key: 'destinations',
+    label: 'إجمالي الوجهات',
+    value: stats.value.totalDestinations,
+    icon: 'material-symbols:location-on',
+    iconBg: 'bg-slate-100',
+    iconColor: 'text-slate-600'
+  },
+  {
+    key: 'messages',
+    label: 'رسائل جديدة',
+    value: stats.value.newMessages,
+    icon: 'material-symbols:mail',
+    iconBg: 'bg-slate-100',
+    iconColor: 'text-slate-600'
+  },
+  {
+    key: 'users',
+    label: 'المستخدمين',
+    value: stats.value.totalUsers,
+    icon: 'material-symbols:group',
+    iconBg: 'bg-slate-100',
+    iconColor: 'text-slate-600'
+  },
+  {
+    key: 'bookings',
+    label: 'إجمالي الحجوزات',
+    value: stats.value.totalBookings,
+    icon: 'material-symbols:book-online',
+    iconBg: 'bg-slate-100',
+    iconColor: 'text-slate-600'
+  }
+])
 
 // بيانات الرسوم البيانية
 const monthlySalesData = ref({
@@ -420,7 +399,7 @@ onMounted(async () => {
   // التأكد من أن المستخدم مصادق عليه قبل تحميل البيانات
   const { checkAuth } = useAuth()
   try {
-    await checkAuth()
+    await checkAuth(true)
     await loadStats()
   } catch (error) {
     console.error('خطأ في تحميل بيانات الداشبورد:', error)

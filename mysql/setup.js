@@ -85,7 +85,7 @@ async function createAdminUser(connection) {
     
     // Create user
     const [userResult] = await connection.query(
-        'INSERT INTO wonderland_travel.users (email, password_hash, full_name, phone, email_verified, status) VALUES (?, ?, ?, ?, TRUE, "active")',
+        'INSERT INTO wonderland_travel.users (email, password, full_name, phone, email_verified, status) VALUES (?, ?, ?, ?, TRUE, "active")',
         [adminEmail, passwordHash, adminName, adminPhone]
     );
     

@@ -6,17 +6,10 @@
     <!-- رأس الصفحة -->
     <div class="flex flex-col sm:flex-row sm:items-center sm:justify-between">
       <div>
-        <h1 class="text-2xl font-bold text-gray-900">تحرير الحزمة السياحية</h1>
-        <p class="mt-1 text-sm text-gray-600">تعديل تفاصيل الحزمة السياحية</p>
+        <h1 class="text-2xl font-bold text-gray-900">تحرير الباقة السياحية</h1>
+        <p class="mt-1 text-sm text-gray-600">تعديل تفاصيل الباقة السياحية</p>
       </div>
-      <div class="mt-4 sm:mt-0 flex space-x-3 space-x-reverse">
-        <NuxtLink
-          :to="`/admin/packages/${packageId}`"
-          class="inline-flex items-center px-4 py-2 bg-gray-600 text-white rounded-lg hover:bg-gray-700 transition-colors"
-        >
-          <Icon name="material-symbols:visibility" class="h-5 w-5 ml-2" />
-          عرض
-        </NuxtLink>
+      <div class="mt-4 sm:mt-0">
         <NuxtLink
           to="/admin/packages"
           class="inline-flex items-center px-4 py-2 bg-gray-600 text-white rounded-lg hover:bg-gray-700 transition-colors"
@@ -27,10 +20,31 @@
       </div>
     </div>
 
+    <!-- رسائل النجاح والخطأ -->
+    <div v-if="message" :class="[
+      'p-4 rounded-lg mb-6',
+      messageType === 'success' ? 'bg-green-50 text-green-800 border border-green-200' : 'bg-red-50 text-red-800 border border-red-200'
+    ]">
+      {{ message }}
+    </div>
+
     <!-- حالة التحميل -->
     <div v-if="loading" class="flex justify-center items-center py-12">
       <Icon name="material-symbols:progress-activity" class="animate-spin h-8 w-8 text-blue-600" />
-      <span class="mr-3 text-gray-600">جارٍ تحميل الحزمة...</span>
+      <span class="mr-3 text-gray-600">جارٍ تحميل الباقة...</span>
+    </div>
+
+    <!-- حالة الخطأ -->
+    <div v-else-if="error" class="bg-red-50 border border-red-200 rounded-lg p-6 text-center">
+      <Icon name="material-symbols:error" class="h-12 w-12 text-red-500 mx-auto mb-4" />
+      <h3 class="text-lg font-medium text-red-800 mb-2">خطأ في تحميل الباقة</h3>
+      <p class="text-red-600 mb-4">{{ error }}</p>
+      <button 
+        @click="loadPackage" 
+        class="px-4 py-2 bg-red-600 text-white rounded-lg hover:bg-red-700 transition-colors"
+      >
+        إعادة المحاولة
+      </button>
     </div>
 
     <!-- نموذج التحرير -->
@@ -45,6 +59,7 @@
                 <label class="block text-sm font-medium text-gray-700 mb-2">العنوان (عربي)</label>
                 <input
                   v-model="form.title_ar"
+                  @input="clearMessage"
                   type="text"
                   required
                   class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
@@ -55,6 +70,7 @@
                 <label class="block text-sm font-medium text-gray-700 mb-2">العنوان (إنجليزي)</label>
                 <input
                   v-model="form.title_en"
+                  @input="clearMessage"
                   type="text"
                   required
                   class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
@@ -87,18 +103,19 @@
               </div>
             </div>
 
-            <!-- صورة الحزمة -->
+            <!-- صورة الباقة -->
             <div>
-              <label class="block text-sm font-medium text-gray-700 mb-2">صورة الحزمة</label>
-              <input
+              <label class="block text-sm font-medium text-gray-700 mb-2">صورة الباقة</label>
+              <ImageUpload
                 v-model="form.image_url"
-                type="url"
-                class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
-                placeholder="رابط الصورة"
+                alt="صورة الباقة"
+                upload-type="package"
+                @upload-complete="handleImageUploadComplete"
+                @upload-error="handleImageUploadError"
               />
-              <div v-if="form.image_url" class="mt-2">
-                <img :src="form.image_url" alt="Preview" class="h-32 w-32 object-cover rounded-lg" />
-              </div>
+              <p class="mt-2 text-xs text-gray-500">
+                يمكنك رفع صورة JPG, PNG, JPEG بحجم أقصى 5MB
+              </p>
             </div>
 
             <!-- المميزات -->
@@ -315,13 +332,7 @@
         </div>
 
         <!-- أزرار الإجراءات -->
-        <div class="flex justify-end space-x-3 space-x-reverse pt-6 border-t border-gray-200">
-          <NuxtLink
-            :to="`/admin/packages/${packageId}`"
-            class="px-6 py-2 border border-gray-300 text-gray-700 rounded-lg hover:bg-gray-50 transition-colors"
-          >
-            إلغاء
-          </NuxtLink>
+        <div class="flex justify-end pt-6 border-t border-gray-200">
           <button
             type="submit"
             :disabled="saving"
@@ -337,19 +348,25 @@
 </template>
 
 <script setup>
+// Import components
+import ImageUpload from '~/components/ui/ImageUpload.vue'
+
 // إعداد الصفحة
 definePageMeta({
   layout: 'admin',
   middleware: 'admin'
 })
 
-// الحصول على معرف الحزمة من الرابط
+// الحصول على معرف الباقة من الرابط
 const route = useRoute()
-const packageId = route.params.id
+const packageId = computed(() => route.params.id)
 
 // المتغيرات التفاعلية
 const loading = ref(true)
 const saving = ref(false)
+const message = ref('')
+const messageType = ref('')
+const error = ref('')
 
 // نموذج البيانات
 const form = ref({
@@ -371,12 +388,19 @@ const form = ref({
   excluded: ['']
 })
 
-// تحميل بيانات الحزمة
+// تحميل بيانات الباقة
 const loadPackage = async () => {
   try {
     loading.value = true
-    const result = await $fetch(`/api/packages/${packageId}`)
+    error.value = ''
+    console.log('🔄 Loading package with ID:', packageId.value)
+    console.log('🔄 API URL:', `/api/packages/${packageId.value}`)
+    
+    const result = await $fetch(`/api/packages/${packageId.value}`)
+    console.log('✅ API result:', result)
+    
     const packageData = result?.package || result
+    console.log('📦 Package data:', packageData)
     
     if (packageData) {
       form.value = {
@@ -387,28 +411,54 @@ const loadPackage = async () => {
         price: packageData.price || 0,
         duration_days: packageData.duration_days || packageData.duration || 1,
         travel_period: packageData.travel_period || packageData.location || '',
-        max_persons: packageData.max_persons || packageData.max_guests || 10,
+        max_persons: packageData.max_persons || 10,
         category: packageData.category || 'domestic',
         status: packageData.status || 'active',
         featured: packageData.featured || false,
         image_url: packageData.image_url || packageData.image || '',
-        features: packageData.features || [''],
-        itinerary: packageData.itinerary || [''],
-        included: packageData.included || [''],
-        excluded: packageData.excluded || ['']
+        features: packageData.features && packageData.features.length > 0 ? packageData.features : [''],
+        itinerary: packageData.itinerary && packageData.itinerary.length > 0 ? packageData.itinerary : [''],
+        included: packageData.included && packageData.included.length > 0 ? packageData.included : [''],
+        excluded: packageData.excluded && packageData.excluded.length > 0 ? packageData.excluded : ['']
       }
+      console.log('✅ Form data loaded:', form.value)
+    } else {
+      error.value = 'لم يتم العثور على بيانات الباقة'
+      console.log('❌ No package data found')
     }
-  } catch (error) {
-    console.error('خطأ في تحميل الحزمة:', error)
+  } catch (err) {
+    console.error('❌ خطأ في تحميل الباقة:', err)
+    error.value = err.message || 'خطأ في تحميل بيانات الباقة. يرجى المحاولة مرة أخرى.'
   } finally {
     loading.value = false
+    console.log('🏁 Loading completed')
   }
 }
 
-// تحديث الحزمة
+// معالجة رفع الصورة بنجاح
+const handleImageUploadComplete = (fileInfo) => {
+  const { showSuccess } = useNotifications()
+  showSuccess('تم رفع الصورة', 'تم رفع الصورة بنجاح!')
+}
+
+// معالجة خطأ رفع الصورة
+const handleImageUploadError = (error) => {
+  const { showError } = useNotifications()
+  showError('خطأ في رفع الصورة', error.message || 'حدث خطأ في رفع الصورة')
+}
+
+// تحديث الباقة
 const updatePackage = async () => {
+  const { showSuccess, showError, showWarning } = useNotifications()
+  
   try {
     saving.value = true
+    
+    // التحقق من صحة البيانات
+    if (!form.value.title_ar || !form.value.title_en || !form.value.description_ar || !form.value.description_en) {
+      showWarning('حقول مطلوبة', 'يرجى ملء جميع الحقول المطلوبة')
+      return
+    }
     
     // تنظيف البيانات
     const cleanData = {
@@ -419,19 +469,32 @@ const updatePackage = async () => {
       excluded: form.value.excluded.filter(e => e.trim())
     }
     
-    // TODO: Add API endpoint for updating packages
-    await $fetch(`/api/packages/${packageId}`, {
+    const result = await $fetch(`/api/packages/${packageId.value}`, {
       method: 'PUT',
       body: cleanData
     })
     
-    console.log('تم تحديث الحزمة بنجاح')
-    await navigateTo(`/admin/packages/${packageId}`)
+    if (result.success) {
+      showSuccess('تم التحديث بنجاح', 'تم تحديث الباقة بنجاح!')
+      // Navigate after a short delay to show the success message
+      setTimeout(async () => {
+        await navigateTo(`/admin/packages/${packageId.value}`)
+      }, 1500)
+    } else {
+      showError('فشل في التحديث', 'فشل في تحديث الباقة. يرجى المحاولة مرة أخرى.')
+    }
   } catch (error) {
-    console.error('خطأ في تحديث الحزمة:', error)
+    console.error('خطأ في تحديث الباقة:', error)
+    showError('خطأ في التحديث', 'حدث خطأ في تحديث الباقة. يرجى المحاولة مرة أخرى.')
   } finally {
     saving.value = false
   }
+}
+
+// مسح الرسائل عند بدء التعديل
+const clearMessage = () => {
+  message.value = ''
+  messageType.value = ''
 }
 
 // دوال إدارة المميزات
@@ -480,14 +543,18 @@ const removeExcludedItem = (index) => {
 
 // تحميل البيانات عند تحميل الصفحة
 onMounted(() => {
+  console.log('🚀 Edit page mounted, package ID:', packageId.value)
+  console.log('📍 Route params:', route.params)
+  console.log('📍 Current route:', route.path)
+  console.log('📍 Full route object:', route)
   loadPackage()
 })
 
 // SEO والميتا
 useHead({
-  title: `تحرير الحزمة - Wonder Land Admin`,
+  title: `تحرير الباقة - Wonder Land Admin`,
   meta: [
-    { name: 'description', content: 'تحرير تفاصيل الحزمة السياحية' },
+    { name: 'description', content: 'تحرير تفاصيل الباقة السياحية' },
     { name: 'robots', content: 'noindex, nofollow' }
   ]
 })

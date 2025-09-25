@@ -96,12 +96,12 @@
         </div>
       </div>
 
-      <!-- تفاصيل الحزمة -->
+      <!-- تفاصيل الباقة -->
       <div class="bg-white rounded-lg shadow-sm border border-gray-200 p-6">
-        <h2 class="text-lg font-semibold text-gray-900 mb-4">تفاصيل الحزمة</h2>
+        <h2 class="text-lg font-semibold text-gray-900 mb-4">تفاصيل الباقة</h2>
         <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
           <div>
-            <label class="block text-sm font-medium text-gray-500 mb-1">اسم الحزمة</label>
+            <label class="block text-sm font-medium text-gray-500 mb-1">اسم الباقة</label>
             <p class="text-gray-900">{{ booking.package?.title_ar || booking.package?.title_en || booking.package?.title || 'غير محدد' }}</p>
           </div>
           <div>
@@ -113,7 +113,7 @@
             <p class="text-gray-900">{{ booking.package?.duration_days || 'غير محدد' }} أيام</p>
           </div>
           <div>
-            <label class="block text-sm font-medium text-gray-500 mb-1">سعر الحزمة</label>
+            <label class="block text-sm font-medium text-gray-500 mb-1">سعر الباقة</label>
             <p class="text-gray-900">{{ formatPrice(booking.package?.price) }}</p>
           </div>
         </div>

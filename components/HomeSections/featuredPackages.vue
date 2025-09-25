@@ -10,7 +10,7 @@
         </p>
       </div>
       <!-- Loading State -->
-      <div v-if="packages.pending.value" class="text-center py-12">
+      <div v-if="pending" class="text-center py-12">
         <div class="inline-flex items-center gap-2 text-gray-600">
           <Icon name="material-symbols:refresh" class="h-6 w-6 animate-spin" />
           <span>جاري تحميل الباقات...</span>
@@ -18,13 +18,13 @@
       </div>
 
       <!-- Error State -->
-      <div v-else-if="packages.error.value" class="text-center py-12">
+      <div v-else-if="error" class="text-center py-12">
         <div class="text-red-600 mb-4">
           <Icon name="material-symbols:error" class="h-12 w-12 mx-auto mb-2" />
           <p>حدث خطأ في تحميل الباقات</p>
         </div>
         <button 
-          @click="packages.refresh()"
+          @click="refresh()"
           class="bg-blue-600 text-white px-4 py-2 rounded-lg hover:bg-blue-700 transition-colors"
         >
           إعادة المحاولة
@@ -58,9 +58,9 @@
 import PackageCard from '~/components/packages/PackageCard.vue'
 import { usePackages } from '~/composables/usePackages'
 
-const packages = usePackages()
+const { packages, pending, error, refresh } = usePackages()
 const featuredPackages = computed(() => {
-  const allPackages = packages.getPackages()
+  const allPackages = packages.value || []
   console.log('All packages in featuredPackages:', allPackages)
   const featured = allPackages.filter(pkg => pkg.featured === true || pkg.featured === 1)
   console.log('Featured packages:', featured)
@@ -70,11 +70,11 @@ const featuredPackages = computed(() => {
 // Refresh packages on mount
 onMounted(() => {
   console.log('FeaturedPackages mounted, refreshing...')
-  packages.refresh()
+  refresh()
 })
 
 // Watch for packages data changes
-watch(() => packages.getPackages(), (newPackages) => {
+watch(() => packages.value, (newPackages) => {
   console.log('Packages data changed:', newPackages)
   console.log('Featured packages after change:', featuredPackages.value)
 }, { immediate: true })

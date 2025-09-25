@@ -15,13 +15,13 @@ export default defineNuxtRouteMiddleware(async (to) => {
   if (!currentUser) {
     console.log('👤 No user in state, checking auth...')
     try {
-      currentUser = await checkAuth()
+      currentUser = await checkAuth(true) // Use silent mode to avoid console noise
     } catch (error) {
       console.error('❌ Auth check failed:', error)
       return navigateTo('/admin/login')
     }
   } else {
-    console.log('✅ User already authenticated:', currentUser.email)
+    console.log('✅ User already authenticated from cookie:', currentUser.email)
   }
 
   // التحقق من المستخدم والصلاحيات مباشرة

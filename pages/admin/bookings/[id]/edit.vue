@@ -86,19 +86,19 @@
               </div>
             </div>
 
-            <!-- تفاصيل الحزمة -->
+            <!-- تفاصيل الباقة -->
             <div>
-              <h2 class="text-lg font-semibold text-gray-900 mb-4">تفاصيل الحزمة</h2>
+              <h2 class="text-lg font-semibold text-gray-900 mb-4">تفاصيل الباقة</h2>
               <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
                 <div>
-                  <label class="block text-sm font-medium text-gray-700 mb-2">اختيار الحزمة *</label>
+                  <label class="block text-sm font-medium text-gray-700 mb-2">اختيار الباقة *</label>
                   <select
                     v-model="form.package_id"
                     required
                     class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
                     @change="onPackageChange"
                   >
-                    <option value="">اختر الحزمة</option>
+                    <option value="">اختر الباقة</option>
                     <option v-for="pkg in packages" :key="pkg.id" :value="pkg.id">
                       {{ pkg.title_ar || pkg.title_en || pkg.title }} - {{ formatPrice(pkg.price) }}
                     </option>
@@ -132,9 +132,9 @@
                 </div>
               </div>
               
-              <!-- عرض تفاصيل الحزمة المختارة -->
+              <!-- عرض تفاصيل الباقة المختارة -->
               <div v-if="selectedPackage" class="mt-4 p-4 bg-blue-50 rounded-lg border border-blue-200">
-                <h3 class="text-sm font-medium text-blue-900 mb-2">تفاصيل الحزمة المختارة</h3>
+                <h3 class="text-sm font-medium text-blue-900 mb-2">تفاصيل الباقة المختارة</h3>
                 <div class="grid grid-cols-1 md:grid-cols-2 gap-4 text-sm text-blue-800">
                   <div>
                     <span class="font-medium">العنوان:</span> {{ selectedPackage.title_ar || selectedPackage.title_en || selectedPackage.title }}
@@ -423,13 +423,13 @@ const isFormValid = computed(() => {
          form.value.total_amount > 0
 })
 
-// تحميل الحزم
+// تحميل الباقات
 const loadPackages = async () => {
   try {
     const result = await $fetch('/api/packages')
     packages.value = result?.data || result || []
   } catch (error) {
-    console.error('خطأ في تحميل الحزم:', error)
+    console.error('خطأ في تحميل الباقات:', error)
     packages.value = []
   }
 }
@@ -464,7 +464,7 @@ const loadBooking = async () => {
         cancellation_reason: bookingData.cancellation_reason || ''
       }
       
-      // تحديث الحزمة المختارة
+      // تحديث الباقة المختارة
       onPackageChange()
     }
   } catch (error) {
@@ -474,7 +474,7 @@ const loadBooking = async () => {
   }
 }
 
-// عند تغيير الحزمة
+// عند تغيير الباقة
 const onPackageChange = () => {
   selectedPackage.value = packages.value.find(pkg => pkg.id == form.value.package_id)
   if (selectedPackage.value) {

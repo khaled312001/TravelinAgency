@@ -593,7 +593,7 @@ const seoPages = ref([
     id: 3,
     name: 'الحزم السياحية',
     title: 'الحزم السياحية - Wonder Land',
-    description: 'استكشف أفضل الحزم السياحية والعروض',
+    description: 'استكشف أفضل الباقات السياحية والعروض',
     seoStatus: 'optimized'
   }
 ])

@@ -2,6 +2,11 @@
 const productionURL = 'https://wonderland1.com'
 export default defineNuxtConfig({
   devtools: { enabled: false },
+  
+  devServer: {
+    port: 3000,
+    host: 'localhost'
+  },
 
   modules: [
     '@nuxt/image',
@@ -60,7 +65,7 @@ export default defineNuxtConfig({
     provider: 'ipx',
     dir: 'public',
     domains: ['images.unsplash.com', 'images.pexels.com'],
-    format: ['webp'],
+    format: ['jpg', 'jpeg', 'png', 'webp'],
     screens: {
       xs: 320,
       sm: 640,
@@ -69,13 +74,13 @@ export default defineNuxtConfig({
       xl: 1280,
       xxl: 1536,
     },
+    quality: 80,
+    densities: [1, 2],
     presets: {
-      destination: {
+      default: {
         modifiers: {
           format: 'webp',
-          width: 800,
-          height: 600,
-          quality: 90
+          quality: 80
         }
       }
     }

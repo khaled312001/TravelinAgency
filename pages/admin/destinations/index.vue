@@ -4,28 +4,29 @@
     <div class="h-16"></div>
     
     <!-- رأس الصفحة -->
-    <div class="flex flex-col sm:flex-row sm:items-center sm:justify-between">
-      <div>
-        <h1 class="text-2xl font-bold text-gray-900">إدارة الوجهات السياحية</h1>
-        <p class="mt-1 text-sm text-gray-600">إدارة وتحرير الوجهات السياحية المتاحة</p>
-      </div>
-      <div class="mt-4 sm:mt-0 flex space-x-3 space-x-reverse">
+    <AdminPageHeader 
+      title="إدارة الوجهات السياحية"
+      description="إدارة وتحرير الوجهات السياحية المتاحة"
+    >
+      <template #actions>
         <button
           @click="exportDestinations"
-          class="inline-flex items-center px-4 py-2 bg-green-600 text-white rounded-lg hover:bg-green-700 transition-colors"
+          class="inline-flex items-center px-3 sm:px-4 py-2 bg-green-600 text-white rounded-lg hover:bg-green-700 transition-colors text-sm"
         >
-          <Icon name="material-symbols:download" class="h-5 w-5 ml-2" />
-          تصدير البيانات
+          <Icon name="material-symbols:download" class="h-4 w-4 sm:h-5 sm:w-5 ml-2" />
+          <span class="hidden sm:inline">تصدير البيانات</span>
+          <span class="sm:hidden">تصدير</span>
         </button>
         <NuxtLink
           to="/admin/destinations/create"
-          class="inline-flex items-center px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors"
+          class="inline-flex items-center px-3 sm:px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors text-sm"
         >
-          <Icon name="material-symbols:add" class="h-5 w-5 ml-2" />
-          إضافة وجهة جديدة
+          <Icon name="material-symbols:add" class="h-4 w-4 sm:h-5 sm:w-5 ml-2" />
+          <span class="hidden sm:inline">إضافة وجهة جديدة</span>
+          <span class="sm:hidden">إضافة</span>
         </NuxtLink>
-      </div>
-    </div>
+      </template>
+    </AdminPageHeader>
 
     <!-- شريط البحث والتصفية -->
     <div class="bg-white rounded-lg shadow-sm border border-gray-200 p-6">
@@ -149,11 +150,11 @@
                   </NuxtLink>
                   <button
                     @click="toggleDestinationStatus(destination)"
-                    :class="destination.status === 'active' ? 'text-orange-600 hover:text-orange-900' : 'text-green-600 hover:text-green-900'"
+                    :class="destination.active ? 'text-orange-600 hover:text-orange-900' : 'text-green-600 hover:text-green-900'"
                     class="p-1 rounded"
-                    :title="destination.status === 'active' ? 'إلغاء التفعيل' : 'تفعيل'"
+                    :title="destination.active ? 'إلغاء التفعيل' : 'تفعيل'"
                   >
-                    <Icon :name="destination.status === 'active' ? 'material-symbols:pause' : 'material-symbols:play-arrow'" class="h-4 w-4" />
+                    <Icon :name="destination.active ? 'material-symbols:pause' : 'material-symbols:play-arrow'" class="h-4 w-4" />
                   </button>
                   <button
                     @click="deleteDestination(destination)"
@@ -275,11 +276,14 @@ const totalItems = computed(() => {
   }
 
   if (typeFilter.value) {
-    filtered = filtered.filter(dest => dest.type === typeFilter.value)
+    filtered = filtered.filter(dest => dest.category === typeFilter.value)
   }
 
   if (statusFilter.value) {
-    filtered = filtered.filter(dest => dest.status === statusFilter.value)
+    filtered = filtered.filter(dest => {
+      const isActive = dest.active === 1 || dest.active === true
+      return statusFilter.value === 'active' ? isActive : !isActive
+    })
   }
 
   return filtered.length
@@ -300,31 +304,7 @@ const loadDestinations = async () => {
     }
   } catch (error) {
     console.error('خطأ في تحميل الوجهات:', error)
-    // بيانات وهمية للعرض في حالة الخطأ
-    destinations.value = [
-      {
-        id: 1,
-        name_ar: 'الرياض',
-        name_en: 'Riyadh',
-        description_ar: 'عاصمة المملكة العربية السعودية',
-        description_en: 'Capital of Saudi Arabia',
-        type: 'saudi',
-        status: 'active',
-        image: '/images/destinations/riyadh/main.jpg',
-        created_at: new Date().toISOString()
-      },
-      {
-        id: 2,
-        name_ar: 'دبي',
-        name_en: 'Dubai',
-        description_ar: 'مدينة الإمارات الرائعة',
-        description_en: 'Amazing UAE city',
-        type: 'global',
-        status: 'active',
-        image: '/images/destinations/dubai/main.jpg',
-        created_at: new Date(Date.now() - 86400000).toISOString()
-      }
-    ]
+    destinations.value = []
   } finally {
     loading.value = false
   }
@@ -333,11 +313,23 @@ const loadDestinations = async () => {
 // تغيير حالة الوجهة
 const toggleDestinationStatus = async (dest) => {
   try {
-    const newStatus = dest.status === 'active' ? 'inactive' : 'active'
+    const newStatus = dest.active ? 'inactive' : 'active'
+    const newActiveValue = dest.active ? 0 : 1
     
-    // TODO: Add API endpoint for updating destination status
+    // Update via API
+    await $fetch(`/api/destinations/${dest.id}`, {
+      method: 'PUT',
+      body: {
+        ...dest,
+        active: newActiveValue,
+        status: newStatus
+      }
+    })
+    
+    // Update local state
     const index = destinations.value.findIndex(d => d.id === dest.id)
     if (index !== -1) {
+      destinations.value[index].active = newActiveValue
       destinations.value[index].status = newStatus
     }
 

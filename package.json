@@ -12,7 +12,8 @@
     "create-tables": "node scripts/create-admin-tables.js",
     "create-admin": "node scripts/setup-admin.js",
     "fix-database": "node scripts/fix-database.js",
-    "insert-sample-data": "node scripts/insert-sample-data.js"
+    "insert-sample-data": "node scripts/insert-sample-data.js",
+    "migrate-images": "node scripts/migrate-package-images.js"
   },
   "dependencies": {
     "@nuxt/icon": "^1.11.0",
@@ -35,6 +36,7 @@
     "nuxt-simple-sitemap": "^4.4.1",
     "prisma": "^6.16.2",
     "twilio": "^5.5.0",
+    "uuid": "^9.0.1",
     "vue-chartjs": "^5.3.2",
     "vue-i18n": "^9.9.0",
     "xlsx": "^0.18.5"
@@ -48,6 +50,7 @@
     "@nuxt/image": "^1.9.0",
     "@nuxtjs/google-fonts": "^3.2.0",
     "@types/node": "^22.13.9",
+    "@types/uuid": "^9.0.8",
     "@types/vue": "^2.0.0",
     "compression": "^1.7.5",
     "dotenv": "^16.4.7",

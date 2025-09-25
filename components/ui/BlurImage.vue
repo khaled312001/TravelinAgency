@@ -52,7 +52,7 @@ const props = withDefaults(defineProps<Props>(), {
   height: 600,
   wrapperClass: '',
   imageClass: 'w-full h-full object-cover',
-  sizes: '(max-width: 768px) 100vw, 50vw',
+  sizes: 'sm:100vw md:50vw',
   loading: 'lazy',
   quality: 80
 })

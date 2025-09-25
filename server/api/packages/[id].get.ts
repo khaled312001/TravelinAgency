@@ -25,8 +25,14 @@ export default defineEventHandler(async (event) => {
         duration_days as duration,
         image_url as image,
         travel_period as location,
+        max_persons,
+        category,
         featured,
         active as status,
+        features,
+        itinerary,
+        included,
+        excluded,
         created_at,
         updated_at
       FROM packages 
@@ -54,10 +60,15 @@ export default defineEventHandler(async (event) => {
         travel_period: packageData.location,
         duration_days: packageData.duration,
         price: packageData.price,
-        max_persons: 10, // Default value
+        max_persons: packageData.max_persons || 10,
+        category: packageData.category || 'domestic',
         featured: packageData.featured,
         location: packageData.location,
-        status: packageData.status,
+        status: packageData.status === 1 ? 'active' : 'inactive',
+        features: JSON.parse(packageData.features || '[]'),
+        itinerary: JSON.parse(packageData.itinerary || '[]'),
+        included: JSON.parse(packageData.included || '[]'),
+        excluded: JSON.parse(packageData.excluded || '[]'),
         created_at: packageData.created_at,
         updated_at: packageData.updated_at
       }

@@ -1,6 +1,6 @@
 <template>
   <div>
-    <div v-if="pending" class="flex justify-center items-center min-h-screen">
+    <div v-if="pending && !package_" class="flex justify-center items-center min-h-screen">
       <div class="animate-spin rounded-full h-12 w-12 border-4 border-primary border-t-transparent"></div>
       <span class="sr-only">{{ $t('common.loading') }}</span>
     </div>
@@ -49,42 +49,44 @@
       </div>
     </div>
 
+    <!-- Package Not Found -->
+    <div v-else class="min-h-screen flex flex-col items-center justify-center px-4 text-center">
+      <h1 class="text-2xl font-bold text-gray-900 mb-4">{{ $t('packages.not_found') }}</h1>
+      <p class="text-gray-600 mb-8">{{ $t('packages.not_found_description') }}</p>
+      <NuxtLink 
+        to="/packages" 
+        class="rounded-full bg-primary px-6 py-3 text-white hover:bg-primary-dark transition-colors"
+      >
+        {{ $t('packages.view_all') }}
+      </NuxtLink>
+    </div>
+
     <!-- Contact Form Modal -->
-    <ContactFormModal 
-      v-if="showContactForm"
-      :package_="package_"
-      @close="showContactForm = false"
-    />
+    <ContactForm v-model="showContactForm" :package_="package_" />
   </div>
 </template>
 
 <script setup lang="ts">
-import { ref, watch, computed } from 'vue'
-import { useAsyncData } from 'nuxt/app'
-import { useRoute } from 'vue-router'
+import { ref, watch, computed, onMounted } from 'vue'
+import { useRoute, useRouter } from 'vue-router'
 import { useI18n } from 'vue-i18n'
 import type { Package } from '~/composables/usePackages'
 import { usePackages } from '~/composables/usePackages'
 
 import PackageDetails from '~/components/packages/PackageDetails.vue'
+import ContactForm from '~/components/ContactForm.vue'
 
 const route = useRoute()
+const router = useRouter()
 const { t, locale } = useI18n()
-const { getPackageById } = usePackages()
+const { packages, pending, error } = usePackages()
 const showContactForm = ref(false)
 
-// Fetch package data
-const {
-  data: package_,
-  pending,
-  error
-} = await useAsyncData<Package>(
-  `package-${route.params.id}`,
-  () => getPackageById(route.params.id as string),
-  {
-    watch: [route.params.id]
-  }
-)
+// Get package by ID from the packages data
+const package_ = computed(() => {
+  const packageId = route.params.id as string
+  return packages.value?.find(p => p.id === packageId) || null
+})
 
 // Define page meta for proper routing
 definePageMeta({
@@ -92,9 +94,9 @@ definePageMeta({
 })
 
 // Watch for package data and redirect if not found
-watch(package_, (newPackage) => {
-  if (!newPackage && !pending.value) {
-    useRouter().push('/packages')
+watch([package_, pending], ([newPackage, isPending]) => {
+  if (!newPackage && !isPending) {
+    router.push('/packages')
   }
 })
 

@@ -32,8 +32,19 @@
         <div v-if="pending" class="flex justify-center items-center min-h-[400px]">
           <div class="animate-spin rounded-full h-12 w-12 border-4 border-primary border-t-transparent"></div>
         </div>
-        <div v-else-if="error" class="text-center text-red-500">
-          {{ $t('common.error') }}
+        <div v-else-if="error" class="text-center text-red-500 py-16">
+          <div class="max-w-md mx-auto">
+            <Icon name="material-symbols:error-outline" class="h-16 w-16 mx-auto mb-4 text-red-400" />
+            <h3 class="text-lg font-medium mb-2">{{ $t('common.error') }}</h3>
+            <p class="text-gray-500">{{ error.message || 'An error occurred while loading packages' }}</p>
+          </div>
+        </div>
+        <div v-else-if="packages.length === 0" class="text-center text-gray-500 py-16">
+          <div class="max-w-md mx-auto">
+            <Icon name="material-symbols:package-2-outline" class="h-16 w-16 mx-auto mb-4 text-gray-400" />
+            <h3 class="text-lg font-medium mb-2">{{ $t('packages.no_packages') }}</h3>
+            <p class="text-gray-500">{{ $t('packages.no_packages_description') }}</p>
+          </div>
         </div>
         <div v-else class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
           <PackageCard
@@ -51,14 +62,6 @@
 import type { Package } from '~/composables/usePackages'
 
 import PackageCard from '~/components/packages/PackageCard.vue'
-const { getPackages } = usePackages()
-
-const {
-  data: packages,
-  pending,
-  error
-} = await useAsyncData<Package[]>('packages', () => getPackages(), {
-  default: () => []
-})
+const { packages, pending, error } = usePackages()
 
 </script>

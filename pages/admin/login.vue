@@ -125,27 +125,42 @@ const showPassword = ref(false)
 const { user, login, loading, error } = useAuth()
 
 // التحقق من تسجيل الدخول المسبق
+const hasCheckedInitialAuth = ref(false)
+
 onMounted(async () => {
-  // Check if user is already authenticated
-  const { checkAuth } = useAuth()
-  try {
-    const currentUser = await checkAuth()
-    if (currentUser && currentUser.role && ['admin', 'super_admin', 'moderator'].includes(currentUser.role)) {
-      // Only redirect if user is actually an admin
-      console.log('User is already authenticated as admin, redirecting to dashboard')
-      await navigateTo('/admin/dashboard')
+  // Check if there's a token cookie first to avoid unnecessary API calls
+  const tokenCookie = useCookie('auth-token')
+  
+  if (tokenCookie.value) {
+    // Only check auth if there's a token
+    const { checkAuth } = useAuth()
+    try {
+      const currentUser = await checkAuth(true) // Use silent mode to reduce console noise
+      if (currentUser && currentUser.role && ['admin', 'super_admin', 'moderator'].includes(currentUser.role)) {
+        // Only redirect if user is actually an admin
+        console.log('User is already authenticated as admin, redirecting to dashboard')
+        await navigateTo('/admin/dashboard')
+        return // Exit early to prevent further processing
+      }
+    } catch (error) {
+      // User is not authenticated, stay on login page
+      console.log('User not authenticated, staying on login page')
     }
-  } catch (error) {
-    // User is not authenticated, stay on login page
-    console.log('User not authenticated, staying on login page')
+  } else {
+    // No token, user is definitely not authenticated
+    console.log('No auth token found, staying on login page')
   }
+  
+  // Mark that we've checked initial auth after a short delay
+  setTimeout(() => {
+    hasCheckedInitialAuth.value = true
+  }, 500)
 })
 
-// Watch for user state changes - but only after successful login
 watchEffect(() => {
-  if (user.value && user.value.role && ['admin', 'super_admin', 'moderator'].includes(user.value.role)) {
-    // Only redirect if user has admin role
-    console.log('User state changed to admin, redirecting to dashboard')
+  // Only redirect if user state changes after initial auth check
+  if (hasCheckedInitialAuth.value && user.value && user.value.role && ['admin', 'super_admin', 'moderator'].includes(user.value.role)) {
+    console.log('User state changed to admin after login, redirecting to dashboard')
     navigateTo('/admin/dashboard')
   }
 })

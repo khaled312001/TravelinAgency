@@ -19,9 +19,10 @@
         <div
           v-for="(service, index) in services"
           :key="service.title_en"
-          class="group relative rounded-3xl overflow-hidden h-[420px] backdrop-blur-[2px]"
+          class="group relative rounded-3xl overflow-hidden h-[420px] backdrop-blur-[2px] cursor-pointer"
           data-aos="zoom-in"
           :data-aos-delay="100 * index"
+          @click="service.link ? navigateTo(service.link) : null"
         >
           <!-- Background Image -->
           <NuxtImg
@@ -131,6 +132,15 @@ const services = [
     description_ar: 'فريق دعم متخصص جاهز لمساعدتك في أي وقت',
     icon: 'material-symbols:call-outline', 
     image: '/images/home/services/support_24_7.jpg'
+  },
+  {
+    title_en: 'custom_package',
+    title_ar: 'صمم باقتك المثالية',
+    description_en: 'custom_package_desc',
+    description_ar: 'هل تريد تخصيص هذه الباقة أو إنشاء باقة خاصة بك؟ خبراء السفر لدينا هنا لمساعدتك في تخطيط عطلتك المثالية.',
+    icon: 'material-symbols:design-services-outline', 
+    image: '/images/home/services/custom_package.jpg',
+    link: '/custom-package'
   }
 ]
 </script>

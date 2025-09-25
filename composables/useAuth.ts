@@ -1,9 +1,21 @@
 import type { User, AdminProfile } from '~/utils/database'
 
-interface AuthUser extends User, AdminProfile {}
+// Cache-busting comment - v2.5
+interface AuthUser extends User {
+  role?: 'admin' | 'super_admin' | 'moderator'
+  permissions?: Record<string, boolean>
+}
 
 export const useAuth = () => {
-  const user = useState<AuthUser | null>('auth.user', () => null)
+  // Use useCookie for persistent storage that survives page refreshes
+  const userCookie = useCookie<AuthUser | null>('auth.user', {
+    default: () => null,
+    maxAge: 60 * 60 * 24 * 7, // 7 days
+    sameSite: 'lax',
+    secure: process.env.NODE_ENV === 'production'
+  })
+  
+  const user = useState<AuthUser | null>('auth.user', () => userCookie.value)
   const loading = useState<boolean>('auth.loading', () => false)
   const error = useState<string>('auth.error', () => '')
 
@@ -20,6 +32,7 @@ export const useAuth = () => {
 
       if (response.success && response.data.user && response.data.token) {
         user.value = response.data.user
+        userCookie.value = response.data.user // Store user data in cookie for persistence
         
         // Token is already stored in cookie by the server
         // No need to store it again on client side
@@ -55,6 +68,7 @@ export const useAuth = () => {
       console.error('Logout error:', err)
     } finally {
       user.value = null
+      userCookie.value = null // Clear user data from cookie
       
       // Clear token cookie (server will handle this)
       const tokenCookie = useCookie('auth-token')
@@ -65,38 +79,48 @@ export const useAuth = () => {
   }
 
   // Check authentication status
-  const checkAuth = async () => {
+  const checkAuth = async (silent = false) => {
     if (user.value) {
-      console.log('👤 User already in state:', user.value.email, 'role:', user.value.role)
+      if (!silent) console.log('👤 User already in state:', user.value.email, 'role:', user.value.role)
       return user.value
     }
 
+    // Check if token cookie exists first
+    const tokenCookie = useCookie('auth-token')
+    if (!tokenCookie.value) {
+      if (!silent) console.log('🔍 No auth token found in cookie')
+      user.value = null
+      return null
+    }
+
     try {
-      console.log('🔍 Fetching user data from API...')
+      if (!silent) console.log('🔍 Fetching user data from API...')
       const response = await $fetch<{ success: boolean; data: { user: AuthUser } }>('/api/auth/me')
-      console.log('📡 API Response:', response)
       
       if (response.success && response.data.user) {
-        // Set user in state regardless of role (for debugging)
         user.value = response.data.user
-        console.log('✅ User data set in state:', user.value.email, 'role:', user.value.role)
-        
-        // Return user data for middleware to check role
+        userCookie.value = response.data.user // Store user data in cookie for persistence
+        if (!silent) console.log('✅ User authenticated:', user.value.email, 'role:', user.value.role)
         return user.value
       } else {
-        console.log('❌ Invalid response from auth API:', response)
+        if (!silent) console.log('❌ Invalid response from auth API')
         user.value = null
+        userCookie.value = null // Clear user data from cookie
         return null
       }
     } catch (err: any) {
-      console.error('❌ Auth check error:', err)
-      user.value = null
+      // Only log errors if not silent mode and not a 401 (which is expected for unauthenticated users)
+      if (!silent && err.statusCode !== 401) {
+        console.error('❌ Auth check error:', err)
+      }
       
-      // If it's a 401 error, clear any existing token
+      user.value = null
+      userCookie.value = null // Clear user data from cookie
+      
+      // If it's a 401 error, clear any existing token silently
       if (err.statusCode === 401) {
-        console.log('🔒 Clearing invalid token')
-        const tokenCookie = useCookie('auth-token')
         tokenCookie.value = null
+        if (!silent) console.log('🔒 Cleared invalid token')
       }
       
       return null
@@ -112,14 +136,17 @@ export const useAuth = () => {
       
       if (response.success && response.data.user) {
         user.value = response.data.user
+        userCookie.value = response.data.user // Store user data in cookie for persistence
         return user.value
       } else {
         user.value = null
+        userCookie.value = null // Clear user data from cookie
         return null
       }
     } catch (err) {
       console.error('Refresh user error:', err)
       user.value = null
+      userCookie.value = null // Clear user data from cookie
       return null
     }
   }
@@ -132,7 +159,7 @@ export const useAuth = () => {
 
   // Check if user has specific role
   const hasRole = (role: string | string[]): boolean => {
-    if (!user.value) return false
+    if (!user.value || !user.value.role) return false
     
     if (Array.isArray(role)) {
       return role.includes(user.value.role)

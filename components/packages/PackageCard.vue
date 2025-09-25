@@ -3,19 +3,18 @@
     :to="localpath(`/packages/${props.package_.id}`)"
     class="group relative flex h-full flex-col overflow-hidden rounded-xl bg-surface shadow-[0_2px_15px_-3px_rgba(0,0,0,0.07),0_10px_20px_-2px_rgba(0,0,0,0.04)] hover:shadow-[0_8px_25px_-5px_rgba(0,0,0,0.1),0_10px_20px_-5px_rgba(0,0,0,0.04)] transition-all duration-300"
   >
-    <div class="relative h-[280px] overflow-hidden">
-      <NuxtImg
-        :src="props.package_.image_url"
-        class="h-full w-full object-cover transition-transform duration-300 group-hover:scale-105"
-        :alt="props.package_.title_en"
-        width="800"
-        height="600"
-        loading="lazy"
-        format="webp"
-        quality="85"
-        sizes="(max-width: 768px) 100vw, (max-width: 1024px) 50vw, 33vw"
-        placeholder
-      />
+        <div class="relative h-[280px] overflow-hidden">
+          <NuxtImg
+            :src="props.package_.image_url"
+            class="h-full w-full object-cover transition-transform duration-300 group-hover:scale-105"
+            :alt="props.package_.title_en"
+            width="800"
+            height="600"
+            loading="lazy"
+            sizes="sm:100vw md:50vw lg:33vw"
+            placeholder
+            @error="handleImageError"
+          />
       <div class="absolute inset-0 bg-gradient-to-t from-black/60 via-black/20 to-transparent"></div>
       
       <!-- Hotel Grade Badge -->
@@ -95,4 +94,27 @@ const props = defineProps<{
 }>()
 const {locale} = useI18n()
 const localpath = useLocalePath()
+
+// Handle image loading errors
+const handleImageError = (event: Event) => {
+  console.warn('Image failed to load:', props.package_.image_url)
+  const img = event.target as HTMLImageElement
+  if (img) {
+    // Try fallback to original image without IPX optimization
+    const originalSrc = props.package_.image_url
+    if (originalSrc && !originalSrc.includes('_ipx')) {
+      // Try the old path if new path fails
+      if (originalSrc.includes('/imported/')) {
+        const filename = originalSrc.split('/').pop()
+        const oldPath = `/images/packages/${filename}`
+        img.src = oldPath
+      } else {
+        img.src = originalSrc
+      }
+    } else {
+      // Ultimate fallback to placeholder
+      img.src = '/images/placeholder.svg'
+    }
+  }
+}
 </script>

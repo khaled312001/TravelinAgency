@@ -4,93 +4,48 @@
     <div class="h-16"></div>
     
     <!-- رأس الصفحة -->
-    <div class="flex flex-col sm:flex-row sm:items-center sm:justify-between">
-      <div>
-        <h1 class="text-2xl font-bold text-gray-900">إدارة المحتوى</h1>
-        <p class="mt-1 text-sm text-gray-600">إدارة صفحات الموقع والمحتوى</p>
-      </div>
-      <div class="mt-4 sm:mt-0 flex space-x-3 space-x-reverse">
+    <AdminPageHeader 
+      title="إدارة المحتوى"
+      description="إدارة صفحات الموقع والمحتوى"
+    >
+      <template #actions>
         <NuxtLink
           to="/admin/content/analytics"
-          class="inline-flex items-center px-4 py-2 bg-indigo-600 text-white rounded-lg hover:bg-indigo-700 transition-colors"
+          class="inline-flex items-center px-3 sm:px-4 py-2 bg-indigo-600 text-white rounded-lg hover:bg-indigo-700 transition-colors text-sm"
         >
-          <Icon name="material-symbols:analytics" class="h-5 w-5 ml-2" />
-          الإحصائيات
+          <Icon name="material-symbols:analytics" class="h-4 w-4 sm:h-5 sm:w-5 ml-2" />
+          <span class="hidden sm:inline">الإحصائيات</span>
+          <span class="sm:hidden">إحصائيات</span>
         </NuxtLink>
         <NuxtLink
           to="/admin/content/templates"
-          class="inline-flex items-center px-4 py-2 bg-green-600 text-white rounded-lg hover:bg-green-700 transition-colors"
+          class="inline-flex items-center px-3 sm:px-4 py-2 bg-green-600 text-white rounded-lg hover:bg-green-700 transition-colors text-sm"
         >
-          <Icon name="material-symbols:widgets" class="h-5 w-5 ml-2" />
-          القوالب
+          <Icon name="material-symbols:widgets" class="h-4 w-4 sm:h-5 sm:w-5 ml-2" />
+          <span class="hidden sm:inline">القوالب</span>
+          <span class="sm:hidden">قوالب</span>
         </NuxtLink>
         <NuxtLink
           to="/admin/content/editor"
-          class="inline-flex items-center px-4 py-2 bg-purple-600 text-white rounded-lg hover:bg-purple-700 transition-colors"
+          class="inline-flex items-center px-3 sm:px-4 py-2 bg-purple-600 text-white rounded-lg hover:bg-purple-700 transition-colors text-sm"
         >
-          <Icon name="material-symbols:edit" class="h-5 w-5 ml-2" />
-          محرر المحتوى
+          <Icon name="material-symbols:edit" class="h-4 w-4 sm:h-5 sm:w-5 ml-2" />
+          <span class="hidden sm:inline">محرر المحتوى</span>
+          <span class="sm:hidden">محرر</span>
         </NuxtLink>
         <NuxtLink
           to="/admin/content/create"
-          class="inline-flex items-center px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors"
+          class="inline-flex items-center px-3 sm:px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors text-sm"
         >
-          <Icon name="material-symbols:add" class="h-5 w-5 ml-2" />
-          إضافة صفحة جديدة
+          <Icon name="material-symbols:add" class="h-4 w-4 sm:h-5 sm:w-5 ml-2" />
+          <span class="hidden sm:inline">إضافة صفحة جديدة</span>
+          <span class="sm:hidden">إضافة</span>
         </NuxtLink>
-      </div>
-    </div>
+      </template>
+    </AdminPageHeader>
 
     <!-- إحصائيات سريعة -->
-    <div class="grid grid-cols-1 md:grid-cols-4 gap-4">
-      <div class="bg-white rounded-lg shadow-sm border border-gray-200 p-6">
-        <div class="flex items-center">
-          <div class="p-2 bg-blue-100 rounded-lg">
-            <Icon name="material-symbols:article" class="h-6 w-6 text-blue-600" />
-          </div>
-          <div class="mr-3">
-            <p class="text-sm font-medium text-gray-600">إجمالي الصفحات</p>
-            <p class="text-2xl font-bold text-gray-900">{{ totalPages }}</p>
-          </div>
-        </div>
-      </div>
-      
-      <div class="bg-white rounded-lg shadow-sm border border-gray-200 p-6">
-        <div class="flex items-center">
-          <div class="p-2 bg-green-100 rounded-lg">
-            <Icon name="material-symbols:visibility" class="h-6 w-6 text-green-600" />
-          </div>
-          <div class="mr-3">
-            <p class="text-sm font-medium text-gray-600">منشور</p>
-            <p class="text-2xl font-bold text-gray-900">{{ publishedPages }}</p>
-          </div>
-        </div>
-      </div>
-      
-      <div class="bg-white rounded-lg shadow-sm border border-gray-200 p-6">
-        <div class="flex items-center">
-          <div class="p-2 bg-orange-100 rounded-lg">
-            <Icon name="material-symbols:edit" class="h-6 w-6 text-orange-600" />
-          </div>
-          <div class="mr-3">
-            <p class="text-sm font-medium text-gray-600">مسودة</p>
-            <p class="text-2xl font-bold text-gray-900">{{ draftPages }}</p>
-          </div>
-        </div>
-      </div>
-      
-      <div class="bg-white rounded-lg shadow-sm border border-gray-200 p-6">
-        <div class="flex items-center">
-          <div class="p-2 bg-purple-100 rounded-lg">
-            <Icon name="material-symbols:today" class="h-6 w-6 text-purple-600" />
-          </div>
-          <div class="mr-3">
-            <p class="text-sm font-medium text-gray-600">اليوم</p>
-            <p class="text-2xl font-bold text-gray-900">{{ todayPages }}</p>
-          </div>
-        </div>
-      </div>
-    </div>
+    <AdminStats :stats="contentStats" />
 
 
 
@@ -374,6 +329,42 @@ const todayPages = computed(() => {
   return pages.value.filter(page => new Date(page.created_at) >= today).length
 })
 
+// إحصائيات المحتوى
+const contentStats = computed(() => [
+  {
+    key: 'total',
+    label: 'إجمالي الصفحات',
+    value: totalPagesCount.value,
+    icon: 'material-symbols:article',
+    iconBg: 'bg-blue-100',
+    iconColor: 'text-blue-600'
+  },
+  {
+    key: 'published',
+    label: 'منشور',
+    value: publishedPages.value,
+    icon: 'material-symbols:visibility',
+    iconBg: 'bg-green-100',
+    iconColor: 'text-green-600'
+  },
+  {
+    key: 'draft',
+    label: 'مسودة',
+    value: draftPages.value,
+    icon: 'material-symbols:edit',
+    iconBg: 'bg-orange-100',
+    iconColor: 'text-orange-600'
+  },
+  {
+    key: 'today',
+    label: 'اليوم',
+    value: todayPages.value,
+    icon: 'material-symbols:today',
+    iconBg: 'bg-purple-100',
+    iconColor: 'text-purple-600'
+  }
+])
+
 // بيانات الرسوم البيانية للمحتوى
 const contentTypeData = computed(() => {
   const typeCounts = pages.value.reduce((acc, page) => {
@@ -638,7 +629,7 @@ onMounted(async () => {
   // التأكد من أن المستخدم مصادق عليه قبل تحميل البيانات
   const { checkAuth } = useAuth()
   try {
-    await checkAuth()
+    await checkAuth(true)
     await loadPages()
   } catch (error) {
     console.error('خطأ في تحميل بيانات المحتوى:', error)

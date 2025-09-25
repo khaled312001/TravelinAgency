@@ -152,7 +152,7 @@ const updateTokenStatus = () => {
 const testCheckAuth = async () => {
   testResults.value = 'جاري اختبار التحقق من المصادقة...\n'
   try {
-    const result = await checkAuth()
+    const result = await checkAuth(true)
     testResults.value += `النتيجة: ${result ? 'نجح' : 'فشل'}\n`
     if (result) {
       testResults.value += `المستخدم: ${result.email}\n`

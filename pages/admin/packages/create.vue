@@ -6,7 +6,7 @@
     <!-- رأس الصفحة -->
     <div class="flex flex-col sm:flex-row sm:items-center sm:justify-between">
       <div>
-        <h1 class="text-2xl font-bold text-gray-900">إضافة حزمة سياحية جديدة</h1>
+        <h1 class="text-2xl font-bold text-gray-900">إضافة باقة سياحية جديدة</h1>
         <p class="mt-1 text-sm text-gray-600">إنشاء حزمة سياحية جديدة</p>
       </div>
       <div class="mt-4 sm:mt-0">
@@ -74,57 +74,19 @@
               </div>
             </div>
 
-            <!-- صورة الحزمة -->
+            <!-- صورة الباقة -->
             <div>
-              <label class="block text-sm font-medium text-gray-700 mb-2">صورة الحزمة</label>
-              <div class="space-y-4">
-                <!-- رفع الصورة -->
-                <div class="flex items-center justify-center w-full">
-                  <label for="image-upload" class="flex flex-col items-center justify-center w-full h-32 border-2 border-gray-300 border-dashed rounded-lg cursor-pointer bg-gray-50 hover:bg-gray-100">
-                    <div class="flex flex-col items-center justify-center pt-5 pb-6">
-                      <Icon name="material-symbols:cloud-upload" class="w-8 h-8 mb-2 text-gray-500" />
-                      <p class="mb-2 text-sm text-gray-500">
-                        <span class="font-semibold">انقر لرفع صورة</span> أو اسحب وأفلت
-                      </p>
-                      <p class="text-xs text-gray-500">PNG, JPG أو JPEG (MAX. 10MB)</p>
-                    </div>
-                    <input 
-                      id="image-upload" 
-                      type="file" 
-                      accept="image/*" 
-                      @change="handleImageUpload"
-                      class="hidden"
-                    />
-                  </label>
-                </div>
-                
-                <!-- معاينة الصورة -->
-                <div v-if="form.image_url || imagePreview" class="mt-4">
-                  <img 
-                    :src="imagePreview || form.image_url" 
-                    alt="معاينة الصورة" 
-                    class="h-32 w-32 object-cover rounded-lg border border-gray-300"
-                  />
-                  <button
-                    type="button"
-                    @click="removeImage"
-                    class="mt-2 text-sm text-red-600 hover:text-red-800"
-                  >
-                    إزالة الصورة
-                  </button>
-                </div>
-                
-                <!-- أو إدخال رابط الصورة -->
-                <div class="mt-4">
-                  <label class="block text-sm font-medium text-gray-700 mb-2">أو أدخل رابط الصورة</label>
-                  <input
-                    v-model="form.image_url"
-                    type="url"
-                    class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
-                    placeholder="رابط الصورة"
-                  />
-                </div>
-              </div>
+              <label class="block text-sm font-medium text-gray-700 mb-2">صورة الباقة</label>
+              <ImageUpload
+                v-model="form.image_url"
+                alt="صورة الباقة"
+                upload-type="package"
+                @upload-complete="handleImageUploadComplete"
+                @upload-error="handleImageUploadError"
+              />
+              <p class="mt-2 text-xs text-gray-500">
+                يمكنك رفع صورة JPG, PNG, JPEG بحجم أقصى 5MB
+              </p>
             </div>
 
             <!-- المميزات -->
@@ -356,7 +318,7 @@
             class="px-6 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors disabled:opacity-50"
           >
             <Icon v-if="saving" name="material-symbols:progress-activity" class="animate-spin h-4 w-4 ml-2 inline" />
-            {{ saving ? 'جاري الإنشاء...' : 'إنشاء الحزمة' }}
+            {{ saving ? 'جاري الإنشاء...' : 'إنشاء الباقة' }}
           </button>
         </div>
       </div>
@@ -365,6 +327,9 @@
 </template>
 
 <script setup>
+// Import components
+import ImageUpload from '~/components/ui/ImageUpload.vue'
+
 // إعداد الصفحة
 definePageMeta({
   layout: 'admin',
@@ -373,7 +338,6 @@ definePageMeta({
 
 // المتغيرات التفاعلية
 const saving = ref(false)
-const imagePreview = ref(null)
 
 // نموذج البيانات
 const form = ref({
@@ -395,36 +359,30 @@ const form = ref({
   excluded: ['']
 })
 
-// رفع الصورة
-const handleImageUpload = (event) => {
-  const file = event.target.files[0]
-  if (file) {
-    // إنشاء معاينة للصورة
-    const reader = new FileReader()
-    reader.onload = (e) => {
-      imagePreview.value = e.target.result
-    }
-    reader.readAsDataURL(file)
-    
-    // TODO: رفع الصورة إلى الخادم
-    // form.value.image_url = uploadedImageUrl
-  }
+// معالجة رفع الصورة بنجاح
+const handleImageUploadComplete = (fileInfo) => {
+  const { showSuccess } = useNotifications()
+  showSuccess('تم رفع الصورة', 'تم رفع الصورة بنجاح!')
 }
 
-// إزالة الصورة
-const removeImage = () => {
-  form.value.image_url = ''
-  imagePreview.value = null
-  const fileInput = document.getElementById('image-upload')
-  if (fileInput) {
-    fileInput.value = ''
-  }
+// معالجة خطأ رفع الصورة
+const handleImageUploadError = (error) => {
+  const { showError } = useNotifications()
+  showError('خطأ في رفع الصورة', error.message || 'حدث خطأ في رفع الصورة')
 }
 
-// إنشاء الحزمة
+// إنشاء الباقة
 const createPackage = async () => {
+  const { showSuccess, showError, showWarning } = useNotifications()
+  
   try {
     saving.value = true
+    
+    // التحقق من صحة البيانات
+    if (!form.value.title_ar || !form.value.title_en || !form.value.description_ar || !form.value.description_en) {
+      showWarning('حقول مطلوبة', 'يرجى ملء جميع الحقول المطلوبة')
+      return
+    }
     
     // تنظيف البيانات
     const cleanData = {
@@ -435,16 +393,23 @@ const createPackage = async () => {
       excluded: form.value.excluded.filter(e => e.trim())
     }
     
-    // TODO: Add API endpoint for creating packages
     const result = await $fetch('/api/packages', {
       method: 'POST',
       body: cleanData
     })
     
-    console.log('تم إنشاء الحزمة بنجاح:', result)
-    await navigateTo(`/admin/packages/${result.id || result.package?.id}`)
+    console.log('✅ Create package result:', result)
+    
+    if (result.success && result.package) {
+      showSuccess('تم الإنشاء بنجاح', 'تم إنشاء الباقة بنجاح!')
+      console.log('🚀 Navigating to:', `/admin/packages/${result.package.id}`)
+      await navigateTo(`/admin/packages/${result.package.id}`)
+    } else {
+      showError('فشل في الإنشاء', 'فشل في إنشاء الباقة. يرجى المحاولة مرة أخرى.')
+    }
   } catch (error) {
-    console.error('خطأ في إنشاء الحزمة:', error)
+    console.error('خطأ في إنشاء الباقة:', error)
+    showError('خطأ في الإنشاء', 'حدث خطأ في إنشاء الباقة. يرجى المحاولة مرة أخرى.')
   } finally {
     saving.value = false
   }
@@ -496,7 +461,7 @@ const removeExcludedItem = (index) => {
 
 // SEO والميتا
 useHead({
-  title: 'إضافة حزمة جديدة - Wonder Land Admin',
+  title: 'إضافة باقة جديدة - Wonder Land Admin',
   meta: [
     { name: 'description', content: 'إنشاء حزمة سياحية جديدة' },
     { name: 'robots', content: 'noindex, nofollow' }

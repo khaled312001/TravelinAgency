@@ -4,222 +4,124 @@
     <div class="h-16"></div>
     
     <!-- رأس الصفحة -->
-    <div class="flex flex-col sm:flex-row sm:items-center sm:justify-between">
-      <div>
-        <h1 class="text-2xl font-bold text-gray-900">إدارة الباقات السياحية</h1>
-        <p class="mt-1 text-sm text-gray-600">إدارة وتحرير الباقات السياحية المتاحة</p>
-      </div>
-      <div class="mt-4 sm:mt-0 flex space-x-3 space-x-reverse">
+    <AdminPageHeader 
+      title="إدارة الباقات السياحية"
+      description="إدارة وتحرير الباقات السياحية المتاحة"
+    >
+      <template #actions>
         <button
           @click="exportPackages"
-          class="inline-flex items-center px-4 py-2 bg-green-600 text-white rounded-lg hover:bg-green-700 transition-colors"
+          class="inline-flex items-center px-3 sm:px-4 py-2 bg-green-600 text-white rounded-lg hover:bg-green-700 transition-colors text-sm"
         >
-          <Icon name="material-symbols:download" class="h-5 w-5 ml-2" />
-          تصدير البيانات
+          <Icon name="material-symbols:download" class="h-4 w-4 sm:h-5 sm:w-5 ml-2" />
+          <span class="hidden sm:inline">تصدير البيانات</span>
+          <span class="sm:hidden">تصدير</span>
         </button>
         <NuxtLink
-          to="/admin/packages/create"
-          class="inline-flex items-center px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors"
+          to="/admin/packages/images"
+          class="inline-flex items-center px-3 sm:px-4 py-2 bg-purple-600 text-white rounded-lg hover:bg-purple-700 transition-colors text-sm"
         >
-          <Icon name="material-symbols:add" class="h-5 w-5 ml-2" />
-          إضافة حزمة جديدة
+          <Icon name="material-symbols:image" class="h-4 w-4 sm:h-5 sm:w-5 ml-2" />
+          <span class="hidden sm:inline">إدارة الصور</span>
+          <span class="sm:hidden">الصور</span>
         </NuxtLink>
-      </div>
-    </div>
+        <NuxtLink
+          to="/admin/packages/create"
+          class="inline-flex items-center px-3 sm:px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors text-sm"
+        >
+          <Icon name="material-symbols:add" class="h-4 w-4 sm:h-5 sm:w-5 ml-2" />
+          <span class="hidden sm:inline">إضافة باقة جديدة</span>
+          <span class="sm:hidden">إضافة</span>
+        </NuxtLink>
+      </template>
+    </AdminPageHeader>
 
     <!-- شريط البحث والتصفية -->
-    <div class="bg-white rounded-lg shadow-sm border border-gray-200 p-6">
-      <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
-        <!-- البحث -->
-        <div class="relative">
-          <Icon name="material-symbols:search" class="absolute right-3 top-1/2 transform -translate-y-1/2 h-5 w-5 text-gray-400" />
-          <input
-            v-model="searchQuery"
-            type="text"
-            placeholder="البحث في الحزم..."
-            class="w-full pr-10 pl-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
-          />
-        </div>
-
-        <!-- تصفية حسب الحالة -->
-        <select
-          v-model="statusFilter"
-          class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
-        >
-          <option value="">جميع الحالات</option>
-          <option value="active">نشط</option>
-          <option value="inactive">غير نشط</option>
-          <option value="draft">مسودة</option>
-        </select>
-
-        <!-- تصفية حسب الفئة -->
-        <select
-          v-model="categoryFilter"
-          class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
-        >
-          <option value="">جميع الفئات</option>
-          <option value="domestic">محلي</option>
-          <option value="international">دولي</option>
-          <option value="religious">ديني</option>
-          <option value="adventure">مغامرة</option>
-        </select>
-      </div>
-    </div>
+    <AdminFilters>
+      <AdminSearchInput
+        v-model="searchQuery"
+        placeholder="البحث في الباقات..."
+      />
+      <AdminSelect
+        v-model="statusFilter"
+        :options="statusOptions"
+        placeholder="جميع الحالات"
+      />
+      <AdminSelect
+        v-model="categoryFilter"
+        :options="categoryOptions"
+        placeholder="جميع الفئات"
+      />
+    </AdminFilters>
 
     <!-- قائمة الباقات -->
-    <div class="bg-white rounded-lg shadow-sm border border-gray-200">
-      <!-- حالة التحميل -->
-      <div v-if="loading" class="flex justify-center items-center py-12">
-        <Icon name="material-symbols:progress-activity" class="animate-spin h-8 w-8 text-blue-600" />
-        <span class="mr-3 text-gray-600">جارٍ تحميل الحزم...</span>
-      </div>
+    <AdminTable
+      :items="filteredPackages"
+      :columns="tableColumns"
+      :actions="tableActions"
+      :loading="loading"
+      empty-icon="material-symbols:package-2-outline"
+      empty-title="لا توجد حزم"
+      empty-description="لم يتم العثور على أي حزم سياحية"
+      :empty-action="{
+        label: 'إضافة باقة جديدة',
+        icon: 'material-symbols:add',
+        class: 'inline-flex items-center px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors',
+        handler: () => navigateTo('/admin/packages/create')
+      }"
+    >
+      <!-- عمود الباقة -->
+      <template #column-title="{ item: pkg }">
+        <div class="flex items-center">
+          <img 
+            :src="pkg.image || pkg.image_url || '/images/placeholder.jpg'" 
+            :alt="pkg.title_ar || pkg.title_en || pkg.title"
+            class="h-10 w-10 sm:h-12 sm:w-12 rounded-lg object-cover ml-3 sm:ml-4 flex-shrink-0"
+            loading="lazy"
+          />
+          <div class="min-w-0 flex-1">
+            <div class="text-sm font-medium text-gray-900 truncate">{{ pkg.title_ar || pkg.title_en || pkg.title }}</div>
+            <div class="text-sm text-gray-500 truncate">{{ truncateText(pkg.description_ar || pkg.description_en || pkg.description, 30) }}</div>
+          </div>
+        </div>
+      </template>
 
-      <!-- قائمة الباقات -->
-      <div v-else-if="filteredPackages.length > 0" class="overflow-x-auto">
-        <table class="min-w-full divide-y divide-gray-200">
-          <thead class="bg-gray-50">
-            <tr>
-              <th class="px-6 py-3 text-right text-xs font-medium text-gray-500 uppercase tracking-wider">
-                الحزمة
-              </th>
-              <th class="px-6 py-3 text-right text-xs font-medium text-gray-500 uppercase tracking-wider">
-                السعر
-              </th>
-              <th class="px-6 py-3 text-right text-xs font-medium text-gray-500 uppercase tracking-wider">
-                الفئة
-              </th>
-              <th class="px-6 py-3 text-right text-xs font-medium text-gray-500 uppercase tracking-wider">
-                الحالة
-              </th>
-              <th class="px-6 py-3 text-right text-xs font-medium text-gray-500 uppercase tracking-wider">
-                تاريخ الإنشاء
-              </th>
-              <th class="px-6 py-3 text-right text-xs font-medium text-gray-500 uppercase tracking-wider">
-                الإجراءات
-              </th>
-            </tr>
-          </thead>
-          <tbody class="bg-white divide-y divide-gray-200">
-            <tr v-for="pkg in filteredPackages" :key="pkg.id" class="hover:bg-gray-50">
-              <!-- معلومات الحزمة -->
-              <td class="px-6 py-4 whitespace-nowrap">
-                <div class="flex items-center">
-                  <img 
-                    :src="pkg.image || pkg.image_url || '/images/placeholder.jpg'" 
-                    :alt="pkg.title_ar || pkg.title_en || pkg.title"
-                    class="h-12 w-12 rounded-lg object-cover ml-4"
-                    loading="lazy"
-                  />
-                  <div>
-                    <div class="text-sm font-medium text-gray-900">{{ pkg.title_ar || pkg.title_en || pkg.title }}</div>
-                    <div class="text-sm text-gray-500">{{ truncateText(pkg.description_ar || pkg.description_en || pkg.description, 50) }}</div>
-                  </div>
-                </div>
-              </td>
+      <!-- عمود الفئة -->
+      <template #column-category="{ item: pkg }">
+        <span :class="getCategoryColor(pkg.category)" class="px-2 py-1 text-xs font-medium rounded-full">
+          {{ getCategoryName(pkg.category) }}
+        </span>
+      </template>
 
-              <!-- السعر -->
-              <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">
-                {{ formatPrice(pkg.price) }}
-              </td>
+      <!-- عمود الحالة -->
+      <template #column-status="{ item: pkg }">
+        <span :class="getStatusColor(pkg.status)" class="px-2 py-1 text-xs font-medium rounded-full">
+          {{ getStatusName(pkg.status) }}
+        </span>
+      </template>
 
-              <!-- الفئة -->
-              <td class="px-6 py-4 whitespace-nowrap">
-                <span :class="getCategoryColor(pkg.category)" class="px-2 py-1 text-xs font-medium rounded-full">
-                  {{ getCategoryName(pkg.category) }}
-                </span>
-              </td>
+      <!-- عمود السعر -->
+      <template #column-price="{ item: pkg }">
+        <div>
+          <div class="text-sm font-medium text-gray-900">{{ formatPrice(pkg.price) }}</div>
+          <div class="text-sm text-gray-500">{{ pkg.currency || 'SAR' }}</div>
+        </div>
+      </template>
 
-              <!-- الحالة -->
-              <td class="px-6 py-4 whitespace-nowrap">
-                <span :class="getStatusColor(pkg.status)" class="px-2 py-1 text-xs font-medium rounded-full">
-                  {{ getStatusName(pkg.status) }}
-                </span>
-              </td>
-
-              <!-- تاريخ الإنشاء -->
-              <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
-                {{ formatDate(pkg.created_at) }}
-              </td>
-
-              <!-- الإجراءات -->
-              <td class="px-6 py-4 whitespace-nowrap text-right text-sm font-medium">
-                <div class="flex items-center space-x-2 space-x-reverse">
-                  <NuxtLink
-                    :to="`/admin/packages/${pkg.id}`"
-                    class="text-blue-600 hover:text-blue-900 p-1 rounded"
-                    title="عرض"
-                  >
-                    <Icon name="material-symbols:visibility" class="h-4 w-4" />
-                  </NuxtLink>
-                  <NuxtLink
-                    :to="`/admin/packages/${pkg.id}/edit`"
-                    class="text-green-600 hover:text-green-900 p-1 rounded"
-                    title="تحرير"
-                  >
-                    <Icon name="material-symbols:edit" class="h-4 w-4" />
-                  </NuxtLink>
-                  <button
-                    @click="togglePackageStatus(pkg)"
-                    :class="pkg.status === 'active' ? 'text-orange-600 hover:text-orange-900' : 'text-green-600 hover:text-green-900'"
-                    class="p-1 rounded"
-                    :title="pkg.status === 'active' ? 'إلغاء التفعيل' : 'تفعيل'"
-                  >
-                    <Icon :name="pkg.status === 'active' ? 'material-symbols:pause' : 'material-symbols:play-arrow'" class="h-4 w-4" />
-                  </button>
-                  <button
-                    @click="deletePackage(pkg)"
-                    class="text-red-600 hover:text-red-900 p-1 rounded"
-                    title="حذف"
-                  >
-                    <Icon name="material-symbols:delete" class="h-4 w-4" />
-                  </button>
-                </div>
-              </td>
-            </tr>
-          </tbody>
-        </table>
-      </div>
-
-      <!-- حالة عدم وجود بيانات -->
-      <div v-else class="text-center py-12">
-        <Icon name="material-symbols:package-2-outline" class="h-16 w-16 text-gray-300 mx-auto mb-4" />
-        <h3 class="text-lg font-medium text-gray-900 mb-2">لا توجد حزم</h3>
-        <p class="text-gray-500 mb-6">لم يتم العثور على أي حزم سياحية</p>
-        <NuxtLink
-          to="/admin/packages/create"
-          class="inline-flex items-center px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors"
-        >
-          <Icon name="material-symbols:add" class="h-5 w-5 ml-2" />
-          إضافة حزمة جديدة
-        </NuxtLink>
-      </div>
-    </div>
+      <!-- عمود تاريخ الإنشاء -->
+      <template #column-created_at="{ item: pkg }">
+        {{ formatDate(pkg.created_at) }}
+      </template>
+    </AdminTable>
 
     <!-- التصفح -->
-    <div v-if="totalPages > 1" class="flex items-center justify-between">
-      <div class="text-sm text-gray-700">
-        عرض {{ (currentPage - 1) * itemsPerPage + 1 }} إلى {{ Math.min(currentPage * itemsPerPage, totalItems) }} من أصل {{ totalItems }} حزمة
-      </div>
-      <div class="flex space-x-1 space-x-reverse">
-        <button
-          @click="currentPage = Math.max(1, currentPage - 1)"
-          :disabled="currentPage === 1"
-          class="px-3 py-2 text-sm bg-white border border-gray-300 rounded-md hover:bg-gray-50 disabled:opacity-50 disabled:cursor-not-allowed"
-        >
-          السابق
-        </button>
-        <span class="px-3 py-2 text-sm bg-blue-600 text-white border border-blue-600 rounded-md">
-          {{ currentPage }}
-        </span>
-        <button
-          @click="currentPage = Math.min(totalPages, currentPage + 1)"
-          :disabled="currentPage === totalPages"
-          class="px-3 py-2 text-sm bg-white border border-gray-300 rounded-md hover:bg-gray-50 disabled:opacity-50 disabled:cursor-not-allowed"
-        >
-          التالي
-        </button>
-      </div>
-    </div>
+    <AdminPagination
+      v-model:current-page="currentPage"
+      :total-pages="totalPages"
+      :total-items="totalItems"
+      :items-per-page="itemsPerPage"
+      item-name="حزمة"
+    />
   </div>
 </template>
 
@@ -297,7 +199,66 @@ const totalItems = computed(() => {
 
 const totalPages = computed(() => Math.ceil(totalItems.value / itemsPerPage))
 
-// تحميل الحزم
+// خيارات التصفية
+const statusOptions = computed(() => [
+  { value: 'active', label: 'نشط' },
+  { value: 'inactive', label: 'غير نشط' },
+  { value: 'draft', label: 'مسودة' }
+])
+
+const categoryOptions = computed(() => [
+  { value: 'domestic', label: 'محلي' },
+  { value: 'international', label: 'دولي' },
+  { value: 'religious', label: 'ديني' },
+  { value: 'adventure', label: 'مغامرة' }
+])
+
+// أعمدة الجدول
+const tableColumns = computed(() => [
+  { key: 'title', label: 'الباقة' },
+  { key: 'category', label: 'الفئة' },
+  { key: 'status', label: 'الحالة' },
+  { key: 'price', label: 'السعر' },
+  { key: 'created_at', label: 'تاريخ الإنشاء' }
+])
+
+// إجراءات الجدول
+const tableActions = computed(() => [
+  {
+    key: 'view',
+    icon: 'material-symbols:visibility',
+    label: 'عرض',
+    class: 'text-blue-600 hover:text-blue-900',
+    title: 'عرض',
+    handler: (pkg) => navigateTo(`/admin/packages/${pkg.id}`)
+  },
+  {
+    key: 'edit',
+    icon: 'material-symbols:edit',
+    label: 'تحرير',
+    class: 'text-green-600 hover:text-green-900',
+    title: 'تحرير',
+    handler: (pkg) => navigateTo(`/admin/packages/${pkg.id}/edit`)
+  },
+  {
+    key: 'toggle',
+    icon: 'material-symbols:play-arrow',
+    label: 'تفعيل',
+    class: 'text-orange-600 hover:text-orange-900',
+    title: 'تفعيل/إلغاء تفعيل',
+    handler: (pkg) => togglePackageStatus(pkg)
+  },
+  {
+    key: 'delete',
+    icon: 'material-symbols:delete',
+    label: 'حذف',
+    class: 'text-red-600 hover:text-red-900',
+    title: 'حذف',
+    handler: (pkg) => deletePackage(pkg)
+  }
+])
+
+// تحميل الباقات
 const loadPackages = async () => {
   try {
     loading.value = true
@@ -310,7 +271,7 @@ const loadPackages = async () => {
       packages.value = []
     }
   } catch (error) {
-    console.error('خطأ في تحميل الحزم:', error)
+    console.error('خطأ في تحميل الباقات:', error)
     // بيانات وهمية للعرض في حالة الخطأ
     packages.value = [
       {
@@ -343,7 +304,7 @@ const loadPackages = async () => {
   }
 }
 
-// تغيير حالة الحزمة
+// تغيير حالة الباقة
 const togglePackageStatus = async (pkg) => {
   try {
     const newStatus = pkg.status === 'active' ? 'inactive' : 'active'
@@ -356,15 +317,15 @@ const togglePackageStatus = async (pkg) => {
     }
 
     // إشعار بالنجاح
-    console.log(`تم ${newStatus === 'active' ? 'تفعيل' : 'إلغاء تفعيل'} الحزمة بنجاح`)
+    console.log(`تم ${newStatus === 'active' ? 'تفعيل' : 'إلغاء تفعيل'} الباقة بنجاح`)
   } catch (error) {
-    console.error('خطأ في تغيير حالة الحزمة:', error)
+    console.error('خطأ في تغيير حالة الباقة:', error)
   }
 }
 
-// حذف الحزمة
+// حذف الباقة
 const deletePackage = async (pkg) => {
-  if (!confirm('هل أنت متأكد من حذف هذه الحزمة؟ لا يمكن التراجع عن هذا الإجراء.')) return
+  if (!confirm('هل أنت متأكد من حذف هذه الباقة؟ لا يمكن التراجع عن هذا الإجراء.')) return
 
   try {
     await $fetch(`/api/packages/${pkg.id}`, { method: 'DELETE' })
@@ -372,10 +333,16 @@ const deletePackage = async (pkg) => {
     // Remove from local list
     packages.value = packages.value.filter(p => p.id !== pkg.id)
     
-    console.log('تم حذف الحزمة بنجاح')
+    console.log('تم حذف الباقة بنجاح')
   } catch (error) {
-    console.error('خطأ في حذف الحزمة:', error)
+    console.error('خطأ في حذف الباقة:', error)
   }
+}
+
+// التنقل إلى صفحة التحرير
+const navigateToEdit = (packageId) => {
+  console.log('Navigating to edit page:', `/admin/packages/${packageId}/edit`)
+  navigateTo(`/admin/packages/${packageId}/edit`)
 }
 
 // تصدير البيانات
@@ -384,12 +351,12 @@ const exportPackages = () => {
     const { exportPackagesToExcel } = useExcelExport()
     const success = exportPackagesToExcel(packages.value)
     if (success) {
-      console.log('تم تصدير الحزم بنجاح')
+      console.log('تم تصدير الباقات بنجاح')
     } else {
-      console.error('فشل في تصدير الحزم')
+      console.error('فشل في تصدير الباقات')
     }
   } catch (error) {
-    console.error('خطأ في تصدير الحزم:', error)
+    console.error('خطأ في تصدير الباقات:', error)
   }
 }
 
