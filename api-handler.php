@@ -53,6 +53,43 @@ switch ($apiPath) {
         }
         break;
         
+    // Authentication endpoints
+    case '/auth/login':
+        if ($requestMethod === 'POST') {
+            echo json_encode(handleLogin());
+        } else {
+            http_response_code(405);
+            echo json_encode(['error' => 'Method not allowed']);
+        }
+        break;
+        
+    case '/auth/logout':
+        if ($requestMethod === 'POST') {
+            echo json_encode(handleLogout());
+        } else {
+            http_response_code(405);
+            echo json_encode(['error' => 'Method not allowed']);
+        }
+        break;
+        
+    case '/auth/me':
+        if ($requestMethod === 'GET') {
+            echo json_encode(handleGetUser());
+        } else {
+            http_response_code(405);
+            echo json_encode(['error' => 'Method not allowed']);
+        }
+        break;
+        
+    case '/auth/verify':
+        if ($requestMethod === 'POST') {
+            echo json_encode(handleVerifyToken());
+        } else {
+            http_response_code(405);
+            echo json_encode(['error' => 'Method not allowed']);
+        }
+        break;
+        
     default:
         http_response_code(404);
         echo json_encode(['error' => 'API endpoint not found', 'path' => $apiPath]);
@@ -240,6 +277,154 @@ function handleContactMessage() {
             'message' => $input['message'],
             'timestamp' => date('Y-m-d H:i:s')
         ]
+    ];
+}
+
+// Authentication functions
+function handleLogin() {
+    $input = json_decode(file_get_contents('php://input'), true);
+    
+    if (!$input) {
+        http_response_code(400);
+        return ['error' => 'Invalid JSON data'];
+    }
+    
+    if (empty($input['email']) || empty($input['password'])) {
+        http_response_code(400);
+        return ['error' => 'Email and password are required'];
+    }
+    
+    // Hardcoded admin credentials for fallback
+    $adminCredentials = [
+        'admin@worldtripagency.com' => 'admin123',
+        'admin@travel.com' => 'admin123',
+        'admin@wonderland.com' => 'admin123',
+        'admin' => 'admin123'
+    ];
+    
+    if (isset($adminCredentials[$input['email']]) && $adminCredentials[$input['email']] === $input['password']) {
+        $token = generateJWT([
+            'id' => 1,
+            'name' => 'Admin User',
+            'email' => $input['email'],
+            'role' => 'admin'
+        ]);
+        
+        return [
+            'success' => true,
+            'token' => $token,
+            'user' => [
+                'id' => 1,
+                'name' => 'Admin User',
+                'email' => $input['email'],
+                'role' => 'admin'
+            ]
+        ];
+    }
+    
+    return ['error' => 'Invalid credentials'];
+}
+
+function handleLogout() {
+    return [
+        'success' => true,
+        'message' => 'Logged out successfully'
+    ];
+}
+
+function handleGetUser() {
+    $headers = getallheaders();
+    $token = null;
+    
+    if (isset($headers['Authorization'])) {
+        $authHeader = $headers['Authorization'];
+        if (preg_match('/Bearer\s+(.*)$/i', $authHeader, $matches)) {
+            $token = $matches[1];
+        }
+    }
+    
+    if (!$token) {
+        http_response_code(401);
+        return ['error' => 'No token provided'];
+    }
+    
+    $user = verifyJWT($token);
+    if (!$user) {
+        http_response_code(401);
+        return ['error' => 'Invalid token'];
+    }
+    
+    return [
+        'success' => true,
+        'user' => $user
+    ];
+}
+
+function handleVerifyToken() {
+    $input = json_decode(file_get_contents('php://input'), true);
+    
+    if (!$input || empty($input['token'])) {
+        http_response_code(400);
+        return ['error' => 'Token is required'];
+    }
+    
+    $user = verifyJWT($input['token']);
+    if (!$user) {
+        http_response_code(401);
+        return ['error' => 'Invalid token'];
+    }
+    
+    return [
+        'success' => true,
+        'user' => $user
+    ];
+}
+
+function generateJWT($user) {
+    $header = json_encode(['typ' => 'JWT', 'alg' => 'HS256']);
+    $payload = json_encode([
+        'user_id' => $user['id'],
+        'email' => $user['email'],
+        'name' => $user['name'],
+        'role' => $user['role'] ?? 'admin',
+        'iat' => time(),
+        'exp' => time() + (24 * 60 * 60)
+    ]);
+    
+    $base64Header = str_replace(['+', '/', '='], ['-', '_', ''], base64_encode($header));
+    $base64Payload = str_replace(['+', '/', '='], ['-', '_', ''], base64_encode($payload));
+    
+    $signature = hash_hmac('sha256', $base64Header . "." . $base64Payload, 'your-secret-key', true);
+    $base64Signature = str_replace(['+', '/', '='], ['-', '_', ''], base64_encode($signature));
+    
+    return $base64Header . "." . $base64Payload . "." . $base64Signature;
+}
+
+function verifyJWT($token) {
+    $parts = explode('.', $token);
+    if (count($parts) !== 3) {
+        return false;
+    }
+    
+    $header = json_decode(base64_decode(str_replace(['-', '_'], ['+', '/'], $parts[0])), true);
+    $payload = json_decode(base64_decode(str_replace(['-', '_'], ['+', '/'], $parts[1])), true);
+    
+    if (!$payload || $payload['exp'] < time()) {
+        return false;
+    }
+    
+    $signature = hash_hmac('sha256', $parts[0] . "." . $parts[1], 'your-secret-key', true);
+    $base64Signature = str_replace(['+', '/', '='], ['-', '_', ''], base64_encode($signature));
+    
+    if ($base64Signature !== $parts[2]) {
+        return false;
+    }
+    
+    return [
+        'id' => $payload['user_id'],
+        'name' => $payload['name'],
+        'email' => $payload['email'],
+        'role' => $payload['role']
     ];
 }
 ?>
