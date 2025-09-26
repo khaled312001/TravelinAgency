@@ -1,9 +1,8 @@
 export default defineEventHandler(async (event) => {
   return {
-    message: 'Serverless function is working!',
+    status: 'ok',
+    message: 'API is working',
     timestamp: new Date().toISOString(),
-    environment: process.env.NODE_ENV,
-    nodeVersion: process.version,
-    platform: process.platform
+    environment: process.env.NODE_ENV || 'development'
   }
 })
