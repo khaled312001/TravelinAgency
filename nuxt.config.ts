@@ -172,9 +172,7 @@ export default defineNuxtConfig({
     // Ensure proper Vercel deployment
     experimental: {
       wasm: true
-    },
-    // Add error handling for serverless
-    errorHandler: '~/error'
+    }
   },
 
   experimental: {
