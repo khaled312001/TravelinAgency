@@ -232,6 +232,7 @@ function handleHardcodedLogin($email, $password) {
     $adminCredentials = [
         'admin@worldtripagency.com' => 'admin123',
         'admin@travel.com' => 'admin123',
+        'admin@wonderland.com' => 'admin123',
         'admin' => 'admin123'
     ];
     
