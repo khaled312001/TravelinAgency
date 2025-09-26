@@ -68,8 +68,7 @@ import SaudiDestinations from '~/components/HomeSections/saudiDestinations.vue'
 import CMSRenderer from '~/components/cms/CMSRenderer.vue'
 
 definePageMeta({
-  layout: 'default',
-  ssr: false // Temporarily disable SSR to test
+  layout: 'default'
 })
 
 // State
