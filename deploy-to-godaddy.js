@@ -55,11 +55,16 @@ try {
     console.log('✅ Copied server directory');
   }
 
-  // Copy .output directory if it exists
+  // Copy .output directory if it exists (skip if permission issues)
   if (fs.existsSync('.output')) {
     console.log('📁 Copying .output directory...');
-    copyDir('.output', path.join(deployDir, '.output'));
-    console.log('✅ Copied .output directory');
+    try {
+      copyDir('.output', path.join(deployDir, '.output'));
+      console.log('✅ Copied .output directory');
+    } catch (error) {
+      console.log('⚠️  Skipped .output directory due to permission issues');
+      console.log('   This is normal - the .output directory contains build files');
+    }
   }
 
   // Create production .env template
@@ -164,4 +169,10 @@ function copyDir(src, dest) {
     const srcPath = path.join(src, entry.name);
     const destPath = path.join(dest, entry.name);
     
-    if (entr
+    if (entry.isDirectory()) {
+      copyDir(srcPath, destPath);
+    } else {
+      fs.copyFileSync(srcPath, destPath);
+    }
+  }
+}
