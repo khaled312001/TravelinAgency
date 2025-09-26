@@ -1,0 +1,23 @@
+{
+  "buildCommand": "npm run build",
+  "outputDirectory": ".output/public",
+  "framework": "nuxtjs",
+  "functions": {
+    ".output/server/index.mjs": {
+      "maxDuration": 30
+    }
+  },
+  "routes": [
+    {
+      "src": "/api/(.*)",
+      "dest": "/.output/server/index.mjs"
+    },
+    {
+      "src": "/(.*)",
+      "dest": "/.output/server/index.mjs"
+    }
+  ],
+  "env": {
+    "NODE_ENV": "production"
+  }
+}
