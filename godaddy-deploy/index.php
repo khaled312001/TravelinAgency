@@ -33,7 +33,7 @@ $cleanUri = strtok($requestUri, '?');
 
 // Handle static files first
 if (isset($pathInfo['extension'])) {
-    $staticFile = __DIR__ . '/public' . $cleanUri;
+    $staticFile = __DIR__ . '/output/public' . $cleanUri;
     if (file_exists($staticFile) && is_file($staticFile)) {
         $mimeTypes = [
             'css' => 'text/css',
@@ -80,7 +80,7 @@ if (strpos($cleanUri, '/api/') === 0) {
 }
 
 // Check if we have a built Nuxt.js application
-$nuxtHtmlFile = __DIR__ . '/public/index.html';
+$nuxtHtmlFile = __DIR__ . '/output/public/200.html';
 if (file_exists($nuxtHtmlFile)) {
     $content = file_get_contents($nuxtHtmlFile);
     

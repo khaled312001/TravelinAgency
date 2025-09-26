@@ -161,7 +161,7 @@
         "../node_modules/nuxt-site-config/dist/runtime/nitro/composable-barrel-deprecated"
       ],
       "#nuxt-icon-server-bundle": [
-        "./nuxt-icon-server-bundle"
+        "./nuxt-icon-server-bundle.mjs"
       ]
     },
     "lib": [

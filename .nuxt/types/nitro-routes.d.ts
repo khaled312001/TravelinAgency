@@ -193,6 +193,9 @@ declare module "nitropack/types" {
       'put': Simplify<Serialize<Awaited<ReturnType<typeof import('../../server/api/users/[id].put').default>>>>
       'default': Simplify<Serialize<Awaited<ReturnType<typeof import('../../server/api/users/[id]').default>>>>
     }
+    '/__nuxt_error': {
+      'default': Simplify<Serialize<Awaited<ReturnType<typeof import('../../node_modules/nuxt/dist/core/runtime/nitro/handlers/renderer').default>>>>
+    }
     '/sitemap_index.xml': {
       'default': Simplify<Serialize<Awaited<ReturnType<typeof import('../../node_modules/nuxt-simple-sitemap/dist/runtime/routes/sitemap_index.xml').default>>>>
     }

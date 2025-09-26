@@ -55,15 +55,15 @@ try {
     console.log('✅ Copied server directory');
   }
 
-  // Copy .output directory if it exists (skip if permission issues)
-  if (fs.existsSync('.output')) {
-    console.log('📁 Copying .output directory...');
+  // Copy output directory if it exists (skip if permission issues)
+  if (fs.existsSync('output')) {
+    console.log('📁 Copying output directory...');
     try {
-      copyDir('.output', path.join(deployDir, '.output'));
-      console.log('✅ Copied .output directory');
+      copyDir('output', path.join(deployDir, 'output'));
+      console.log('✅ Copied output directory');
     } catch (error) {
-      console.log('⚠️  Skipped .output directory due to permission issues');
-      console.log('   This is normal - the .output directory contains build files');
+      console.log('⚠️  Skipped output directory due to permission issues');
+      console.log('   This is normal - the output directory contains build files');
     }
   }
 
@@ -125,7 +125,7 @@ All files in this 'godaddy-deploy' folder are ready to be uploaded to your GoDad
 - index.php (Application entry point)
 - public/ (Static files and assets)
 - server/ (API routes)
-- .output/ (Nuxt.js build output)
+- output/ (Nuxt.js build output)
 
 ## Test Your Website:
 - Main site: https://worldtripagency.com/

@@ -27,7 +27,7 @@ All files in this 'godaddy-deploy' folder are ready to be uploaded to your GoDad
 - index.php (Application entry point)
 - public/ (Static files and assets)
 - server/ (API routes)
-- .output/ (Nuxt.js build output)
+- output/ (Nuxt.js build output)
 
 ## Test Your Website:
 - Main site: https://worldtripagency.com/

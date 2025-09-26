@@ -1,2 +1,2 @@
-import{publicAssetsURL as s}from"#internal/nuxt/paths";const o=s("/images/404/travel-lost.svg");export{o as default};
+import{publicAssetsURL as e}from"#internal/nuxt/paths";const r=e("/videos/hero/mobile/hero-mobile-center.mp4");export{r as default};
 //# sourceMappingURL=virtual_public6.mjs.map

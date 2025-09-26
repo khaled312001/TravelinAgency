@@ -1,2 +1,2 @@
-import{publicAssetsURL as o}from"#internal/nuxt/paths";const s=o("/videos/hero/desktop/hero-desktop.webm");export{s as default};
+import{publicAssetsURL as e}from"#internal/nuxt/paths";const s=e("/images/home/heroSection/hero-image.webp");export{s as default};
 //# sourceMappingURL=virtual_public2.mjs.map

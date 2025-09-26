@@ -1,2 +1,0 @@
-import{defineEventHandler as e,getRouterParam as s,createError as t}from"file://F:/TravelinAgency/node_modules/h3/dist/index.mjs";const o=e((async e=>{try{const o=s(e,"id");if(!o)throw t({statusCode:400,statusMessage:"معرف الصفحة مطلوب"});return console.log("Deleting SEO page with ID:",o),await new Promise((e=>setTimeout(e,500))),{success:!0,message:"تم حذف صفحة SEO بنجاح"}}catch(e){throw console.error("Error deleting SEO page:",e),t({statusCode:500,statusMessage:"خطأ في حذف صفحة SEO"})}}));export{o as default};
-//# sourceMappingURL=_id_.delete.mjs.map
