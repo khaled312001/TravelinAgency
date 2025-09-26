@@ -1,13 +1,19 @@
 export default defineNuxtRouteMiddleware(async (to) => {
   console.log('🚀 Admin middleware called for:', to.path)
   
-  const { user, checkAuth } = useAuth()
-
   // Skip middleware for login page to avoid redirect loops
   if (to.path === '/admin/login') {
     console.log('⏭️ Skipping middleware for login page')
     return
   }
+
+  // Only run auth checks on client-side to avoid SSR issues
+  if (process.server) {
+    console.log('⏭️ Skipping auth check on server-side')
+    return
+  }
+  
+  const { user, checkAuth } = useAuth()
 
   // التحقق من وجود مستخدم مسجل
   let currentUser = user.value

@@ -5,6 +5,12 @@ export default defineNuxtRouteMiddleware(async (to) => {
   // تجاهل صفحات الإدارة
   if (to.path.startsWith('/admin')) return
   
+  // تجاهل صفحة الصيانة نفسها
+  if (to.path === '/maintenance') return
+  
+  // فقط على العميل لتجنب مشاكل SSR
+  if (process.server) return
+  
   try {
     const { getSetting } = useSettings()
     
@@ -17,5 +23,6 @@ export default defineNuxtRouteMiddleware(async (to) => {
     }
   } catch (error) {
     console.error('Error checking maintenance mode:', error)
+    // في حالة الخطأ، لا نفعل شيئاً لتجنب منع الوصول للموقع
   }
 })
