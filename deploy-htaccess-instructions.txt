@@ -1,0 +1,41 @@
+# DEPLOYMENT INSTRUCTIONS FOR WORKING .HTACCESS
+# ===========================================
+
+# 1. Backup current .htaccess
+cp .htaccess .htaccess.backup-$(date +%Y%m%d)
+
+# 2. Deploy the working .htaccess
+cp .htaccess-working .htaccess
+
+# 3. Set correct permissions
+chmod 644 .htaccess
+
+# 4. Test PHP execution
+curl -k https://worldtripagency.com/test-basic.php
+
+# 5. Test API endpoints
+curl -k https://worldtripagency.com/api/test
+
+# 6. Test main website
+curl -k https://worldtripagency.com/
+
+# 7. If issues persist, restore backup
+# cp .htaccess.backup-* .htaccess
+
+# KEY FEATURES OF THIS .HTACCESS:
+# ✅ Explicitly allows PHP file execution
+# ✅ Sets proper PHP handler
+# ✅ Handles API routes before Nuxt.js routing
+# ✅ Serves static files directly
+# ✅ Redirects IPX optimization URLs
+# ✅ Includes security headers
+# ✅ Enables compression
+# ✅ Sets proper cache headers
+# ✅ Prevents access to sensitive files
+# ✅ Handles MIME types correctly
+
+# TROUBLESHOOTING:
+# - If PHP still fails: Check GoDaddy PHP settings in cPanel
+# - If static files fail: Check file permissions (644 for files, 755 for folders)
+# - If API fails: Check api-handler.php exists and has correct permissions
+# - If Nuxt.js fails: Check 200.html exists in output/public/ or public/

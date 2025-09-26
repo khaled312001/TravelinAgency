@@ -78,13 +78,31 @@ if (isset($pathInfo['extension'])) {
     }
 }
 
-// Handle API routes - try to proxy to Node.js if available
+// Handle API routes - include the API handler
 if (strpos($cleanUri, '/api/') === 0) {
-    // For now, return a simple response for API routes
-    http_response_code(200);
-    header('Content-Type: application/json');
-    echo json_encode(['message' => 'API endpoint', 'uri' => $cleanUri]);
-    exit;
+    // Try to include the API handler
+    if (file_exists(__DIR__ . '/api-handler.php')) {
+        include __DIR__ . '/api-handler.php';
+        exit;
+    } else {
+        // Fallback API response
+        header('Content-Type: application/json');
+        header('Access-Control-Allow-Origin: *');
+        header('Access-Control-Allow-Methods: GET, POST, PUT, DELETE, OPTIONS');
+        header('Access-Control-Allow-Headers: Content-Type, Authorization');
+        
+        if ($_SERVER['REQUEST_METHOD'] === 'OPTIONS') {
+            http_response_code(200);
+            exit;
+        }
+        
+        echo json_encode([
+            'error' => 'API handler not found',
+            'message' => 'Please ensure api-handler.php exists',
+            'timestamp' => date('c')
+        ]);
+        exit;
+    }
 }
 
 // Check if we have a built Nuxt.js application - check multiple locations
