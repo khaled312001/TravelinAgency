@@ -1,0 +1,1 @@
+import{aE as a,aC as t,J as r}from"./Bf4XLz-f.js";const o=a(async n=>{if(!n.path.startsWith("/admin")&&n.path!=="/maintenance")try{const{getSetting:e}=t();if(e("maintenance_mode",!1))return r("/maintenance")}catch(e){console.error("Error checking maintenance mode:",e)}});export{o as default};

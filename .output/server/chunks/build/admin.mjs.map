@@ -1,0 +1,1 @@
+{"version":3,"file":"admin.mjs","sources":["../../../../middleware/admin.ts"],"sourcesContent":null,"names":["admin","defineNuxtRouteMiddleware","async","console","to","path","log"],"mappings":"mjBACUA,MAAAA,EAAuCC,GAAAC,UAG3CC,QAA4BC,IAAAA,kCAAAA,EAAAC,MACqB,iBAAnDD,EAAAC,KAOAF,QAAAG,IAAA,yCANAH,QAAAG,IAAA,wCASF"}

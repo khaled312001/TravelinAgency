@@ -100,6 +100,9 @@ declare module "nitropack/types" {
       'delete': Simplify<Serialize<Awaited<ReturnType<typeof import('../../server/api/content/[id].delete').default>>>>
       'default': Simplify<Serialize<Awaited<ReturnType<typeof import('../../server/api/content/[id]').default>>>>
     }
+    '/api/debug': {
+      'get': Simplify<Serialize<Awaited<ReturnType<typeof import('../../server/api/debug.get').default>>>>
+    }
     '/api/destination-contact-form': {
       'default': Simplify<Serialize<Awaited<ReturnType<typeof import('../../server/api/destination-contact-form').default>>>>
     }

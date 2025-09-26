@@ -88,12 +88,14 @@ export default defineEventHandler(async (event) => {
       data: formattedPackages
     };
 
-  } catch (error) {
+  } catch (error: any) {
     console.error('Error fetching packages:', error);
     
+    // Return a more detailed error response
     return {
       success: false,
       message: 'Failed to fetch packages',
+      error: process.env.NODE_ENV === 'development' ? error.message : 'Internal server error',
       data: []
     };
   }

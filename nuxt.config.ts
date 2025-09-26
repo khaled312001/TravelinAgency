@@ -1,5 +1,5 @@
 // https://nuxt.com/docs/api/configuration/nuxt-config
-const productionURL = 'https://travelin-agency.vercel.app'
+const productionURL = 'https://worldtripagency.com'
 export default defineNuxtConfig({
   devtools: { enabled: false },
   
@@ -57,7 +57,7 @@ export default defineNuxtConfig({
         : 'http://localhost:3000'),
       
       // Public site URL for links in notifications
-      publicSiteUrl: process.env.PUBLIC_SITE_URL || 'https://travelin-agency.vercel.app'
+      publicSiteUrl: process.env.PUBLIC_SITE_URL || 'https://worldtripagency.com'
     }
   },
 
@@ -143,13 +143,13 @@ export default defineNuxtConfig({
   ],
 
   nitro: {
-    preset: 'vercel',
+    preset: 'node-server',
     compressPublicAssets: {
       gzip: true,
       brotli: true
     },
     minify: true,
-    // Improve static asset handling
+    // Improve static asset handling for GoDaddy
     publicAssets: [
       {
         dir: 'public',
@@ -160,7 +160,7 @@ export default defineNuxtConfig({
     routeRules: {
       '/images/**': { static: true },
       '/icons/**': { static: true },
-      // Disable caching for API routes to prevent workbox conflicts
+      // Disable caching for API routes
       '/api/**': { 
         headers: { 
           'Cache-Control': 'no-cache, no-store, must-revalidate',
@@ -168,10 +168,6 @@ export default defineNuxtConfig({
           'Expires': '0'
         }
       }
-    },
-    // Ensure proper Vercel deployment
-    experimental: {
-      wasm: true
     }
   },
 
