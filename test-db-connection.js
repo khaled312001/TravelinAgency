@@ -1,24 +1,31 @@
-// Test database connection script
 import mysql from 'mysql2/promise';
+import dotenv from 'dotenv';
+dotenv.config();
 
 async function testConnection() {
+  console.log('🔧 Testing MySQL Connection...');
+  console.log('Environment:', process.env.NODE_ENV || 'development');
+  
   const config = {
-    host: 'sg2plzcpnl508590.prod.sin2.secureserver.net',
-    port: 3306,
-    user: 'travel',
-    password: 'support@Passord123',
-    database: 'travel',
-    charset: 'utf8mb4',
-    timezone: '+00:00'
+    host: process.env.DB_HOST || 'localhost',
+    port: Number(process.env.DB_PORT) || 3306,
+    user: process.env.DB_USER || 'travel',
+    password: process.env.DB_PASSWORD || 'support@Passord123',
+    database: process.env.DB_NAME || 'travel',
+    ssl: process.env.NODE_ENV === 'production' ? {
+      rejectUnauthorized: false
+    } : false,
+    acquireTimeout: 60000,
+    timeout: 60000
   };
 
-  console.log('🔧 Testing database connection...');
-  console.log('Config:', {
+  console.log('📋 Connection Config:', {
     host: config.host,
     port: config.port,
     user: config.user,
     password: config.password ? '[SET]' : '[EMPTY]',
-    database: config.database
+    database: config.database,
+    ssl: config.ssl ? 'enabled' : 'disabled'
   });
 
   try {
@@ -26,34 +33,32 @@ async function testConnection() {
     console.log('✅ Database connection successful!');
     
     // Test a simple query
-    const [rows] = await connection.execute('SELECT 1 as test');
-    console.log('✅ Query test successful:', rows);
+    const [rows] = await connection.execute('SELECT 1 as test, NOW() as current_time');
+    console.log('✅ Query test successful:', rows[0]);
     
-    // Test if packages table exists
-    const [tables] = await connection.execute('SHOW TABLES LIKE "packages"');
-    console.log('📦 Packages table exists:', tables.length > 0);
+    // Test if tables exist
+    const [tables] = await connection.execute('SHOW TABLES');
+    console.log('📊 Available tables:', tables.length);
     
     if (tables.length > 0) {
-      const [packageCount] = await connection.execute('SELECT COUNT(*) as count FROM packages');
-      console.log('📦 Package count:', packageCount[0].count);
+      console.log('Table names:', tables.map(t => Object.values(t)[0]));
     }
     
     await connection.end();
     console.log('✅ Connection closed successfully');
     
   } catch (error) {
-    console.error('❌ Database connection failed:', {
-      message: error.message,
-      code: error.code,
-      errno: error.errno
-    });
+    console.error('❌ Database connection failed:');
+    console.error('Error Code:', error.code);
+    console.error('Error Message:', error.message);
+    console.error('Error Number:', error.errno);
     
     if (error.code === 'ECONNREFUSED') {
-      console.error('💡 Solution: Check if the database host and port are correct');
+      console.log('💡 Suggestion: Check if your database host and port are correct');
     } else if (error.code === 'ER_ACCESS_DENIED_ERROR') {
-      console.error('💡 Solution: Check if the username and password are correct');
+      console.log('💡 Suggestion: Check your database username and password');
     } else if (error.code === 'ER_BAD_DB_ERROR') {
-      console.error('💡 Solution: Check if the database name is correct');
+      console.log('💡 Suggestion: Check if your database name exists');
     }
   }
 }

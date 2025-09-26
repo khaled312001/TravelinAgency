@@ -1,2 +1,0 @@
-import*as e from"../node_modules/_nuxt/image/dist/runtime/providers/ipx.mjs";const s={screens:{xs:320,sm:640,md:768,lg:1024,xl:1280,xxl:1536,"2xl":1536},presets:{default:{modifiers:{format:"webp",quality:80}}},provider:"ipx",domains:["images.unsplash.com","images.pexels.com"],alias:{},densities:[1,2,1,2],format:["jpg","jpeg","png","webp","webp"],quality:80};s.providers={ipx:{provider:e,defaults:{}}};export{s as imageOptions};
-//# sourceMappingURL=virtual_nuxt_F__TravelinAgency_.nuxt_image-options.mjs.map

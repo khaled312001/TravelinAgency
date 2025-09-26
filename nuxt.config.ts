@@ -38,9 +38,9 @@ export default defineNuxtConfig({
     // MySQL Database configuration
     dbHost: process.env.DB_HOST || 'localhost',
     dbPort: process.env.DB_PORT || 3306,
-    dbUser: process.env.DB_USER || 'wonderland_user',
-    dbPassword: process.env.DB_PASSWORD || 'wonderland_pass',
-    dbName: process.env.DB_NAME || 'wonderland_travel',
+    dbUser: process.env.DB_USER || 'travel',
+    dbPassword: process.env.DB_PASSWORD || 'support@Passord123',
+    dbName: process.env.DB_NAME || 'travel',
     
     // JWT configuration
     jwtSecret: process.env.JWT_SECRET || 'your-super-secret-jwt-key-here',
@@ -172,7 +172,9 @@ export default defineNuxtConfig({
     // Ensure proper Vercel deployment
     experimental: {
       wasm: true
-    }
+    },
+    // Add error handling for serverless
+    errorHandler: '~/error'
   },
 
   experimental: {

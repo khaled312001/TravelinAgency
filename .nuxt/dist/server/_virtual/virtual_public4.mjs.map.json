@@ -1,1 +1,0 @@
-{"file":"virtual_public4.mjs","mappings":"uDAAuD,MAAeA,EAAAC,EAAgB,uCAAuC","names":["_imports_2","publicAssetsURL"],"sources":["../../../../virtual:public?%2Fvideos%2Fhero%2Fdesktop%2Fhero-desktop.mp4"],"sourcesContent":["import { publicAssetsURL } from '#internal/nuxt/paths';export default publicAssetsURL(\"/videos/hero/desktop/hero-desktop.mp4\")"],"version":3}

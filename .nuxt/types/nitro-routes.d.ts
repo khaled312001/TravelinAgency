@@ -116,6 +116,9 @@ declare module "nitropack/types" {
     '/api/destinations/import': {
       'post': Simplify<Serialize<Awaited<ReturnType<typeof import('../../server/api/destinations/import.post').default>>>>
     }
+    '/api/health': {
+      'get': Simplify<Serialize<Awaited<ReturnType<typeof import('../../server/api/health.get').default>>>>
+    }
     '/api/images/delete': {
       'post': Simplify<Serialize<Awaited<ReturnType<typeof import('../../server/api/images/delete.post').default>>>>
     }
@@ -183,6 +186,9 @@ declare module "nitropack/types" {
     }
     '/api/sitemap.xml': {
       'get': Simplify<Serialize<Awaited<ReturnType<typeof import('../../server/api/sitemap.xml.get').default>>>>
+    }
+    '/api/test': {
+      'get': Simplify<Serialize<Awaited<ReturnType<typeof import('../../server/api/test.get').default>>>>
     }
     '/api/users': {
       'post': Simplify<Serialize<Awaited<ReturnType<typeof import('../../server/api/users.post').default>>>>

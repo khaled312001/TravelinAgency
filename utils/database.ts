@@ -11,9 +11,9 @@ export function createDatabasePool() {
     const config = {
       host: process.env.DB_HOST || 'localhost',
       port: Number(process.env.DB_PORT) || 3306,
-      user: process.env.DB_USER || 'root',
-      password: process.env.DB_PASSWORD || '',
-      database: process.env.DB_NAME || 'wonderland_travel'
+      user: process.env.DB_USER || 'travel',
+      password: process.env.DB_PASSWORD || 'support@Passord123',
+      database: process.env.DB_NAME || 'travel'
     }
     
     // Debug logging
@@ -38,7 +38,17 @@ export function createDatabasePool() {
       connectionLimit: 5, // Reduced for serverless
       queueLimit: 0,
       waitForConnections: true,
-      reconnect: true
+      reconnect: true,
+      // SSL configuration for remote connections
+      ssl: process.env.NODE_ENV === 'production' ? {
+        rejectUnauthorized: false
+      } : false,
+      // Connection timeout settings
+      acquireTimeout: 60000,
+      timeout: 60000,
+      // Keep alive settings
+      keepAliveInitialDelay: 0,
+      enableKeepAlive: true
     })
   }
   

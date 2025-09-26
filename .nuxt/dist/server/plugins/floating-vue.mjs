@@ -1,2 +1,0 @@
-import e from"floating-vue";/* empty css                                          */import{defineNuxtPlugin as o}from"../node_modules/nuxt/dist/app/nuxt.mjs";import"vue";import"F:/TravelinAgency/node_modules/klona/dist/index.mjs";import"F:/TravelinAgency/node_modules/defu/dist/defu.mjs";import"#internal/nuxt/paths";const l=o(t=>{t.vueApp.use(e,{themes:{tooltip:{arrow:!0,contentClass:"bg-gray-900 text-white text-xs px-3 py-2 rounded-lg shadow-lg max-w-xs text-center"}}})});export{l as default};
-//# sourceMappingURL=floating-vue.mjs.map

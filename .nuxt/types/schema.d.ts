@@ -205,7 +205,7 @@ declare module 'nuxt/schema' {
 
    dbHost: string,
 
-   dbPort: string,
+   dbPort: number,
 
    dbUser: string,
 

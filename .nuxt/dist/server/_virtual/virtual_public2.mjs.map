@@ -1,1 +1,0 @@
-{"version":3,"file":"virtual_public2.mjs","sources":["../../../../virtual:public?%2Fimages%2Fhome%2FheroSection%2Fhero-image.webp"],"sourcesContent":["import { publicAssetsURL } from '#internal/nuxt/paths';export default publicAssetsURL(\"/images/home/heroSection/hero-image.webp\")"],"names":["_imports_0","publicAssetsURL"],"mappings":"uDAAuD,MAAeA,EAAAC,EAAgB,0CAA0C"}

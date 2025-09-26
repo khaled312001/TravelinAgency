@@ -1,2 +1,0 @@
-import{defineNuxtPlugin as a,useNuxtApp as o}from"../node_modules/nuxt/dist/app/nuxt.mjs";import{useHead as i}from"../node_modules/nuxt/dist/head/runtime/composables/v3.mjs";const p=a(()=>{const e=o();e.hook("app:rendered",()=>{var t,n;const r=((n=(t=e.$i18n)==null?void 0:t.locale)==null?void 0:n.value)||"ar-SA";i({htmlAttrs:{lang:r==="ar-SA"?"ar":"en",dir:r==="ar-SA"?"rtl":"ltr"}})})});export{p as default};
-//# sourceMappingURL=initial-direction.server.mjs.map

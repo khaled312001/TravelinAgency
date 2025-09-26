@@ -1,2 +1,0 @@
-import e from"./media-gallery.vue3.mjs";/* empty css                   */import{useSSRContext as m}from"vue";import a from"../_virtual/_plugin-vue_export-helper.mjs";const o=e.setup;e.setup=(s,r)=>{const t=m();return(t.modules||(t.modules=new Set)).add("pages/media-gallery.vue"),o?o(s,r):void 0};const n=a(e,[["__scopeId","data-v-85953508"]]);export{n as default};
-//# sourceMappingURL=media-gallery.vue.mjs.map
