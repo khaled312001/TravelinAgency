@@ -1,0 +1,20 @@
+RewriteEngine On
+
+# Allow PHP files to execute
+<Files "*.php">
+    Order allow,deny
+    Allow from all
+</Files>
+
+# Handle API routes first
+RewriteCond %{REQUEST_URI} ^/api/
+RewriteRule ^(.*)$ /index.php [QSA,L]
+
+# Handle static files
+RewriteCond %{REQUEST_FILENAME} -f
+RewriteRule ^(.*)$ - [L]
+
+# Handle everything else through index.php
+RewriteCond %{REQUEST_FILENAME} !-f
+RewriteCond %{REQUEST_FILENAME} !-d
+RewriteRule ^(.*)$ /index.php [QSA,L]
