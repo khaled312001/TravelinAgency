@@ -1,0 +1,2 @@
+import o from"./Carousel.vue2.mjs";/* empty css              */import{useSSRContext as u}from"vue";import a from"../../_virtual/_plugin-vue_export-helper.mjs";const e=o.setup;o.setup=(s,r)=>{const t=u();return(t.modules||(t.modules=new Set)).add("components/ui/Carousel.vue"),e?e(s,r):void 0};const d=a(o,[["__scopeId","data-v-13aa8a1b"]]);export{d as default};
+//# sourceMappingURL=Carousel.vue.mjs.map

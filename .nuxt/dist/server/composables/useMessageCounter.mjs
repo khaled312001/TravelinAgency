@@ -1,0 +1,2 @@
+import{ref as o,readonly as a}from"vue";const C=()=>{const t=o(0),s=o(0),r=async()=>{try{const e=await $fetch("/api/contact-messages");if(e&&e.messages){const n=e.messages;s.value=n.length,t.value=n.filter(g=>g.status==="new").length}}catch(e){console.error("Error fetching message counts:",e)}},u=(e,n)=>{s.value=e,t.value=n},c=()=>{t.value=0},l=()=>{s.value++,t.value++};return{unreadCount:a(t),totalCount:a(s),fetchMessageCounts:r,updateCounts:u,markAsRead:c,incrementCount:l}};export{C as useMessageCounter};
+//# sourceMappingURL=useMessageCounter.mjs.map

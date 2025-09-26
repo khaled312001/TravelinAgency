@@ -1,0 +1,1 @@
+{"version":3,"file":"virtual_public5.mjs","sources":["../../../../virtual:public?%2Fvideos%2Fhero%2Fmobile%2Fhero-mobile-center.mp4"],"sourcesContent":["import { publicAssetsURL } from '#internal/nuxt/paths';export default publicAssetsURL(\"/videos/hero/mobile/hero-mobile-center.mp4\")"],"names":["_imports_4","publicAssetsURL"],"mappings":"uDAAuD,MAAeA,EAAAC,EAAgB,4CAA4C"}

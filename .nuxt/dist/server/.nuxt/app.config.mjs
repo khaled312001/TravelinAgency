@@ -1,0 +1,2 @@
+import"vue";import"F:/TravelinAgency/node_modules/klona/dist/index.mjs";import"F:/TravelinAgency/node_modules/hookable/dist/index.mjs";import{defuFn as i}from"F:/TravelinAgency/node_modules/defu/dist/defu.mjs";const o={nuxt:{},icon:{provider:"iconify",class:"",aliases:{},iconifyApiEndpoint:"https://api.iconify.design",localApiEndpoint:"/api/_nuxt_icon",fallbackToApi:!0,cssSelectorPrefix:"i-",cssWherePseudo:!0,mode:"css",attrs:{"aria-hidden":!0},collections:["material-symbols"],fetchTimeout:1500}},c=i(o);export{c as default};
+//# sourceMappingURL=app.config.mjs.map

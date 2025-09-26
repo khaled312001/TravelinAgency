@@ -1,0 +1,697 @@
+<?xml version="1.0" encoding="UTF-8"?><?xml-stylesheet type="text/xsl" href="/__sitemap__/style.xsl"?>
+<urlset xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:video="http://www.google.com/schemas/sitemap-video/1.1" xmlns:xhtml="http://www.w3.org/1999/xhtml" xmlns:image="http://www.google.com/schemas/sitemap-image/1.1" xmlns:news="http://www.google.com/schemas/sitemap-news/0.9" xsi:schemaLocation="http://www.sitemaps.org/schemas/sitemap/0.9 http://www.sitemaps.org/schemas/sitemap/0.9/sitemap.xsd http://www.google.com/schemas/sitemap-image/1.1 http://www.google.com/schemas/sitemap-image/1.1/sitemap-image.xsd" xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
+    <url>
+        <loc>/en-US</loc>
+        <xhtml:link rel="alternate" hreflang="en-US" href="/en-US" />
+        <xhtml:link rel="alternate" hreflang="ar-SA" href="/" />
+        <xhtml:link rel="alternate" hreflang="x-default" href="/" />
+    </url>
+    <url>
+        <loc>/en-US/about</loc>
+        <xhtml:link rel="alternate" hreflang="en-US" href="/en-US/about" />
+        <xhtml:link rel="alternate" hreflang="ar-SA" href="/about" />
+        <xhtml:link rel="alternate" hreflang="x-default" href="/about" />
+        <image:image>
+            <image:loc>/_ipx/w_800&amp;amp;f_webp&amp;amp;q_80/images/about/hero-bg.jpeg</image:loc>
+        </image:image>
+    </url>
+    <url>
+        <loc>/en-US/admin</loc>
+        <xhtml:link rel="alternate" hreflang="en-US" href="/en-US/admin" />
+        <xhtml:link rel="alternate" hreflang="ar-SA" href="/admin" />
+        <xhtml:link rel="alternate" hreflang="x-default" href="/admin" />
+    </url>
+    <url>
+        <loc>/en-US/all-pages</loc>
+        <xhtml:link rel="alternate" hreflang="en-US" href="/en-US/all-pages" />
+        <xhtml:link rel="alternate" hreflang="ar-SA" href="/all-pages" />
+        <xhtml:link rel="alternate" hreflang="x-default" href="/all-pages" />
+    </url>
+    <url>
+        <loc>/en-US/cleanup</loc>
+        <xhtml:link rel="alternate" hreflang="en-US" href="/en-US/cleanup" />
+        <xhtml:link rel="alternate" hreflang="ar-SA" href="/cleanup" />
+        <xhtml:link rel="alternate" hreflang="x-default" href="/cleanup" />
+    </url>
+    <url>
+        <loc>/en-US/custom-package</loc>
+        <xhtml:link rel="alternate" hreflang="en-US" href="/en-US/custom-package" />
+        <xhtml:link rel="alternate" hreflang="ar-SA" href="/custom-package" />
+        <xhtml:link rel="alternate" hreflang="x-default" href="/custom-package" />
+    </url>
+    <url>
+        <loc>/en-US/maintenance</loc>
+        <xhtml:link rel="alternate" hreflang="en-US" href="/en-US/maintenance" />
+        <xhtml:link rel="alternate" hreflang="ar-SA" href="/maintenance" />
+        <xhtml:link rel="alternate" hreflang="x-default" href="/maintenance" />
+    </url>
+    <url>
+        <loc>/en-US/media-gallery</loc>
+        <xhtml:link rel="alternate" hreflang="en-US" href="/en-US/media-gallery" />
+        <xhtml:link rel="alternate" hreflang="ar-SA" href="/media-gallery" />
+        <xhtml:link rel="alternate" hreflang="x-default" href="/media-gallery" />
+    </url>
+    <url>
+        <loc>/en-US/packages</loc>
+        <xhtml:link rel="alternate" hreflang="en-US" href="/en-US/packages" />
+        <xhtml:link rel="alternate" hreflang="ar-SA" href="/packages" />
+        <xhtml:link rel="alternate" hreflang="x-default" href="/packages" />
+        <image:image>
+            <image:loc>/_ipx/f_webp&amp;amp;q_50&amp;amp;blur_3&amp;amp;s_10x10/images/packages/home/packages-hero-bg.jpeg</image:loc>
+        </image:image>
+    </url>
+    <url>
+        <loc>/en-US/showcase</loc>
+        <xhtml:link rel="alternate" hreflang="en-US" href="/en-US/showcase" />
+        <xhtml:link rel="alternate" hreflang="ar-SA" href="/showcase" />
+        <xhtml:link rel="alternate" hreflang="x-default" href="/showcase" />
+        <image:image>
+            <image:loc>/_ipx/f_webp&amp;amp;q_80/images/home/services/flight_reservations.jpg</image:loc>
+        </image:image>
+        <image:image>
+            <image:loc>/_ipx/f_webp&amp;amp;q_80/images/home/services/hotel_reservations.jpg</image:loc>
+        </image:image>
+        <image:image>
+            <image:loc>/_ipx/f_webp&amp;amp;q_80/images/home/services/tour_packages.jpg</image:loc>
+        </image:image>
+        <image:image>
+            <image:loc>/_ipx/f_webp&amp;amp;q_80/images/home/services/travel_insurance.jpg</image:loc>
+        </image:image>
+        <image:image>
+            <image:loc>/_ipx/f_webp&amp;amp;q_80/images/home/services/visa_services.jpg</image:loc>
+        </image:image>
+        <image:image>
+            <image:loc>/_ipx/f_webp&amp;amp;q_80/images/home/services/international_driving_license.jpg</image:loc>
+        </image:image>
+        <image:image>
+            <image:loc>/_ipx/f_webp&amp;amp;q_80/images/home/services/tourism_consultation.jpg</image:loc>
+        </image:image>
+        <image:image>
+            <image:loc>/_ipx/f_webp&amp;amp;q_80/images/home/services/support_24_7.jpg</image:loc>
+        </image:image>
+        <image:image>
+            <image:loc>/_ipx/f_webp&amp;amp;q_80/images/home/services/custom_package.jpg</image:loc>
+        </image:image>
+        <image:image>
+            <image:loc>/_ipx/f_webp&amp;amp;q_50&amp;amp;blur_3&amp;amp;s_10x10/images/destinations/global/Barcelona/Barcelona1.jpeg</image:loc>
+        </image:image>
+        <image:image>
+            <image:loc>/_ipx/f_webp&amp;amp;q_50&amp;amp;blur_3&amp;amp;s_10x10/images/destinations/global/Cairo/Cairo1.jpeg</image:loc>
+        </image:image>
+        <image:image>
+            <image:loc>/_ipx/f_webp&amp;amp;q_50&amp;amp;blur_3&amp;amp;s_10x10/images/destinations/global/Georgia/Georgia1.jpeg</image:loc>
+        </image:image>
+        <image:image>
+            <image:loc>/_ipx/f_webp&amp;amp;q_50&amp;amp;blur_3&amp;amp;s_10x10/images/destinations/global/Istanbul/Istanbul1.jpeg</image:loc>
+        </image:image>
+        <image:image>
+            <image:loc>/_ipx/f_webp&amp;amp;q_50&amp;amp;blur_3&amp;amp;s_10x10/images/destinations/global/London/London1.jpeg</image:loc>
+        </image:image>
+        <image:image>
+            <image:loc>/_ipx/f_webp&amp;amp;q_50&amp;amp;blur_3&amp;amp;s_10x10/images/destinations/global/Madrid/Madrid1.jpeg</image:loc>
+        </image:image>
+        <image:image>
+            <image:loc>/_ipx/f_webp&amp;amp;q_50&amp;amp;blur_3&amp;amp;s_10x10/images/destinations/global/Morocco/Morocco1.jpeg</image:loc>
+        </image:image>
+        <image:image>
+            <image:loc>/_ipx/f_webp&amp;amp;q_50&amp;amp;blur_3&amp;amp;s_10x10/images/destinations/global/Paris/Paris1.jpeg</image:loc>
+        </image:image>
+        <image:image>
+            <image:loc>/_ipx/f_webp&amp;amp;q_50&amp;amp;blur_3&amp;amp;s_10x10/images/destinations/global/SharmElSheikh/SharmElSheikh1.jpeg</image:loc>
+        </image:image>
+        <image:image>
+            <image:loc>/_ipx/f_webp&amp;amp;q_50&amp;amp;blur_3&amp;amp;s_10x10/images/destinations/global/Thailand/Thailand1.jpeg</image:loc>
+        </image:image>
+        <image:image>
+            <image:loc>/_ipx/f_webp&amp;amp;q_50&amp;amp;blur_3&amp;amp;s_10x10/images/destinations/saudi/riyadh/Ryiadh1.jpeg</image:loc>
+        </image:image>
+        <image:image>
+            <image:loc>/_ipx/f_webp&amp;amp;q_50&amp;amp;blur_3&amp;amp;s_10x10/https://images.pexels.com/photos/1320684/pexels-photo-1320684.jpeg</image:loc>
+        </image:image>
+        <image:image>
+            <image:loc>/_ipx/f_webp&amp;amp;q_50&amp;amp;blur_3&amp;amp;s_10x10/images/destinations/saudi/jeddah/Jeddah1.jpeg</image:loc>
+        </image:image>
+        <image:image>
+            <image:loc>/_ipx/f_webp&amp;amp;q_50&amp;amp;blur_3&amp;amp;s_10x10/images/destinations/saudi/Makkah/Makkah1.jpeg</image:loc>
+        </image:image>
+        <image:image>
+            <image:loc>/_ipx/f_webp&amp;amp;q_50&amp;amp;blur_3&amp;amp;s_10x10/images/destinations/saudi/Medina/Medina1.jpeg</image:loc>
+        </image:image>
+        <image:image>
+            <image:loc>/_ipx/f_webp&amp;amp;q_50&amp;amp;blur_3&amp;amp;s_10x10/images/destinations/saudi/alula/AlUla1.jpeg</image:loc>
+        </image:image>
+        <image:image>
+            <image:loc>/_ipx/w_800&amp;amp;f_webp&amp;amp;q_80/images/about/hero-bg.jpeg</image:loc>
+        </image:image>
+        <image:image>
+            <image:loc>/images/home/services/flight_reservations.jpg</image:loc>
+        </image:image>
+        <image:image>
+            <image:loc>/images/home/services/hotel_reservations.jpg</image:loc>
+        </image:image>
+        <image:image>
+            <image:loc>/images/home/services/tour_packages.jpg</image:loc>
+        </image:image>
+        <image:image>
+            <image:loc>/images/home/services/travel_insurance.jpg</image:loc>
+        </image:image>
+        <image:image>
+            <image:loc>/images/home/services/visa_services.jpg</image:loc>
+        </image:image>
+        <image:image>
+            <image:loc>/images/home/services/international_driving_license.jpg</image:loc>
+        </image:image>
+        <image:image>
+            <image:loc>/images/home/services/tourism_consultation.jpg</image:loc>
+        </image:image>
+        <image:image>
+            <image:loc>/images/home/services/support_24_7.jpg</image:loc>
+        </image:image>
+        <image:image>
+            <image:loc>/images/destinations/global/Paris/Paris1.jpeg</image:loc>
+        </image:image>
+        <image:image>
+            <image:loc>/images/destinations/global/London/London1.jpeg</image:loc>
+        </image:image>
+        <image:image>
+            <image:loc>/images/destinations/global/Istanbul/Istanbul1.jpeg</image:loc>
+        </image:image>
+        <image:image>
+            <image:loc>/images/destinations/saudi/riyadh/main.jpg</image:loc>
+        </image:image>
+        <image:image>
+            <image:loc>/images/destinations/saudi/jeddah/Jeddah1.jpeg</image:loc>
+        </image:image>
+        <image:image>
+            <image:loc>/images/destinations/saudi/alula/AlUla1.jpeg</image:loc>
+        </image:image>
+    </url>
+    <url>
+        <loc>/en-US/test-components</loc>
+        <xhtml:link rel="alternate" hreflang="en-US" href="/en-US/test-components" />
+        <xhtml:link rel="alternate" hreflang="ar-SA" href="/test-components" />
+        <xhtml:link rel="alternate" hreflang="x-default" href="/test-components" />
+        <image:image>
+            <image:loc>/_ipx/f_webp&amp;amp;q_80/images/home/services/flight_reservations.jpg</image:loc>
+        </image:image>
+        <image:image>
+            <image:loc>/_ipx/f_webp&amp;amp;q_80/images/home/services/hotel_reservations.jpg</image:loc>
+        </image:image>
+        <image:image>
+            <image:loc>/_ipx/f_webp&amp;amp;q_80/images/home/services/tour_packages.jpg</image:loc>
+        </image:image>
+        <image:image>
+            <image:loc>/_ipx/f_webp&amp;amp;q_80/images/home/services/travel_insurance.jpg</image:loc>
+        </image:image>
+        <image:image>
+            <image:loc>/_ipx/f_webp&amp;amp;q_80/images/home/services/visa_services.jpg</image:loc>
+        </image:image>
+        <image:image>
+            <image:loc>/_ipx/f_webp&amp;amp;q_80/images/home/services/international_driving_license.jpg</image:loc>
+        </image:image>
+        <image:image>
+            <image:loc>/_ipx/f_webp&amp;amp;q_80/images/home/services/tourism_consultation.jpg</image:loc>
+        </image:image>
+        <image:image>
+            <image:loc>/_ipx/f_webp&amp;amp;q_80/images/home/services/support_24_7.jpg</image:loc>
+        </image:image>
+        <image:image>
+            <image:loc>/_ipx/f_webp&amp;amp;q_80/images/home/services/custom_package.jpg</image:loc>
+        </image:image>
+        <image:image>
+            <image:loc>/_ipx/f_webp&amp;amp;q_50&amp;amp;blur_3&amp;amp;s_10x10/images/destinations/global/Barcelona/Barcelona1.jpeg</image:loc>
+        </image:image>
+        <image:image>
+            <image:loc>/_ipx/f_webp&amp;amp;q_50&amp;amp;blur_3&amp;amp;s_10x10/images/destinations/global/Cairo/Cairo1.jpeg</image:loc>
+        </image:image>
+        <image:image>
+            <image:loc>/_ipx/f_webp&amp;amp;q_50&amp;amp;blur_3&amp;amp;s_10x10/images/destinations/global/Georgia/Georgia1.jpeg</image:loc>
+        </image:image>
+        <image:image>
+            <image:loc>/_ipx/f_webp&amp;amp;q_50&amp;amp;blur_3&amp;amp;s_10x10/images/destinations/global/Istanbul/Istanbul1.jpeg</image:loc>
+        </image:image>
+        <image:image>
+            <image:loc>/_ipx/f_webp&amp;amp;q_50&amp;amp;blur_3&amp;amp;s_10x10/images/destinations/global/London/London1.jpeg</image:loc>
+        </image:image>
+        <image:image>
+            <image:loc>/_ipx/f_webp&amp;amp;q_50&amp;amp;blur_3&amp;amp;s_10x10/images/destinations/global/Madrid/Madrid1.jpeg</image:loc>
+        </image:image>
+        <image:image>
+            <image:loc>/_ipx/f_webp&amp;amp;q_50&amp;amp;blur_3&amp;amp;s_10x10/images/destinations/global/Morocco/Morocco1.jpeg</image:loc>
+        </image:image>
+        <image:image>
+            <image:loc>/_ipx/f_webp&amp;amp;q_50&amp;amp;blur_3&amp;amp;s_10x10/images/destinations/global/Paris/Paris1.jpeg</image:loc>
+        </image:image>
+        <image:image>
+            <image:loc>/_ipx/f_webp&amp;amp;q_50&amp;amp;blur_3&amp;amp;s_10x10/images/destinations/global/SharmElSheikh/SharmElSheikh1.jpeg</image:loc>
+        </image:image>
+        <image:image>
+            <image:loc>/_ipx/f_webp&amp;amp;q_50&amp;amp;blur_3&amp;amp;s_10x10/images/destinations/global/Thailand/Thailand1.jpeg</image:loc>
+        </image:image>
+        <image:image>
+            <image:loc>/_ipx/f_webp&amp;amp;q_50&amp;amp;blur_3&amp;amp;s_10x10/images/destinations/saudi/riyadh/Ryiadh1.jpeg</image:loc>
+        </image:image>
+        <image:image>
+            <image:loc>/_ipx/f_webp&amp;amp;q_50&amp;amp;blur_3&amp;amp;s_10x10/https://images.pexels.com/photos/1320684/pexels-photo-1320684.jpeg</image:loc>
+        </image:image>
+        <image:image>
+            <image:loc>/_ipx/f_webp&amp;amp;q_50&amp;amp;blur_3&amp;amp;s_10x10/images/destinations/saudi/jeddah/Jeddah1.jpeg</image:loc>
+        </image:image>
+        <image:image>
+            <image:loc>/_ipx/f_webp&amp;amp;q_50&amp;amp;blur_3&amp;amp;s_10x10/images/destinations/saudi/Makkah/Makkah1.jpeg</image:loc>
+        </image:image>
+        <image:image>
+            <image:loc>/_ipx/f_webp&amp;amp;q_50&amp;amp;blur_3&amp;amp;s_10x10/images/destinations/saudi/Medina/Medina1.jpeg</image:loc>
+        </image:image>
+        <image:image>
+            <image:loc>/_ipx/f_webp&amp;amp;q_50&amp;amp;blur_3&amp;amp;s_10x10/images/destinations/saudi/alula/AlUla1.jpeg</image:loc>
+        </image:image>
+    </url>
+    <url>
+        <loc>/en-US/website-showcase</loc>
+        <xhtml:link rel="alternate" hreflang="en-US" href="/en-US/website-showcase" />
+        <xhtml:link rel="alternate" hreflang="ar-SA" href="/website-showcase" />
+        <xhtml:link rel="alternate" hreflang="x-default" href="/website-showcase" />
+    </url>
+    <url>
+        <loc>/en-US/admin/analytics-demo</loc>
+        <xhtml:link rel="alternate" hreflang="en-US" href="/en-US/admin/analytics-demo" />
+        <xhtml:link rel="alternate" hreflang="ar-SA" href="/admin/analytics-demo" />
+        <xhtml:link rel="alternate" hreflang="x-default" href="/admin/analytics-demo" />
+    </url>
+    <url>
+        <loc>/en-US/admin/auth-test</loc>
+        <xhtml:link rel="alternate" hreflang="en-US" href="/en-US/admin/auth-test" />
+        <xhtml:link rel="alternate" hreflang="ar-SA" href="/admin/auth-test" />
+        <xhtml:link rel="alternate" hreflang="x-default" href="/admin/auth-test" />
+    </url>
+    <url>
+        <loc>/en-US/admin/bookings</loc>
+        <xhtml:link rel="alternate" hreflang="en-US" href="/en-US/admin/bookings" />
+        <xhtml:link rel="alternate" hreflang="ar-SA" href="/admin/bookings" />
+        <xhtml:link rel="alternate" hreflang="x-default" href="/admin/bookings" />
+    </url>
+    <url>
+        <loc>/en-US/admin/cms</loc>
+        <xhtml:link rel="alternate" hreflang="en-US" href="/en-US/admin/cms" />
+        <xhtml:link rel="alternate" hreflang="ar-SA" href="/admin/cms" />
+        <xhtml:link rel="alternate" hreflang="x-default" href="/admin/cms" />
+    </url>
+    <url>
+        <loc>/en-US/admin/contacts</loc>
+        <xhtml:link rel="alternate" hreflang="en-US" href="/en-US/admin/contacts" />
+        <xhtml:link rel="alternate" hreflang="ar-SA" href="/admin/contacts" />
+        <xhtml:link rel="alternate" hreflang="x-default" href="/admin/contacts" />
+    </url>
+    <url>
+        <loc>/en-US/admin/content</loc>
+        <xhtml:link rel="alternate" hreflang="en-US" href="/en-US/admin/content" />
+        <xhtml:link rel="alternate" hreflang="ar-SA" href="/admin/content" />
+        <xhtml:link rel="alternate" hreflang="x-default" href="/admin/content" />
+    </url>
+    <url>
+        <loc>/en-US/admin/dashboard</loc>
+        <xhtml:link rel="alternate" hreflang="en-US" href="/en-US/admin/dashboard" />
+        <xhtml:link rel="alternate" hreflang="ar-SA" href="/admin/dashboard" />
+        <xhtml:link rel="alternate" hreflang="x-default" href="/admin/dashboard" />
+    </url>
+    <url>
+        <loc>/en-US/admin/destinations</loc>
+        <xhtml:link rel="alternate" hreflang="en-US" href="/en-US/admin/destinations" />
+        <xhtml:link rel="alternate" hreflang="ar-SA" href="/admin/destinations" />
+        <xhtml:link rel="alternate" hreflang="x-default" href="/admin/destinations" />
+    </url>
+    <url>
+        <loc>/en-US/admin/login</loc>
+        <xhtml:link rel="alternate" hreflang="en-US" href="/en-US/admin/login" />
+        <xhtml:link rel="alternate" hreflang="ar-SA" href="/admin/login" />
+        <xhtml:link rel="alternate" hreflang="x-default" href="/admin/login" />
+    </url>
+    <url>
+        <loc>/en-US/admin/notifications</loc>
+        <xhtml:link rel="alternate" hreflang="en-US" href="/en-US/admin/notifications" />
+        <xhtml:link rel="alternate" hreflang="ar-SA" href="/admin/notifications" />
+        <xhtml:link rel="alternate" hreflang="x-default" href="/admin/notifications" />
+    </url>
+    <url>
+        <loc>/en-US/admin/packages</loc>
+        <xhtml:link rel="alternate" hreflang="en-US" href="/en-US/admin/packages" />
+        <xhtml:link rel="alternate" hreflang="ar-SA" href="/admin/packages" />
+        <xhtml:link rel="alternate" hreflang="x-default" href="/admin/packages" />
+    </url>
+    <url>
+        <loc>/en-US/admin/profile</loc>
+        <xhtml:link rel="alternate" hreflang="en-US" href="/en-US/admin/profile" />
+        <xhtml:link rel="alternate" hreflang="ar-SA" href="/admin/profile" />
+        <xhtml:link rel="alternate" hreflang="x-default" href="/admin/profile" />
+    </url>
+    <url>
+        <loc>/en-US/admin/reports</loc>
+        <xhtml:link rel="alternate" hreflang="en-US" href="/en-US/admin/reports" />
+        <xhtml:link rel="alternate" hreflang="ar-SA" href="/admin/reports" />
+        <xhtml:link rel="alternate" hreflang="x-default" href="/admin/reports" />
+    </url>
+    <url>
+        <loc>/en-US/admin/seo</loc>
+        <xhtml:link rel="alternate" hreflang="en-US" href="/en-US/admin/seo" />
+        <xhtml:link rel="alternate" hreflang="ar-SA" href="/admin/seo" />
+        <xhtml:link rel="alternate" hreflang="x-default" href="/admin/seo" />
+    </url>
+    <url>
+        <loc>/en-US/admin/settings</loc>
+        <xhtml:link rel="alternate" hreflang="en-US" href="/en-US/admin/settings" />
+        <xhtml:link rel="alternate" hreflang="ar-SA" href="/admin/settings" />
+        <xhtml:link rel="alternate" hreflang="x-default" href="/admin/settings" />
+    </url>
+    <url>
+        <loc>/en-US/admin/users</loc>
+        <xhtml:link rel="alternate" hreflang="en-US" href="/en-US/admin/users" />
+        <xhtml:link rel="alternate" hreflang="ar-SA" href="/admin/users" />
+        <xhtml:link rel="alternate" hreflang="x-default" href="/admin/users" />
+    </url>
+    <url>
+        <loc>/en-US/destinations/alula</loc>
+        <image:image>
+            <image:loc>/_ipx/f_webp&amp;amp;q_90&amp;amp;s_1920x1080/images/destinations/saudi/alula/AlUla1.jpeg</image:loc>
+        </image:image>
+        <image:image>
+            <image:loc>/_ipx/f_webp&amp;amp;q_85&amp;amp;s_600x400/https://images.pexels.com/photos/11215342/pexels-photo-11215342.jpeg</image:loc>
+        </image:image>
+        <image:image>
+            <image:loc>/_ipx/f_webp&amp;amp;q_85&amp;amp;s_600x400/https://images.pexels.com/photos/17186685/pexels-photo-17186685.jpeg</image:loc>
+        </image:image>
+        <image:image>
+            <image:loc>/_ipx/f_webp&amp;amp;q_85&amp;amp;s_600x400/images/destinations/saudi/alula/AlulaOldTown.png</image:loc>
+        </image:image>
+        <image:image>
+            <image:loc>/_ipx/f_webp&amp;amp;q_85&amp;amp;s_400x300/https://images.pexels.com/photos/12555627/pexels-photo-12555627.jpeg</image:loc>
+        </image:image>
+        <image:image>
+            <image:loc>/_ipx/f_webp&amp;amp;q_85&amp;amp;s_400x300/https://images.pexels.com/photos/5550024/pexels-photo-5550024.jpeg</image:loc>
+        </image:image>
+    </url>
+    <url>
+        <loc>/en-US/destinations/barcelona</loc>
+        <image:image>
+            <image:loc>/_ipx/f_webp&amp;amp;q_90&amp;amp;s_1920x1080/images/destinations/global/Barcelona/Barcelona1.jpeg</image:loc>
+        </image:image>
+        <image:image>
+            <image:loc>/_ipx/f_webp&amp;amp;q_85&amp;amp;s_600x400/images/destinations/global/Barcelona/Barcelona1.jpeg</image:loc>
+        </image:image>
+        <image:image>
+            <image:loc>/_ipx/f_webp&amp;amp;q_85&amp;amp;s_600x400/images/destinations/global/Barcelona/Barcelona2.jpeg</image:loc>
+        </image:image>
+        <image:image>
+            <image:loc>/_ipx/f_webp&amp;amp;q_85&amp;amp;s_400x300/images/destinations/global/Barcelona/Barcelona2.jpeg</image:loc>
+        </image:image>
+    </url>
+    <url>
+        <loc>/en-US/destinations/cairo</loc>
+        <image:image>
+            <image:loc>/_ipx/f_webp&amp;amp;q_90&amp;amp;s_1920x1080/images/destinations/global/Cairo/Cairo1.jpeg</image:loc>
+        </image:image>
+        <image:image>
+            <image:loc>/_ipx/f_webp&amp;amp;q_85&amp;amp;s_600x400/images/destinations/global/Cairo/Cairo1.jpeg</image:loc>
+        </image:image>
+        <image:image>
+            <image:loc>/_ipx/f_webp&amp;amp;q_85&amp;amp;s_600x400/images/destinations/global/Cairo/Cairo2.jpeg</image:loc>
+        </image:image>
+        <image:image>
+            <image:loc>/_ipx/f_webp&amp;amp;q_85&amp;amp;s_400x300/images/destinations/global/Cairo/Cairo2.jpeg</image:loc>
+        </image:image>
+    </url>
+    <url>
+        <loc>/en-US/destinations/georgia</loc>
+        <image:image>
+            <image:loc>/_ipx/f_webp&amp;amp;q_90&amp;amp;s_1920x1080/images/destinations/global/Georgia/Georgia1.jpeg</image:loc>
+        </image:image>
+        <image:image>
+            <image:loc>/_ipx/f_webp&amp;amp;q_85&amp;amp;s_600x400/images/destinations/global/Georgia/Georgia1.jpeg</image:loc>
+        </image:image>
+        <image:image>
+            <image:loc>/_ipx/f_webp&amp;amp;q_85&amp;amp;s_600x400/images/destinations/global/Georgia/Georgia2.jpeg</image:loc>
+        </image:image>
+        <image:image>
+            <image:loc>/_ipx/f_webp&amp;amp;q_85&amp;amp;s_400x300/images/destinations/global/Georgia/Georgia3.jpeg</image:loc>
+        </image:image>
+    </url>
+    <url>
+        <loc>/en-US/destinations/istanbul</loc>
+        <image:image>
+            <image:loc>/_ipx/f_webp&amp;amp;q_90&amp;amp;s_1920x1080/images/destinations/global/Istanbul/Istanbul1.jpeg</image:loc>
+        </image:image>
+        <image:image>
+            <image:loc>/_ipx/f_webp&amp;amp;q_85&amp;amp;s_600x400/images/destinations/global/Istanbul/Istanbul1.jpeg</image:loc>
+        </image:image>
+        <image:image>
+            <image:loc>/_ipx/f_webp&amp;amp;q_85&amp;amp;s_600x400/images/destinations/global/Istanbul/Istanbul2.jpeg</image:loc>
+        </image:image>
+        <image:image>
+            <image:loc>/_ipx/f_webp&amp;amp;q_85&amp;amp;s_400x300/images/destinations/global/Istanbul/Istanbul3.jpeg</image:loc>
+        </image:image>
+    </url>
+    <url>
+        <loc>/en-US/destinations/jeddah</loc>
+        <image:image>
+            <image:loc>/_ipx/f_webp&amp;amp;q_90&amp;amp;s_1920x1080/images/destinations/saudi/jeddah/Jeddah1.jpeg</image:loc>
+        </image:image>
+        <image:image>
+            <image:loc>/_ipx/f_webp&amp;amp;q_85&amp;amp;s_600x400/https://images.pexels.com/photos/28506244/pexels-photo-28506244.jpeg</image:loc>
+        </image:image>
+        <image:image>
+            <image:loc>/_ipx/f_webp&amp;amp;q_85&amp;amp;s_600x400/https://images.pexels.com/photos/4614473/pexels-photo-4614473.jpeg</image:loc>
+        </image:image>
+        <image:image>
+            <image:loc>/_ipx/f_webp&amp;amp;q_85&amp;amp;s_400x300/https://images.pexels.com/photos/12692700/pexels-photo-12692700.jpeg</image:loc>
+        </image:image>
+    </url>
+    <url>
+        <loc>/en-US/destinations/london</loc>
+        <image:image>
+            <image:loc>/_ipx/f_webp&amp;amp;q_90&amp;amp;s_1920x1080/images/destinations/global/London/London1.jpeg</image:loc>
+        </image:image>
+        <image:image>
+            <image:loc>/_ipx/f_webp&amp;amp;q_85&amp;amp;s_600x400/images/destinations/global/London/London1.jpeg</image:loc>
+        </image:image>
+        <image:image>
+            <image:loc>/_ipx/f_webp&amp;amp;q_85&amp;amp;s_600x400/images/destinations/global/London/London2.jpeg</image:loc>
+        </image:image>
+        <image:image>
+            <image:loc>/_ipx/f_webp&amp;amp;q_85&amp;amp;s_400x300/images/destinations/global/London/London3.jpeg</image:loc>
+        </image:image>
+    </url>
+    <url>
+        <loc>/en-US/destinations/madrid</loc>
+        <image:image>
+            <image:loc>/_ipx/f_webp&amp;amp;q_90&amp;amp;s_1920x1080/images/destinations/global/Madrid/Madrid1.jpeg</image:loc>
+        </image:image>
+        <image:image>
+            <image:loc>/_ipx/f_webp&amp;amp;q_85&amp;amp;s_600x400/images/destinations/global/Madrid/Madrid1.jpeg</image:loc>
+        </image:image>
+        <image:image>
+            <image:loc>/_ipx/f_webp&amp;amp;q_85&amp;amp;s_600x400/images/destinations/global/Madrid/Madrid2.jpeg</image:loc>
+        </image:image>
+        <image:image>
+            <image:loc>/_ipx/f_webp&amp;amp;q_85&amp;amp;s_400x300/images/destinations/global/Madrid/Madrid3.jpeg</image:loc>
+        </image:image>
+    </url>
+    <url>
+        <loc>/en-US/destinations/makkah</loc>
+        <image:image>
+            <image:loc>/_ipx/f_webp&amp;amp;q_90&amp;amp;s_1920x1080/images/destinations/saudi/Makkah/Makkah1.jpeg</image:loc>
+        </image:image>
+        <image:image>
+            <image:loc>/_ipx/f_webp&amp;amp;q_85&amp;amp;s_600x400/https://images.pexels.com/photos/18274181/pexels-photo-18274181.jpeg</image:loc>
+        </image:image>
+        <image:image>
+            <image:loc>/_ipx/f_webp&amp;amp;q_85&amp;amp;s_600x400/images/destinations/saudi/Makkah/JabalAlnour.png</image:loc>
+        </image:image>
+        <image:image>
+            <image:loc>/_ipx/f_webp&amp;amp;q_85&amp;amp;s_400x300/https://images.pexels.com/photos/5550014/pexels-photo-5550014.jpeg</image:loc>
+        </image:image>
+    </url>
+    <url>
+        <loc>/en-US/destinations/medina</loc>
+        <image:image>
+            <image:loc>/_ipx/f_webp&amp;amp;q_90&amp;amp;s_1920x1080/images/destinations/saudi/Medina/Medina1.jpeg</image:loc>
+        </image:image>
+        <image:image>
+            <image:loc>/_ipx/f_webp&amp;amp;q_85&amp;amp;s_600x400/https://images.pexels.com/photos/19495539/pexels-photo-19495539.jpeg</image:loc>
+        </image:image>
+        <image:image>
+            <image:loc>/_ipx/f_webp&amp;amp;q_85&amp;amp;s_400x300/https://images.pexels.com/photos/5550017/pexels-photo-5550017.jpeg</image:loc>
+        </image:image>
+    </url>
+    <url>
+        <loc>/en-US/destinations/morocco</loc>
+        <image:image>
+            <image:loc>/_ipx/f_webp&amp;amp;q_90&amp;amp;s_1920x1080/images/destinations/global/Morocco/Morocco1.jpeg</image:loc>
+        </image:image>
+        <image:image>
+            <image:loc>/_ipx/f_webp&amp;amp;q_85&amp;amp;s_600x400/images/destinations/global/Morocco/Morocco1.jpeg</image:loc>
+        </image:image>
+        <image:image>
+            <image:loc>/_ipx/f_webp&amp;amp;q_85&amp;amp;s_600x400/images/destinations/global/Morocco/Morocco2.jpeg</image:loc>
+        </image:image>
+        <image:image>
+            <image:loc>/_ipx/f_webp&amp;amp;q_85&amp;amp;s_400x300/images/destinations/global/Morocco/Morocco3.jpeg</image:loc>
+        </image:image>
+    </url>
+    <url>
+        <loc>/en-US/destinations/paris</loc>
+        <image:image>
+            <image:loc>/_ipx/f_webp&amp;amp;q_90&amp;amp;s_1920x1080/images/destinations/global/Paris/Paris1.jpeg</image:loc>
+        </image:image>
+        <image:image>
+            <image:loc>/_ipx/f_webp&amp;amp;q_85&amp;amp;s_600x400/images/destinations/global/Paris/Paris1.jpeg</image:loc>
+        </image:image>
+        <image:image>
+            <image:loc>/_ipx/f_webp&amp;amp;q_85&amp;amp;s_600x400/images/destinations/global/Paris/Paris2.jpeg</image:loc>
+        </image:image>
+        <image:image>
+            <image:loc>/_ipx/f_webp&amp;amp;q_85&amp;amp;s_400x300/images/destinations/global/Paris/Paris3.jpeg</image:loc>
+        </image:image>
+    </url>
+    <url>
+        <loc>/en-US/destinations/red-sea</loc>
+        <image:image>
+            <image:loc>/_ipx/f_webp&amp;amp;q_90&amp;amp;s_1920x1080/https://images.pexels.com/photos/1320684/pexels-photo-1320684.jpeg</image:loc>
+        </image:image>
+        <image:image>
+            <image:loc>/_ipx/f_webp&amp;amp;q_85&amp;amp;s_600x400/https://images.pexels.com/photos/3601425/pexels-photo-3601425.jpeg</image:loc>
+        </image:image>
+        <image:image>
+            <image:loc>/_ipx/f_webp&amp;amp;q_85&amp;amp;s_600x400/https://images.pexels.com/photos/3601426/pexels-photo-3601426.jpeg</image:loc>
+        </image:image>
+        <image:image>
+            <image:loc>/_ipx/f_webp&amp;amp;q_85&amp;amp;s_400x300/https://images.pexels.com/photos/3601427/pexels-photo-3601427.jpeg</image:loc>
+        </image:image>
+    </url>
+    <url>
+        <loc>/en-US/destinations/riyadh</loc>
+        <image:image>
+            <image:loc>/_ipx/f_webp&amp;amp;q_90&amp;amp;s_1920x1080/images/destinations/saudi/riyadh/Ryiadh1.jpeg</image:loc>
+        </image:image>
+        <image:image>
+            <image:loc>/_ipx/f_webp&amp;amp;q_85&amp;amp;s_600x400/https://images.pexels.com/photos/35761/pexels-photo.jpg</image:loc>
+        </image:image>
+        <image:image>
+            <image:loc>/_ipx/f_webp&amp;amp;q_85&amp;amp;s_600x400/https://images.pexels.com/photos/1885720/pexels-photo-1885720.jpeg</image:loc>
+        </image:image>
+        <image:image>
+            <image:loc>/_ipx/f_webp&amp;amp;q_85&amp;amp;s_600x400/https://images.pexels.com/photos/7107495/pexels-photo-7107495.jpeg</image:loc>
+        </image:image>
+        <image:image>
+            <image:loc>/_ipx/f_webp&amp;amp;q_85&amp;amp;s_400x300/https://images.pexels.com/photos/2263436/pexels-photo-2263436.jpeg</image:loc>
+        </image:image>
+        <image:image>
+            <image:loc>/_ipx/f_webp&amp;amp;q_85&amp;amp;s_400x300/https://images.pexels.com/photos/461940/pexels-photo-461940.jpeg</image:loc>
+        </image:image>
+    </url>
+    <url>
+        <loc>/en-US/destinations/sharm-el-sheikh</loc>
+        <image:image>
+            <image:loc>/_ipx/f_webp&amp;amp;q_90&amp;amp;s_1920x1080/images/destinations/global/SharmElSheikh/SharmElSheikh1.jpeg</image:loc>
+        </image:image>
+        <image:image>
+            <image:loc>/_ipx/f_webp&amp;amp;q_85&amp;amp;s_600x400/images/destinations/global/SharmElSheikh/SharmElSheikh2.jpeg</image:loc>
+        </image:image>
+        <image:image>
+            <image:loc>/_ipx/f_webp&amp;amp;q_85&amp;amp;s_600x400/images/destinations/global/SharmElSheikh/SharmElSheikh1.jpeg</image:loc>
+        </image:image>
+        <image:image>
+            <image:loc>/_ipx/f_webp&amp;amp;q_85&amp;amp;s_400x300/images/destinations/global/SharmElSheikh/SharmElSheikh1.jpeg</image:loc>
+        </image:image>
+    </url>
+    <url>
+        <loc>/en-US/destinations/thailand</loc>
+        <image:image>
+            <image:loc>/_ipx/f_webp&amp;amp;q_90&amp;amp;s_1920x1080/images/destinations/global/Thailand/Thailand1.jpeg</image:loc>
+        </image:image>
+        <image:image>
+            <image:loc>/_ipx/f_webp&amp;amp;q_85&amp;amp;s_600x400/images/destinations/global/Thailand/Thailand1.jpeg</image:loc>
+        </image:image>
+        <image:image>
+            <image:loc>/_ipx/f_webp&amp;amp;q_85&amp;amp;s_600x400/images/destinations/global/Thailand/Thailand2.jpeg</image:loc>
+        </image:image>
+        <image:image>
+            <image:loc>/_ipx/f_webp&amp;amp;q_85&amp;amp;s_400x300/images/destinations/global/Thailand/Thailand3.jpeg</image:loc>
+        </image:image>
+    </url>
+    <url>
+        <loc>/en-US/packages/search</loc>
+        <xhtml:link rel="alternate" hreflang="en-US" href="/en-US/packages/search" />
+        <xhtml:link rel="alternate" hreflang="ar-SA" href="/packages/search" />
+        <xhtml:link rel="alternate" hreflang="x-default" href="/packages/search" />
+        <image:image>
+            <image:loc>/_ipx/f_webp&amp;amp;q_50&amp;amp;blur_3&amp;amp;s_10x10/images/packages/home/packages-hero-bg.jpeg</image:loc>
+        </image:image>
+    </url>
+    <url>
+        <loc>/en-US/admin/bookings/create</loc>
+        <xhtml:link rel="alternate" hreflang="en-US" href="/en-US/admin/bookings/create" />
+        <xhtml:link rel="alternate" hreflang="ar-SA" href="/admin/bookings/create" />
+        <xhtml:link rel="alternate" hreflang="x-default" href="/admin/bookings/create" />
+    </url>
+    <url>
+        <loc>/en-US/admin/cms/homepage</loc>
+        <xhtml:link rel="alternate" hreflang="en-US" href="/en-US/admin/cms/homepage" />
+        <xhtml:link rel="alternate" hreflang="ar-SA" href="/admin/cms/homepage" />
+        <xhtml:link rel="alternate" hreflang="x-default" href="/admin/cms/homepage" />
+    </url>
+    <url>
+        <loc>/en-US/admin/cms/pages</loc>
+        <xhtml:link rel="alternate" hreflang="en-US" href="/en-US/admin/cms/pages" />
+        <xhtml:link rel="alternate" hreflang="ar-SA" href="/admin/cms/pages" />
+        <xhtml:link rel="alternate" hreflang="x-default" href="/admin/cms/pages" />
+    </url>
+    <url>
+        <loc>/en-US/admin/content/analytics</loc>
+        <xhtml:link rel="alternate" hreflang="en-US" href="/en-US/admin/content/analytics" />
+        <xhtml:link rel="alternate" hreflang="ar-SA" href="/admin/content/analytics" />
+        <xhtml:link rel="alternate" hreflang="x-default" href="/admin/content/analytics" />
+    </url>
+    <url>
+        <loc>/en-US/admin/content/create</loc>
+        <xhtml:link rel="alternate" hreflang="en-US" href="/en-US/admin/content/create" />
+        <xhtml:link rel="alternate" hreflang="ar-SA" href="/admin/content/create" />
+        <xhtml:link rel="alternate" hreflang="x-default" href="/admin/content/create" />
+    </url>
+    <url>
+        <loc>/en-US/admin/content/editor</loc>
+        <xhtml:link rel="alternate" hreflang="en-US" href="/en-US/admin/content/editor" />
+        <xhtml:link rel="alternate" hreflang="ar-SA" href="/admin/content/editor" />
+        <xhtml:link rel="alternate" hreflang="x-default" href="/admin/content/editor" />
+    </url>
+    <url>
+        <loc>/en-US/admin/content/templates</loc>
+        <xhtml:link rel="alternate" hreflang="en-US" href="/en-US/admin/content/templates" />
+        <xhtml:link rel="alternate" hreflang="ar-SA" href="/admin/content/templates" />
+        <xhtml:link rel="alternate" hreflang="x-default" href="/admin/content/templates" />
+    </url>
+    <url>
+        <loc>/en-US/admin/destinations/create</loc>
+        <xhtml:link rel="alternate" hreflang="en-US" href="/en-US/admin/destinations/create" />
+        <xhtml:link rel="alternate" hreflang="ar-SA" href="/admin/destinations/create" />
+        <xhtml:link rel="alternate" hreflang="x-default" href="/admin/destinations/create" />
+    </url>
+    <url>
+        <loc>/en-US/admin/packages/create</loc>
+        <xhtml:link rel="alternate" hreflang="en-US" href="/en-US/admin/packages/create" />
+        <xhtml:link rel="alternate" hreflang="ar-SA" href="/admin/packages/create" />
+        <xhtml:link rel="alternate" hreflang="x-default" href="/admin/packages/create" />
+    </url>
+    <url>
+        <loc>/en-US/admin/packages/images</loc>
+        <xhtml:link rel="alternate" hreflang="en-US" href="/en-US/admin/packages/images" />
+        <xhtml:link rel="alternate" hreflang="ar-SA" href="/admin/packages/images" />
+        <xhtml:link rel="alternate" hreflang="x-default" href="/admin/packages/images" />
+    </url>
+    <url>
+        <loc>/en-US/admin/users/create</loc>
+        <xhtml:link rel="alternate" hreflang="en-US" href="/en-US/admin/users/create" />
+        <xhtml:link rel="alternate" hreflang="ar-SA" href="/admin/users/create" />
+        <xhtml:link rel="alternate" hreflang="x-default" href="/admin/users/create" />
+    </url>
+</urlset>
+<!-- XML Sitemap generated by Nuxt Simple Sitemap v4.4.0 -->

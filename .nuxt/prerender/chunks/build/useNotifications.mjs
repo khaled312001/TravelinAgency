@@ -1,0 +1,2 @@
+import{inject as t}from"file://F:/TravelinAgency/node_modules/vue/index.mjs";const w=()=>{const i=t("notifications",null);return{showSuccess:(t,o,e)=>{i&&i.addNotification({type:"success",title:t,message:o,duration:e})},showError:(t,o,e)=>{i&&i.addNotification({type:"error",title:t,message:o,duration:e})},showWarning:(t,o,e)=>{i&&i.addNotification({type:"warning",title:t,message:o,duration:e})},showInfo:(t,o,e)=>{i&&i.addNotification({type:"info",title:t,message:o,duration:e})}}};export{w};
+//# sourceMappingURL=useNotifications.mjs.map

@@ -1,0 +1,2 @@
+import e from"../node_modules/nuxt/dist/pages/runtime/validate.mjs";import o from"../node_modules/nuxt/dist/app/middleware/manifest-route-rule.mjs";const a=[e,o],i={admin:()=>import("../middleware/admin.mjs"),locale:()=>import("../middleware/locale.mjs"),maintenance:()=>import("../middleware/maintenance.mjs")};export{a as globalMiddleware,i as namedMiddleware};
+//# sourceMappingURL=virtual_nuxt_F__TravelinAgency_.nuxt_middleware.mjs.map

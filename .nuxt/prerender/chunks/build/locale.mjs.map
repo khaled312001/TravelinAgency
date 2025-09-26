@@ -1,0 +1,1 @@
+{"version":3,"file":"locale.mjs","sources":["../../../dist/server/middleware/locale.mjs"],"sourcesContent":null,"names":["a","defineEventHandler","e","r","path","req","url","res","setHeader"],"mappings":"AAAK,MAACA,EAAEC,oBAAmBC,IAAI,MAAMC,EAAED,EAAEE,MAAMF,EAAEG,IAAIC,KAAK,IAAQ,MAAJH,GAAa,KAAJA,IAASD,EAAEK,IAAIC,UAAU,oBAAoB"}

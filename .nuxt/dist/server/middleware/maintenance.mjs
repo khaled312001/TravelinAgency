@@ -1,0 +1,2 @@
+import{defineNuxtRouteMiddleware as t,navigateTo as a}from"../node_modules/nuxt/dist/app/composables/router.mjs";import{useSettings as r}from"../composables/useSettings.mjs";const m=t(async n=>{if(!n.path.startsWith("/admin"))try{const{getSetting:e}=r();if(e("maintenance_mode",!1))return a("/maintenance")}catch(e){console.error("Error checking maintenance mode:",e)}});export{m as default};
+//# sourceMappingURL=maintenance.mjs.map

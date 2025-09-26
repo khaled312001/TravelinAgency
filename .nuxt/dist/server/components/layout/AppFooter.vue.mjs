@@ -1,0 +1,2 @@
+import o from"./AppFooter.vue2.mjs";/* empty css               */import{useSSRContext as r}from"vue";import m from"../../_virtual/_plugin-vue_export-helper.mjs";const e=o.setup;o.setup=(s,p)=>{const t=r();return(t.modules||(t.modules=new Set)).add("components/layout/AppFooter.vue"),e?e(s,p):void 0};const _=m(o,[["__scopeId","data-v-0d8c3600"]]);export{_ as default};
+//# sourceMappingURL=AppFooter.vue.mjs.map

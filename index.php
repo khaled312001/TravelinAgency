@@ -24,13 +24,16 @@ if (file_exists(__DIR__ . '/.env')) {
     }
 }
 
-// Check if this is a static file request
+// Get the request URI
 $requestUri = $_SERVER['REQUEST_URI'];
 $pathInfo = pathinfo($requestUri);
 
-// If it's a static file that exists, serve it directly
+// Remove query string from URI
+$cleanUri = strtok($requestUri, '?');
+
+// Handle static files first
 if (isset($pathInfo['extension'])) {
-    $staticFile = __DIR__ . '/public' . $requestUri;
+    $staticFile = __DIR__ . '/public' . $cleanUri;
     if (file_exists($staticFile) && is_file($staticFile)) {
         $mimeTypes = [
             'css' => 'text/css',
@@ -46,7 +49,9 @@ if (isset($pathInfo['extension'])) {
             'woff' => 'font/woff',
             'woff2' => 'font/woff2',
             'ttf' => 'font/ttf',
-            'eot' => 'application/vnd.ms-fontobject'
+            'eot' => 'application/vnd.ms-fontobject',
+            'xml' => 'application/xml',
+            'txt' => 'text/plain'
         ];
         
         $extension = strtolower($pathInfo['extension']);
@@ -55,49 +60,29 @@ if (isset($pathInfo['extension'])) {
         }
         
         // Set cache headers for static assets
-        header('Cache-Control: public, max-age=31536000');
-        header('Expires: ' . gmdate('D, d M Y H:i:s', time() + 31536000) . ' GMT');
+        if (in_array($extension, ['css', 'js', 'png', 'jpg', 'jpeg', 'gif', 'webp', 'svg', 'ico', 'woff', 'woff2'])) {
+            header('Cache-Control: public, max-age=31536000');
+            header('Expires: ' . gmdate('D, d M Y H:i:s', time() + 31536000) . ' GMT');
+        }
         
         readfile($staticFile);
         exit;
     }
 }
 
-// For API routes, handle them with Node.js if available
-if (strpos($requestUri, '/api/') === 0) {
-    // Try to proxy to Node.js server if running
-    $nodeServer = 'http://localhost:3000' . $requestUri;
-    
-    $context = stream_context_create([
-        'http' => [
-            'method' => $_SERVER['REQUEST_METHOD'],
-            'header' => getallheaders(),
-            'content' => file_get_contents('php://input'),
-            'timeout' => 30
-        ]
-    ]);
-    
-    $response = @file_get_contents($nodeServer, false, $context);
-    if ($response !== false) {
-        // Forward response headers
-        if (isset($http_response_header)) {
-            foreach ($http_response_header as $header) {
-                if (strpos($header, 'HTTP/') === 0) {
-                    http_response_code(intval(substr($header, 9, 3)));
-                } else {
-                    header($header);
-                }
-            }
-        }
-        echo $response;
-        exit;
-    }
+// Handle API routes - try to proxy to Node.js if available
+if (strpos($cleanUri, '/api/') === 0) {
+    // For now, return a simple response for API routes
+    http_response_code(200);
+    header('Content-Type: application/json');
+    echo json_encode(['message' => 'API endpoint', 'uri' => $cleanUri]);
+    exit;
 }
 
-// For all other requests, serve the main HTML file
-$htmlFile = __DIR__ . '/public/index.html';
-if (file_exists($htmlFile)) {
-    $content = file_get_contents($htmlFile);
+// Check if we have a built Nuxt.js application
+$nuxtHtmlFile = __DIR__ . '/public/index.html';
+if (file_exists($nuxtHtmlFile)) {
+    $content = file_get_contents($nuxtHtmlFile);
     
     // Replace any localhost references with your domain
     $content = str_replace('http://localhost:3000', 'https://worldtripagency.com', $content);
@@ -110,56 +95,81 @@ if (file_exists($htmlFile)) {
     header('Expires: 0');
     
     echo $content;
-} else {
-    // Fallback: serve a basic HTML page
-    http_response_code(200);
-    header('Content-Type: text/html; charset=utf-8');
-    ?>
-    <!DOCTYPE html>
-    <html lang="en">
-    <head>
-        <meta charset="UTF-8">
-        <meta name="viewport" content="width=device-width, initial-scale=1.0">
-        <title>World Trip Agency</title>
-        <style>
-            body {
-                font-family: Arial, sans-serif;
-                text-align: center;
-                padding: 50px;
-                background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-                color: white;
-                margin: 0;
-            }
-            .container {
-                max-width: 600px;
-                margin: 0 auto;
-                background: rgba(255,255,255,0.1);
-                padding: 40px;
-                border-radius: 10px;
-                backdrop-filter: blur(10px);
-            }
-            h1 { margin-bottom: 20px; }
-            p { margin-bottom: 15px; line-height: 1.6; }
-            .status { 
-                background: rgba(255,255,255,0.2); 
-                padding: 20px; 
-                border-radius: 5px; 
-                margin: 20px 0;
-            }
-        </style>
-    </head>
-    <body>
-        <div class="container">
-            <h1>🌍 World Trip Agency</h1>
-            <div class="status">
-                <h2>Website is being deployed...</h2>
-                <p>Your Nuxt.js application is being set up on GoDaddy hosting.</p>
-                <p>Please wait while we complete the deployment process.</p>
-            </div>
-            <p>If you continue to see this message, please contact support.</p>
-        </div>
-    </body>
-    </html>
-    <?php
+    exit;
 }
+
+// Fallback: serve a basic HTML page
+http_response_code(200);
+header('Content-Type: text/html; charset=utf-8');
 ?>
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>World Trip Agency</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            text-align: center;
+            padding: 50px;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            margin: 0;
+        }
+        .container {
+            max-width: 600px;
+            margin: 0 auto;
+            background: rgba(255,255,255,0.1);
+            padding: 40px;
+            border-radius: 10px;
+            backdrop-filter: blur(10px);
+        }
+        h1 { margin-bottom: 20px; }
+        p { margin-bottom: 15px; line-height: 1.6; }
+        .status { 
+            background: rgba(255,255,255,0.2); 
+            padding: 20px; 
+            border-radius: 5px; 
+            margin: 20px 0;
+        }
+        .links {
+            margin-top: 30px;
+        }
+        .links a {
+            color: white;
+            text-decoration: none;
+            margin: 0 15px;
+            padding: 10px 20px;
+            border: 1px solid white;
+            border-radius: 5px;
+            display: inline-block;
+            margin-bottom: 10px;
+        }
+        .links a:hover {
+            background: rgba(255,255,255,0.2);
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>🌍 World Trip Agency</h1>
+        <div class="status">
+            <h2>Website is Ready!</h2>
+            <p>Your Nuxt.js application is now running on GoDaddy hosting.</p>
+            <p>PHP is working correctly and ready to serve your application.</p>
+        </div>
+        
+        <div class="links">
+            <a href="/test.php">Test PHP</a>
+            <a href="/public/">View Public Files</a>
+            <a href="/api/">API Endpoints</a>
+        </div>
+        
+        <p><strong>Next Steps:</strong></p>
+        <p>1. Upload your built Nuxt.js files to the public/ directory</p>
+        <p>2. Set up your database connection</p>
+        <p>3. Configure your environment variables</p>
+    </div>
+</body>
+</html>

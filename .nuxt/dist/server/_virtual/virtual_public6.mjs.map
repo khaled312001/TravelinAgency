@@ -1,0 +1,1 @@
+{"version":3,"file":"virtual_public6.mjs","sources":["../../../../virtual:public?%2Fimages%2F404%2Ftravel-lost.svg"],"sourcesContent":["import { publicAssetsURL } from '#internal/nuxt/paths';export default publicAssetsURL(\"/images/404/travel-lost.svg\")"],"names":["_imports_0","publicAssetsURL"],"mappings":"uDAAuD,MAAeA,EAAAC,EAAgB,6BAA6B"}

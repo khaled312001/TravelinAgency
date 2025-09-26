@@ -1,0 +1,2 @@
+import t from"./SlideText.vue2.mjs";/* empty css               */import{useSSRContext as m}from"vue";import p from"../../_virtual/_plugin-vue_export-helper.mjs";const o=t.setup;t.setup=(s,r)=>{const e=m();return(e.modules||(e.modules=new Set)).add("components/ui/SlideText.vue"),o?o(s,r):void 0};const c=p(t,[["__scopeId","data-v-2b8ebf06"]]);export{c as default};
+//# sourceMappingURL=SlideText.vue.mjs.map

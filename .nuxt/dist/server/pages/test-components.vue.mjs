@@ -1,0 +1,2 @@
+import t from"./test-components.vue3.mjs";/* empty css                     */import{useSSRContext as m}from"vue";import n from"../_virtual/_plugin-vue_export-helper.mjs";const e=t.setup;t.setup=(s,p)=>{const o=m();return(o.modules||(o.modules=new Set)).add("pages/test-components.vue"),e?e(s,p):void 0};const d=n(t,[["__scopeId","data-v-02c322a3"]]);export{d as default};
+//# sourceMappingURL=test-components.vue.mjs.map

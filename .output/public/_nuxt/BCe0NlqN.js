@@ -1,0 +1,1 @@
+import{aE as a,aC as t,J as r}from"./BPMBOJUR.js";const c=a(async n=>{if(!n.path.startsWith("/admin"))try{const{getSetting:e}=t();if(e("maintenance_mode",!1))return r("/maintenance")}catch(e){console.error("Error checking maintenance mode:",e)}});export{c as default};

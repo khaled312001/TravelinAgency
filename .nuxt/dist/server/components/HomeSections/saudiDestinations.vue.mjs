@@ -1,0 +1,2 @@
+import t from"./saudiDestinations.vue2.mjs";/* empty css                       */import{useSSRContext as i}from"vue";import m from"../../_virtual/_plugin-vue_export-helper.mjs";const s=t.setup;t.setup=(e,n)=>{const o=i();return(o.modules||(o.modules=new Set)).add("components/HomeSections/saudiDestinations.vue"),s?s(e,n):void 0};const u=m(t,[["__scopeId","data-v-c673da4e"]]);export{u as default};
+//# sourceMappingURL=saudiDestinations.vue.mjs.map

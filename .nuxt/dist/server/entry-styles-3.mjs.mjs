@@ -1,0 +1,2 @@
+const t="input[type=email],input[type=tel],input[type=text]{-webkit-appearance:none;-moz-appearance:none;appearance:none}input:-webkit-autofill,input:-webkit-autofill:focus,input:-webkit-autofill:hover{-webkit-box-shadow:inset 0 0 0 1000px #f9fafb;-webkit-text-fill-color:#374151;-webkit-transition:background-color 5000s ease-in-out 0s;transition:background-color 5000s ease-in-out 0s}";export{t as default};
+//# sourceMappingURL=entry-styles-3.mjs.mjs.map

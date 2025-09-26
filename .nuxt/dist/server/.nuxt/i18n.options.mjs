@@ -1,0 +1,2 @@
+const n=["en-US","ar-SA"],e={"en-US":[],"ar-SA":[]},o=[()=>import("../i18n.config.mjs")],l=[{code:"en-US",language:"en-US",name:"English",dir:"ltr",files:[]},{code:"ar-SA",language:"ar-SA",name:"العربية",dir:"rtl",files:[]}],s="@nuxtjs/i18n",a=!1,t="nuxtI18n",c="i18n_redirected",r="nuxt-i18n-slp";export{c as DEFAULT_COOKIE_KEY,t as DEFAULT_DYNAMIC_PARAMS_KEY,s as NUXT_I18N_MODULE_ID,r as SWITCH_LOCALE_PATH_LINK_IDENTIFIER,n as localeCodes,e as localeLoaders,l as normalizedLocales,a as parallelPlugin,o as vueI18nConfigs};
+//# sourceMappingURL=i18n.options.mjs.map
