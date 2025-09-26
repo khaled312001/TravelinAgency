@@ -97,9 +97,6 @@
       "#build": [
         "./"
       ],
-      "#build/*": [
-        "./*"
-      ],
       "#internal/nuxt/paths": [
         "../node_modules/nuxt/dist/core/runtime/nitro/utils/paths"
       ],
@@ -161,7 +158,7 @@
         "../node_modules/nuxt-site-config/dist/runtime/nitro/composable-barrel-deprecated"
       ],
       "#nuxt-icon-server-bundle": [
-        "./nuxt-icon-server-bundle.mjs"
+        "./nuxt-icon-server-bundle"
       ]
     },
     "lib": [

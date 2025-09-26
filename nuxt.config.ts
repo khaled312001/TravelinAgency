@@ -168,6 +168,10 @@ export default defineNuxtConfig({
           'Expires': '0'
         }
       }
+    },
+    // Ensure proper Vercel deployment
+    experimental: {
+      wasm: true
     }
   },
 

@@ -1,0 +1,1 @@
+{"version":3,"file":"locale.mjs","sources":["../../../../../../middleware/locale.ts"],"sourcesContent":null,"names":["locale","defineEventHandler","event","path","req","url","res","setHeader"],"mappings":"AAACA,MAAAA,EAAeC,oBAAoBC,IAE7B,MAAMC,EAAOD,EAAMC,MAAQD,EAAME,IAAIC,KAAO,IAI/B,MAATF,GAAyB,KAATA,IAEZD,EAAAI,IAAIC,UAAU,oBAAqB"}
