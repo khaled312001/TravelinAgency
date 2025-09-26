@@ -1,0 +1,43 @@
+# GoDaddy Deployment Instructions
+
+## Quick Fix for 500 Error
+
+1. **Upload Files**: Upload ALL contents of this 'godaddy-fixed' folder to your GoDaddy hosting root directory (public_html)
+
+2. **File Permissions**: Set these permissions via cPanel File Manager:
+   - Folders: 755
+   - Files: 644
+   - .htaccess: 644
+
+3. **Test**: Visit https://worldtripagency.com/test.php to verify PHP is working
+
+4. **Environment**: Rename .env.example to .env and update with your database credentials
+
+## What This Fix Does:
+
+- ✅ Corrected index.php to look in the right directories
+- ✅ Added fallback paths for different deployment structures
+- ✅ Included debug information to help troubleshoot
+- ✅ Proper static file handling
+- ✅ Correct MIME types and caching headers
+
+## If Still Getting 500 Error:
+
+1. Check error logs in cPanel
+2. Verify .htaccess is uploaded and has correct permissions
+3. Ensure all files are in the root directory (not in a subfolder)
+4. Check that output/public/200.html exists
+
+## File Structure Should Be:
+public_html/
+├── index.php (the corrected one)
+├── .htaccess
+├── test.php
+├── output/
+│   └── public/
+│       ├── 200.html
+│       ├── _nuxt/
+│       └── images/
+└── .env (rename from .env.example)
+
+Your website should now work at: https://worldtripagency.com/
