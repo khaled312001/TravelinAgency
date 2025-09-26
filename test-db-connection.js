@@ -1,5 +1,5 @@
 // Test database connection script
-const mysql = require('mysql2/promise');
+import mysql from 'mysql2/promise';
 
 async function testConnection() {
   const config = {
@@ -9,9 +9,7 @@ async function testConnection() {
     password: 'support@Passord123',
     database: 'travel',
     charset: 'utf8mb4',
-    timezone: '+00:00',
-    acquireTimeout: 10000,
-    timeout: 10000
+    timezone: '+00:00'
   };
 
   console.log('🔧 Testing database connection...');

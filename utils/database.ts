@@ -38,8 +38,6 @@ export function createDatabasePool() {
       connectionLimit: 5, // Reduced for serverless
       queueLimit: 0,
       waitForConnections: true,
-      acquireTimeout: 10000, // 10 seconds
-      timeout: 10000, // 10 seconds
       reconnect: true
     })
   }
@@ -68,6 +66,8 @@ export async function executeQuery<T = any>(sql: string, params: any[] = []): Pr
       throw new Error('Database access denied. Please check your credentials.')
     } else if (error.code === 'ER_BAD_DB_ERROR') {
       throw new Error('Database does not exist. Please check your database name.')
+    } else if (error.code === 'ER_HOST_NOT_PRIVILEGED') {
+      throw new Error('Database host not allowed. Please configure remote access in GoDaddy cPanel.')
     }
     
     throw error
