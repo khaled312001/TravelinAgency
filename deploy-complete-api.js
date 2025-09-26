@@ -1,4 +1,12 @@
-<?php
+#!/usr/bin/env node
+
+import fs from 'fs';
+
+console.log('🚀 DEPLOYING COMPLETE API HANDLER');
+console.log('=================================\n');
+
+// Create the complete API handler
+const completeApiHandler = `<?php
 // Complete API handler for GoDaddy + Nuxt.js
 header('Content-Type: application/json');
 header('Access-Control-Allow-Origin: *');
@@ -342,4 +350,26 @@ switch ($apiPath) {
         ]);
         break;
 }
-?>
+?>`;
+
+// Write the complete API handler
+fs.writeFileSync('api-handler-complete.php', completeApiHandler);
+console.log('✅ Created: api-handler-complete.php');
+
+console.log('\n📋 DEPLOY COMPLETE API:');
+console.log('======================');
+console.log('Run these commands on your GoDaddy server:');
+console.log('');
+console.log('# 1. Deploy complete API handler');
+console.log('cp api-handler-complete.php api-handler.php');
+console.log('chmod 644 api-handler.php');
+console.log('');
+console.log('# 2. Test all API endpoints');
+console.log('curl -k https://worldtripagency.com/api/test');
+console.log('curl -k https://worldtripagency.com/api/packages');
+console.log('curl -k https://worldtripagency.com/api/destinations');
+console.log('curl -k -X POST https://worldtripagency.com/api/auth/login \\');
+console.log('  -H "Content-Type: application/json" \\');
+console.log('  -d \'{"email":"admin@wonderland.com","password":"admin123"}\'');
+console.log('');
+console.log('🎯 This will deploy the complete API with all endpoints!');
