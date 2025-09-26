@@ -4,7 +4,9 @@
 The build was failing because Vercel was looking for a `dist` directory, but Nuxt 3 with Nitro generates files in `.output/public` and `.output/server`.
 
 ## Solution
-Created `vercel.json` configuration file to specify the correct output directory and routing.
+1. Changed Nitro preset from `node-server` to `vercel` in `nuxt.config.ts`
+2. Created minimal `vercel.json` configuration file
+3. The Vercel preset automatically handles function routing and output directory
 
 ## Environment Variables Required
 
@@ -47,11 +49,13 @@ NODE_ENV=production
 
 ## Vercel Configuration Details
 
-The `vercel.json` file includes:
-- **outputDirectory**: `.output/public` (where Nuxt generates static files)
-- **functions**: Serverless function configuration for API routes
-- **routes**: Proper routing for both API and page routes
-- **framework**: Set to `nuxtjs` for optimal Nuxt support
+The configuration includes:
+- **Nitro preset**: Changed to `vercel` in `nuxt.config.ts` for optimal Vercel compatibility
+- **vercel.json**: Minimal configuration with just the framework specification
+- **Automatic handling**: The Vercel preset automatically handles:
+  - Output directory (`.output/public`)
+  - Serverless function routing
+  - API route configuration
 
 ## Database Setup
 
