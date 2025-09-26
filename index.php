@@ -31,42 +31,50 @@ $pathInfo = pathinfo($requestUri);
 // Remove query string from URI
 $cleanUri = strtok($requestUri, '?');
 
-// Handle static files first
+// Handle static files first - check multiple possible locations
+$staticPaths = [
+    __DIR__ . '/output/public' . $cleanUri,
+    __DIR__ . '/public' . $cleanUri,
+    __DIR__ . '/godaddy-deploy/output/public' . $cleanUri,
+    __DIR__ . '/godaddy-deploy/public' . $cleanUri
+];
+
 if (isset($pathInfo['extension'])) {
-    $staticFile = __DIR__ . '/output/public' . $cleanUri;
-    if (file_exists($staticFile) && is_file($staticFile)) {
-        $mimeTypes = [
-            'css' => 'text/css',
-            'js' => 'application/javascript',
-            'json' => 'application/json',
-            'png' => 'image/png',
-            'jpg' => 'image/jpeg',
-            'jpeg' => 'image/jpeg',
-            'gif' => 'image/gif',
-            'webp' => 'image/webp',
-            'svg' => 'image/svg+xml',
-            'ico' => 'image/x-icon',
-            'woff' => 'font/woff',
-            'woff2' => 'font/woff2',
-            'ttf' => 'font/ttf',
-            'eot' => 'application/vnd.ms-fontobject',
-            'xml' => 'application/xml',
-            'txt' => 'text/plain'
-        ];
-        
-        $extension = strtolower($pathInfo['extension']);
-        if (isset($mimeTypes[$extension])) {
-            header('Content-Type: ' . $mimeTypes[$extension]);
+    foreach ($staticPaths as $staticFile) {
+        if (file_exists($staticFile) && is_file($staticFile)) {
+            $mimeTypes = [
+                'css' => 'text/css',
+                'js' => 'application/javascript',
+                'json' => 'application/json',
+                'png' => 'image/png',
+                'jpg' => 'image/jpeg',
+                'jpeg' => 'image/jpeg',
+                'gif' => 'image/gif',
+                'webp' => 'image/webp',
+                'svg' => 'image/svg+xml',
+                'ico' => 'image/x-icon',
+                'woff' => 'font/woff',
+                'woff2' => 'font/woff2',
+                'ttf' => 'font/ttf',
+                'eot' => 'application/vnd.ms-fontobject',
+                'xml' => 'application/xml',
+                'txt' => 'text/plain'
+            ];
+            
+            $extension = strtolower($pathInfo['extension']);
+            if (isset($mimeTypes[$extension])) {
+                header('Content-Type: ' . $mimeTypes[$extension]);
+            }
+            
+            // Set cache headers for static assets
+            if (in_array($extension, ['css', 'js', 'png', 'jpg', 'jpeg', 'gif', 'webp', 'svg', 'ico', 'woff', 'woff2'])) {
+                header('Cache-Control: public, max-age=31536000');
+                header('Expires: ' . gmdate('D, d M Y H:i:s', time() + 31536000) . ' GMT');
+            }
+            
+            readfile($staticFile);
+            exit;
         }
-        
-        // Set cache headers for static assets
-        if (in_array($extension, ['css', 'js', 'png', 'jpg', 'jpeg', 'gif', 'webp', 'svg', 'ico', 'woff', 'woff2'])) {
-            header('Cache-Control: public, max-age=31536000');
-            header('Expires: ' . gmdate('D, d M Y H:i:s', time() + 31536000) . ' GMT');
-        }
-        
-        readfile($staticFile);
-        exit;
     }
 }
 
@@ -79,23 +87,31 @@ if (strpos($cleanUri, '/api/') === 0) {
     exit;
 }
 
-// Check if we have a built Nuxt.js application
-$nuxtHtmlFile = __DIR__ . '/output/public/200.html';
-if (file_exists($nuxtHtmlFile)) {
-    $content = file_get_contents($nuxtHtmlFile);
-    
-    // Replace any localhost references with your domain
-    $content = str_replace('http://localhost:3000', 'https://worldtripagency.com', $content);
-    $content = str_replace('localhost:3000', 'worldtripagency.com', $content);
-    
-    // Set proper headers
-    header('Content-Type: text/html; charset=utf-8');
-    header('Cache-Control: no-cache, no-store, must-revalidate');
-    header('Pragma: no-cache');
-    header('Expires: 0');
-    
-    echo $content;
-    exit;
+// Check if we have a built Nuxt.js application - check multiple locations
+$nuxtHtmlPaths = [
+    __DIR__ . '/output/public/200.html',
+    __DIR__ . '/public/200.html',
+    __DIR__ . '/godaddy-deploy/output/public/200.html',
+    __DIR__ . '/godaddy-deploy/public/200.html'
+];
+
+foreach ($nuxtHtmlPaths as $nuxtHtmlFile) {
+    if (file_exists($nuxtHtmlFile)) {
+        $content = file_get_contents($nuxtHtmlFile);
+        
+        // Replace any localhost references with your domain
+        $content = str_replace('http://localhost:3000', 'https://worldtripagency.com', $content);
+        $content = str_replace('localhost:3000', 'worldtripagency.com', $content);
+        
+        // Set proper headers
+        header('Content-Type: text/html; charset=utf-8');
+        header('Cache-Control: no-cache, no-store, must-revalidate');
+        header('Pragma: no-cache');
+        header('Expires: 0');
+        
+        echo $content;
+        exit;
+    }
 }
 
 // Fallback: serve a basic HTML page
@@ -149,27 +165,49 @@ header('Content-Type: text/html; charset=utf-8');
         .links a:hover {
             background: rgba(255,255,255,0.2);
         }
+        .error {
+            background: rgba(255,0,0,0.2);
+            border: 1px solid rgba(255,0,0,0.5);
+            padding: 20px;
+            border-radius: 5px;
+            margin: 20px 0;
+        }
     </style>
 </head>
 <body>
     <div class="container">
         <h1>🌍 World Trip Agency</h1>
+        <div class="error">
+            <h2>⚠️ Deployment Issue Detected</h2>
+            <p>Your Nuxt.js application files are not found in the expected locations.</p>
+        </div>
+        
         <div class="status">
-            <h2>Website is Ready!</h2>
-            <p>Your Nuxt.js application is now running on GoDaddy hosting.</p>
-            <p>PHP is working correctly and ready to serve your application.</p>
+            <h3>🔍 Debug Information:</h3>
+            <p><strong>Current Directory:</strong> <?php echo __DIR__; ?></p>
+            <p><strong>Request URI:</strong> <?php echo htmlspecialchars($requestUri); ?></p>
+            <p><strong>Clean URI:</strong> <?php echo htmlspecialchars($cleanUri); ?></p>
+            
+            <h4>📁 Checking for files in:</h4>
+            <ul style="text-align: left; max-width: 400px; margin: 0 auto;">
+                <?php foreach ($nuxtHtmlPaths as $path): ?>
+                    <li><?php echo $path; ?> - <?php echo file_exists($path) ? '✅ Found' : '❌ Not found'; ?></li>
+                <?php endforeach; ?>
+            </ul>
         </div>
         
         <div class="links">
             <a href="/test.php">Test PHP</a>
             <a href="/public/">View Public Files</a>
-            <a href="/api/">API Endpoints</a>
+            <a href="/output/public/">View Output Files</a>
+            <a href="/godaddy-deploy/">View Deploy Files</a>
         </div>
         
         <p><strong>Next Steps:</strong></p>
-        <p>1. Upload your built Nuxt.js files to the public/ directory</p>
-        <p>2. Set up your database connection</p>
-        <p>3. Configure your environment variables</p>
+        <p>1. Upload your built Nuxt.js files to the correct directory</p>
+        <p>2. Ensure the output/public/200.html file exists</p>
+        <p>3. Check file permissions (folders: 755, files: 644)</p>
+        <p>4. Verify your .htaccess file is in place</p>
     </div>
 </body>
 </html>
