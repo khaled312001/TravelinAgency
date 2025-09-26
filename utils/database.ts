@@ -25,13 +25,22 @@ export function createDatabasePool() {
       database: config.database
     })
     
+    // Check if we have required database credentials
+    if (!config.host || !config.user || !config.database) {
+      console.error('❌ Missing required database configuration')
+      throw new Error('Database configuration is incomplete')
+    }
+    
     pool = mysql.createPool({
       ...config,
       charset: 'utf8mb4',
       timezone: '+00:00',
-      connectionLimit: 10,
+      connectionLimit: 5, // Reduced for serverless
       queueLimit: 0,
-      waitForConnections: true
+      waitForConnections: true,
+      acquireTimeout: 10000, // 10 seconds
+      timeout: 10000, // 10 seconds
+      reconnect: true
     })
   }
   
@@ -39,13 +48,28 @@ export function createDatabasePool() {
 }
 
 export async function executeQuery<T = any>(sql: string, params: any[] = []): Promise<T[]> {
-  const pool = createDatabasePool()
-  
   try {
+    const pool = createDatabasePool()
     const [rows] = await pool.execute(sql, params)
     return rows as T[]
-  } catch (error) {
-    console.error('Database query error:', error)
+  } catch (error: any) {
+    console.error('Database query error:', {
+      message: error.message,
+      code: error.code,
+      errno: error.errno,
+      sql: sql.substring(0, 100) + '...',
+      params: params
+    })
+    
+    // Handle specific MySQL errors
+    if (error.code === 'ECONNREFUSED') {
+      throw new Error('Database connection refused. Please check your database configuration.')
+    } else if (error.code === 'ER_ACCESS_DENIED_ERROR') {
+      throw new Error('Database access denied. Please check your credentials.')
+    } else if (error.code === 'ER_BAD_DB_ERROR') {
+      throw new Error('Database does not exist. Please check your database name.')
+    }
+    
     throw error
   }
 }
