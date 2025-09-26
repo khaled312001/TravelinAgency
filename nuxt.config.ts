@@ -1,5 +1,5 @@
 // https://nuxt.com/docs/api/configuration/nuxt-config
-const productionURL = 'https://wonderland1.com'
+const productionURL = 'https://worldtripagency.com'
 export default defineNuxtConfig({
   devtools: { enabled: false },
   
@@ -57,7 +57,7 @@ export default defineNuxtConfig({
         : 'http://localhost:3000'),
       
       // Public site URL for links in notifications
-      publicSiteUrl: process.env.PUBLIC_SITE_URL || 'https://wonderland1.com'
+      publicSiteUrl: process.env.PUBLIC_SITE_URL || 'https://worldtripagency.com'
     }
   },
 
@@ -143,7 +143,7 @@ export default defineNuxtConfig({
   ],
 
   nitro: {
-    preset: 'cloudflare_pages',
+    preset: 'node-server',
     compressPublicAssets: {
       gzip: true,
       brotli: true
@@ -177,7 +177,7 @@ export default defineNuxtConfig({
 
   app: {
     head: {
-      title: 'Wonder Land',
+      title: 'World Trip Agency',
       htmlAttrs: {
         lang: 'ar-SA',
         dir: 'rtl'
