@@ -62,12 +62,13 @@ export function usePackages() {
     fetchPackages()
   }
 
-  // Both server and client: fetch on mount for consistency
+  // Only fetch on client-side to avoid SSR issues
   if (process.client) {
     onMounted(initializePackages)
   } else {
-    // Server-side: Start fetching immediately
-    initializePackages()
+    // Server-side: Set pending to false and use empty array
+    pending.value = false
+    packages.value = []
   }
 
   // Listen for auto-refresh events from the plugin
