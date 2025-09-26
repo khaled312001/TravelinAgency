@@ -61,6 +61,25 @@ export default defineNuxtConfig({
     }
   },
 
+  // Security configuration
+  security: {
+    headers: {
+      crossOriginEmbedderPolicy: process.env.NODE_ENV === 'production' ? 'require-corp' : false,
+      contentSecurityPolicy: {
+        'base-uri': ["'self'"],
+        'font-src': ["'self'", 'https:', 'data:'],
+        'form-action': ["'self'"],
+        'frame-ancestors': ["'none'"],
+        'img-src': ["'self'", 'data:', 'https:'],
+        'object-src': ["'none'"],
+        'script-src-attr': ["'none'"],
+        'style-src': ["'self'", 'https:', "'unsafe-inline'"],
+        'script-src': ["'self'", 'https:', "'unsafe-inline'", "'unsafe-eval'"],
+        'upgrade-insecure-requests': process.env.NODE_ENV === 'production' ? [] : false
+      }
+    }
+  },
+
   image: {
     provider: 'ipx',
     dir: 'public',

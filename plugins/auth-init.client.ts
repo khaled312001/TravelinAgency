@@ -9,7 +9,7 @@ export default defineNuxtPlugin(async () => {
   if (!isLoginPage) {
     // Check if user data is already available from cookie
     if (user.value) {
-      console.log('🚀 Auth initialization - user data already available from cookie (v2.5)')
+      // User already authenticated, no need to check again
       return
     }
     
@@ -20,19 +20,17 @@ export default defineNuxtPlugin(async () => {
       try {
         // التحقق من المصادقة عند تحميل التطبيق (silent mode to reduce console noise)
         await checkAuth(true)
-        console.log('🚀 Auth initialization completed (v2.5)')
+        // Auth check completed successfully
       } catch (error: any) {
         // Only log if it's not a 401 error (which is expected for unauthenticated users)
         if (error.statusCode !== 401) {
-          console.log('⚠️ Auth initialization failed:', error)
-        } else {
-          console.log('🚀 Auth initialization - invalid token found (v2.5)')
+          console.warn('Authentication check failed:', error.message)
         }
+        // Clear invalid token silently
+        tokenCookie.value = null
       }
-    } else {
-      console.log('🚀 Auth initialization skipped - no token found (v2.5)')
     }
-  } else {
-    console.log('🚀 Auth initialization skipped on login page (v2.5)')
+    // No token found - user is not authenticated (this is normal)
   }
+  // On login page - skip auth initialization (this is expected behavior)
 })

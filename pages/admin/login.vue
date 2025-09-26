@@ -147,8 +147,7 @@ onMounted(async () => {
       console.log('User not authenticated, staying on login page')
     }
   } else {
-    // No token, user is definitely not authenticated
-    console.log('No auth token found, staying on login page')
+    // No token, user is definitely not authenticated - this is normal for login page
   }
   
   // Mark that we've checked initial auth after a short delay
