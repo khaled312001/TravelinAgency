@@ -1,36 +1,90 @@
-# Simple .htaccess to fix download issue
-DirectoryIndex index.php index.html
+RewriteEngine On
 
-<IfModule mod_rewrite.c>
-    RewriteEngine On
-    
-    # Handle static files first
-    RewriteCond %{REQUEST_FILENAME} -f
-    RewriteRule ^ - [L]
-    
-    # Handle directories
-    RewriteCond %{REQUEST_FILENAME} -d
-    RewriteRule ^ - [L]
-    
-    # Handle _ipx image processing requests - redirect to actual images
-    RewriteCond %{REQUEST_URI} ^/_ipx/.*?/images/(.*)$
-    RewriteRule ^/_ipx/.*?/images/(.*)$ /images/$1 [L]
-    
-    # Handle API routes
-    RewriteCond %{REQUEST_URI} ^/api/ [NC]
-    RewriteRule ^(.*)$ api-handler.php [QSA,L]
-    
-    # Everything else goes to index.php
-    RewriteRule ^(.*)$ index.php [QSA,L]
+# Force HTTPS redirect
+RewriteCond %{HTTPS} off
+RewriteRule ^(.*)$ https://%{HTTP_HOST}%{REQUEST_URI} [L,R=301]
+
+# Handle IPX image processing requests - redirect to actual images
+RewriteCond %{REQUEST_URI} ^/_ipx/.*?/images/(.*)$
+RewriteRule ^/_ipx/.*?/images/(.*)$ /images/$1 [L]
+
+# Handle static files first
+RewriteCond %{REQUEST_FILENAME} -f
+RewriteRule ^(.*)$ - [L]
+
+# Handle API routes
+RewriteCond %{REQUEST_URI} ^/api/
+RewriteRule ^(.*)$ /index.php [QSA,L]
+
+# Handle Nuxt.js client-side routing
+RewriteCond %{REQUEST_FILENAME} !-f
+RewriteCond %{REQUEST_FILENAME} !-d
+RewriteRule ^(.*)$ /index.php [QSA,L]
+
+# Enable compression
+<IfModule mod_deflate.c>
+    AddOutputFilterByType DEFLATE text/plain
+    AddOutputFilterByType DEFLATE text/html
+    AddOutputFilterByType DEFLATE text/xml
+    AddOutputFilterByType DEFLATE text/css
+    AddOutputFilterByType DEFLATE application/xml
+    AddOutputFilterByType DEFLATE application/xhtml+xml
+    AddOutputFilterByType DEFLATE application/rss+xml
+    AddOutputFilterByType DEFLATE application/javascript
+    AddOutputFilterByType DEFLATE application/x-javascript
 </IfModule>
 
-# Set proper MIME types
+# Set proper MIME types for images and fonts
 <IfModule mod_mime.c>
-    AddType text/html .php
-    AddType text/html .html
-    AddType application/javascript .js
-    AddType text/css .css
+    AddType image/webp .webp
+    AddType image/avif .avif
+    AddType image/svg+xml .svg
     AddType image/jpeg .jpg .jpeg
     AddType image/png .png
-    AddType image/webp .webp
+    AddType image/gif .gif
+    AddType font/woff2 .woff2
+    AddType font/woff .woff
+    AddType font/ttf .ttf
+    AddType font/otf .otf
+    AddType application/font-woff2 .woff2
+    AddType application/font-woff .woff
 </IfModule>
+
+# Set cache headers for static assets
+<IfModule mod_expires.c>
+    ExpiresActive on
+    ExpiresByType text/css "access plus 1 year"
+    ExpiresByType application/javascript "access plus 1 year"
+    ExpiresByType image/png "access plus 1 year"
+    ExpiresByType image/jpg "access plus 1 year"
+    ExpiresByType image/jpeg "access plus 1 year"
+    ExpiresByType image/gif "access plus 1 year"
+    ExpiresByType image/webp "access plus 1 year"
+    ExpiresByType image/svg+xml "access plus 1 year"
+    ExpiresByType font/woff "access plus 1 year"
+    ExpiresByType font/woff2 "access plus 1 year"
+    ExpiresByType application/font-woff2 "access plus 1 year"
+    ExpiresByType application/font-woff "access plus 1 year"
+</IfModule>
+
+# Security headers
+<IfModule mod_headers.c>
+    Header always set X-Content-Type-Options nosniff
+    Header always set X-Frame-Options DENY
+    Header always set X-XSS-Protection "1; mode=block"
+    Header always set Referrer-Policy "strict-origin-when-cross-origin"
+    Header always set Strict-Transport-Security "max-age=31536000; includeSubDomains; preload"
+    Header always set Content-Security-Policy "default-src 'self'; script-src 'self' 'unsafe-inline' 'unsafe-eval' https://fonts.googleapis.com https://static.cloudflareinsights.com https://img1.wsimg.com; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; font-src 'self' https://fonts.gstatic.com; img-src 'self' data: https: https://images.pexels.com https://images.unsplash.com; connect-src 'self' https: https://api.iconify.design https://img1.wsimg.com; frame-src 'self';"
+</IfModule>
+
+# Prevent access to sensitive files
+<FilesMatch "\.(env|log|sql|md)$">
+    Order allow,deny
+    Deny from all
+</FilesMatch>
+
+# Allow access to public files
+<Directory "public">
+    Order allow,deny
+    Allow from all
+</Directory>
