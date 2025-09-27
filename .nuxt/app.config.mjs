@@ -18,7 +18,14 @@ const inlineConfig = {
       "aria-hidden": true
     },
     "collections": [
-      "material-symbols"
+      "material-symbols",
+      "carbon",
+      "ic",
+      "logos",
+      "material-symbols-light",
+      "mdi",
+      "ri",
+      "tabler"
     ],
     "fetchTimeout": 1500
   }

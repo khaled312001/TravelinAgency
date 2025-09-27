@@ -205,7 +205,7 @@ declare module 'nuxt/schema' {
 
    dbHost: string,
 
-   dbPort: number,
+   dbPort: string,
 
    dbUser: string,
 
@@ -225,20 +225,6 @@ declare module 'nuxt/schema' {
 
    nitro: {
       envPrefix: string,
-   },
-
-   "nuxt-schema-org": {
-      reactive: boolean,
-
-      minify: boolean,
-
-      scriptAttributes: {
-         id: string,
-      },
-
-      identity: any,
-
-      version: string,
    },
 
    "nuxt-simple-sitemap": {
@@ -347,6 +333,20 @@ declare module 'nuxt/schema' {
    siteUrl: string,
 
    publicSiteUrl: string,
+
+   "nuxt-schema-org": {
+      reactive: boolean,
+
+      minify: boolean,
+
+      scriptAttributes: {
+         id: string,
+      },
+
+      identity: any,
+
+      version: string,
+   },
 
    i18n: {
       baseUrl: string,
