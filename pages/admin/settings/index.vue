@@ -107,14 +107,91 @@
             </div>
           </div>
 
-          <div>
-            <label class="block text-sm font-medium text-gray-700 mb-2">شعار الموقع (URL)</label>
-            <input
-              v-model="settings.site_logo"
-              type="text"
-              class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
-              placeholder="/images/logo.png"
-            />
+          <!-- شعار الموقع -->
+          <div class="space-y-4">
+            <label class="block text-sm font-medium text-gray-700">شعار الموقع</label>
+            
+            <!-- الشعار الحالي -->
+            <div v-if="settings.site_logo" class="flex items-center space-x-4 space-x-reverse">
+              <div class="relative">
+                <img 
+                  :src="settings.site_logo" 
+                  :alt="settings.site_name_ar"
+                  class="w-20 h-20 object-contain border border-gray-300 rounded-lg bg-gray-50"
+                />
+                <button
+                  @click="removeLogo"
+                  class="absolute -top-2 -right-2 bg-red-500 text-white rounded-full w-6 h-6 flex items-center justify-center text-xs hover:bg-red-600"
+                >
+                  ×
+                </button>
+              </div>
+              <div>
+                <p class="text-sm text-gray-600">الشعار الحالي</p>
+                <p class="text-xs text-gray-500">{{ settings.site_logo }}</p>
+              </div>
+            </div>
+            
+            <!-- منطقة رفع الصورة -->
+            <div class="border-2 border-dashed border-gray-300 rounded-lg p-6 text-center hover:border-blue-400 transition-colors">
+              <div 
+                @click="triggerFileInput"
+                @dragover.prevent="handleDragOver"
+                @dragleave.prevent="handleDragLeave"
+                @drop.prevent="handleDrop"
+                class="cursor-pointer"
+                :class="{ 'border-blue-400 bg-blue-50': isDragOver }"
+              >
+                <Icon name="material-symbols:cloud-upload" class="mx-auto h-12 w-12 text-gray-400 mb-4" />
+                <p class="text-sm text-gray-600 mb-2">
+                  {{ isDragOver ? 'أفلت الصورة هنا' : 'اسحب وأفلت الصورة هنا أو انقر للاختيار' }}
+                </p>
+                <p class="text-xs text-gray-500">
+                  الأنواع المدعومة: JPG, PNG, GIF, WebP (حد أقصى 5MB)
+                </p>
+                <input
+                  ref="fileInput"
+                  type="file"
+                  accept="image/*"
+                  @change="handleFileSelect"
+                  class="hidden"
+                />
+              </div>
+            </div>
+            
+            <!-- معاينة الصورة الجديدة -->
+            <div v-if="imagePreview" class="mt-4">
+              <p class="text-sm font-medium text-gray-700 mb-2">معاينة الشعار الجديد:</p>
+              <div class="flex items-center space-x-4 space-x-reverse">
+                <img 
+                  :src="imagePreview" 
+                  alt="معاينة الشعار"
+                  class="w-20 h-20 object-contain border border-gray-300 rounded-lg bg-gray-50"
+                />
+                <div class="flex-1">
+                  <p class="text-sm text-gray-600">{{ selectedFile?.name }}</p>
+                  <p class="text-xs text-gray-500">{{ formatFileSize(selectedFile?.size) }}</p>
+                </div>
+                <button
+                  @click="uploadImage"
+                  :disabled="uploading"
+                  class="px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 disabled:opacity-50 disabled:cursor-not-allowed"
+                >
+                  <Icon v-if="uploading" name="material-symbols:progress-activity" class="animate-spin h-4 w-4 ml-2 inline" />
+                  {{ uploading ? 'جاري الرفع...' : 'رفع الشعار' }}
+                </button>
+              </div>
+            </div>
+            
+            <!-- شريط التقدم -->
+            <div v-if="uploading" class="w-full bg-gray-200 rounded-full h-2">
+              <div class="bg-blue-600 h-2 rounded-full transition-all duration-300" :style="{ width: uploadProgress + '%' }"></div>
+            </div>
+            
+            <!-- رسائل الحالة -->
+            <div v-if="uploadMessage" class="p-3 rounded-lg" :class="uploadMessage.type === 'success' ? 'bg-green-50 text-green-700' : 'bg-red-50 text-red-700'">
+              {{ uploadMessage.text }}
+            </div>
           </div>
         </div>
 
@@ -461,6 +538,15 @@ definePageMeta({
 const saving = ref(false)
 const activeTab = ref('general')
 
+// متغيرات رفع الصور
+const fileInput = ref(null)
+const selectedFile = ref(null)
+const imagePreview = ref('')
+const uploading = ref(false)
+const uploadProgress = ref(0)
+const isDragOver = ref(false)
+const uploadMessage = ref(null)
+
 // تبويبات الإعدادات
 const tabs = [
   { id: 'general', name: 'عام', icon: 'material-symbols:settings' },
@@ -525,6 +611,139 @@ const settings = ref({
 
 // استخدام composable الإعدادات
 const { loadSettings: loadSettingsFromComposable, updateSettings } = useSettings()
+
+// دوال رفع الصور
+const triggerFileInput = () => {
+  fileInput.value?.click()
+}
+
+const handleDragOver = (e) => {
+  e.preventDefault()
+  isDragOver.value = true
+}
+
+const handleDragLeave = (e) => {
+  e.preventDefault()
+  isDragOver.value = false
+}
+
+const handleDrop = (e) => {
+  e.preventDefault()
+  isDragOver.value = false
+  
+  const files = e.dataTransfer.files
+  if (files.length > 0) {
+    handleFile(files[0])
+  }
+}
+
+const handleFileSelect = (e) => {
+  const file = e.target.files[0]
+  if (file) {
+    handleFile(file)
+  }
+}
+
+const handleFile = (file) => {
+  // التحقق من نوع الملف
+  const allowedTypes = ['image/jpeg', 'image/jpg', 'image/png', 'image/gif', 'image/webp']
+  if (!allowedTypes.includes(file.type)) {
+    showUploadMessage('نوع الملف غير مدعوم. يرجى اختيار صورة من نوع JPG, PNG, GIF, أو WebP.', 'error')
+    return
+  }
+
+  // التحقق من حجم الملف (5MB)
+  if (file.size > 5 * 1024 * 1024) {
+    showUploadMessage('حجم الملف كبير جداً. الحد الأقصى 5 ميجابايت.', 'error')
+    return
+  }
+
+  selectedFile.value = file
+  
+  // إنشاء معاينة للصورة
+  const reader = new FileReader()
+  reader.onload = (e) => {
+    imagePreview.value = e.target.result
+  }
+  reader.readAsDataURL(file)
+  
+  // إخفاء رسائل الخطأ السابقة
+  uploadMessage.value = null
+}
+
+const uploadImage = async () => {
+  if (!selectedFile.value) return
+
+  try {
+    uploading.value = true
+    uploadProgress.value = 0
+    uploadMessage.value = null
+
+    const formData = new FormData()
+    formData.append('image', selectedFile.value)
+
+    // محاكاة شريط التقدم
+    const progressInterval = setInterval(() => {
+      if (uploadProgress.value < 90) {
+        uploadProgress.value += 10
+      }
+    }, 100)
+
+    const response = await $fetch('/api/upload/image', {
+      method: 'POST',
+      body: formData
+    })
+
+    clearInterval(progressInterval)
+    uploadProgress.value = 100
+
+    if (response.success) {
+      // تحديث رابط الشعار في الإعدادات
+      settings.value.site_logo = response.url
+      
+      // إخفاء المعاينة وإعادة تعيين المتغيرات
+      imagePreview.value = ''
+      selectedFile.value = null
+      if (fileInput.value) {
+        fileInput.value.value = ''
+      }
+      
+      showUploadMessage('تم رفع الشعار بنجاح!', 'success')
+      
+      // حفظ الإعدادات تلقائياً
+      await saveSettings()
+    } else {
+      showUploadMessage('فشل في رفع الشعار: ' + (response.error || 'خطأ غير معروف'), 'error')
+    }
+  } catch (error) {
+    console.error('خطأ في رفع الصورة:', error)
+    showUploadMessage('خطأ في الاتصال: ' + error.message, 'error')
+  } finally {
+    uploading.value = false
+    uploadProgress.value = 0
+  }
+}
+
+const removeLogo = () => {
+  if (confirm('هل أنت متأكد من حذف الشعار؟')) {
+    settings.value.site_logo = ''
+    showUploadMessage('تم حذف الشعار', 'success')
+  }
+}
+
+const showUploadMessage = (text, type) => {
+  uploadMessage.value = { text, type }
+  setTimeout(() => {
+    uploadMessage.value = null
+  }, 5000)
+}
+
+const formatFileSize = (bytes) => {
+  if (!bytes) return ''
+  const sizes = ['Bytes', 'KB', 'MB', 'GB']
+  const i = Math.floor(Math.log(bytes) / Math.log(1024))
+  return Math.round(bytes / Math.pow(1024, i) * 100) / 100 + ' ' + sizes[i]
+}
 
 // تحميل الإعدادات
 const loadSettings = async () => {
