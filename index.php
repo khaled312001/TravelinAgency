@@ -120,6 +120,8 @@ foreach ($nuxtHtmlPaths as $nuxtHtmlFile) {
         // Replace any localhost references with your domain
         $content = str_replace('http://localhost:3000', 'https://worldtripagency.com', $content);
         $content = str_replace('localhost:3000', 'worldtripagency.com', $content);
+        $content = str_replace('http://localhost', 'https://worldtripagency.com', $content);
+        $content = str_replace('localhost', 'worldtripagency.com', $content);
         
         // Set proper headers
         header('Content-Type: text/html; charset=utf-8');

@@ -1,23 +1,37 @@
 <?php
-echo "<h1>PHP is working!</h1>";
-echo "<p>Current time: " . date('Y-m-d H:i:s') . "</p>";
-echo "<p>PHP version: " . phpversion() . "</p>";
-echo "<p>Current directory: " . __DIR__ . "</p>";
+echo "PHP is working!<br>";
+echo "Current time: " . date('Y-m-d H:i:s') . "<br>";
+echo "PHP version: " . phpversion() . "<br>";
 
-// Check if output directory exists
-if (file_exists(__DIR__ . '/output/public/200.html')) {
-    echo "<p style='color: green;'>✅ output/public/200.html found</p>";
-} else {
-    echo "<p style='color: red;'>❌ output/public/200.html not found</p>";
-}
-
-// List files in current directory
-echo "<h3>Files in current directory:</h3><ul>";
-$files = scandir(__DIR__);
-foreach ($files as $file) {
-    if ($file != '.' && $file != '..') {
-        echo "<li>" . $file . "</li>";
+// Test database connection
+try {
+    $host = "localhost";
+    $dbname = "travel";
+    $username = "travel";
+    $password = "support@Passord123";
+    
+    $dsn = "mysql:host=$host;dbname=$dbname;charset=utf8mb4";
+    $pdo = new PDO($dsn, $username, $password, [
+        PDO::ATTR_ERRMODE => PDO::ERRMODE_EXCEPTION,
+        PDO::ATTR_DEFAULT_FETCH_MODE => PDO::FETCH_ASSOC,
+        PDO::ATTR_EMULATE_PREPARES => false,
+    ]);
+    
+    echo "✅ Database connection successful!<br>";
+    
+    // Test if packages table exists
+    $stmt = $pdo->query("SHOW TABLES LIKE 'packages'");
+    if ($stmt->rowCount() > 0) {
+        echo "✅ Packages table exists<br>";
+        
+        $stmt = $pdo->query("SELECT COUNT(*) as count FROM packages");
+        $result = $stmt->fetch();
+        echo "📦 Packages count: " . $result['count'] . "<br>";
+    } else {
+        echo "⚠️  Packages table not found<br>";
     }
+    
+} catch (PDOException $e) {
+    echo "❌ Database connection failed: " . $e->getMessage() . "<br>";
 }
-echo "</ul>";
 ?>

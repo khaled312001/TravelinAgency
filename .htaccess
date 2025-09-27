@@ -4,7 +4,15 @@ RewriteEngine On
 RewriteCond %{HTTPS} off
 RewriteRule ^(.*)$ https://%{HTTP_HOST}%{REQUEST_URI} [L,R=301]
 
-# Handle Angular and Vue.js client-side routing
+# Handle static files first
+RewriteCond %{REQUEST_FILENAME} -f
+RewriteRule ^(.*)$ - [L]
+
+# Handle API routes
+RewriteCond %{REQUEST_URI} ^/api/
+RewriteRule ^(.*)$ /index.php [QSA,L]
+
+# Handle Nuxt.js client-side routing
 RewriteCond %{REQUEST_FILENAME} !-f
 RewriteCond %{REQUEST_FILENAME} !-d
 RewriteRule ^(.*)$ /index.php [QSA,L]
