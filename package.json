@@ -50,6 +50,7 @@
     "@nuxt/devtools": "latest",
     "@nuxt/image": "^1.9.0",
     "@nuxtjs/google-fonts": "^3.2.0",
+    "@types/jsonwebtoken": "^9.0.10",
     "@types/node": "^22.13.9",
     "@types/uuid": "^9.0.8",
     "@types/vue": "^2.0.0",

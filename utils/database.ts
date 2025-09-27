@@ -27,8 +27,8 @@ export function createDatabasePool() {
     
     // Check if we have required database credentials
     if (!config.host || !config.user || !config.database) {
-      console.error('❌ Missing required database configuration')
-      throw new Error('Database configuration is incomplete')
+      console.warn('⚠️ Missing database configuration - running in demo mode')
+      return null
     }
     
     pool = mysql.createPool({
@@ -42,7 +42,7 @@ export function createDatabasePool() {
       // SSL configuration for remote connections
       ssl: process.env.NODE_ENV === 'production' ? {
         rejectUnauthorized: false
-      } : false,
+      } : undefined,
       // Connection timeout settings
       acquireTimeout: 60000,
       timeout: 60000,
@@ -58,6 +58,10 @@ export function createDatabasePool() {
 export async function executeQuery<T = any>(sql: string, params: any[] = []): Promise<T[]> {
   try {
     const pool = createDatabasePool()
+    if (!pool) {
+      console.warn('⚠️ Database not available - returning empty result')
+      return []
+    }
     const [rows] = await pool.execute(sql, params)
     return rows as T[]
   } catch (error: any) {

@@ -2,29 +2,32 @@
 
 ## Required Environment Variables
 
-You need to set these environment variables in your Vercel project settings:
+To fix the 500 error on Vercel, you need to set these environment variables in your Vercel dashboard:
 
-### 1. Database Configuration
+### 1. Go to Vercel Dashboard
+1. Visit [vercel.com](https://vercel.com)
+2. Select your project: `travelin-agency-nlcs`
+3. Go to **Settings** → **Environment Variables**
+
+### 2. Add These Variables
+
+#### Basic Configuration
+```
+NODE_ENV=production
+PUBLIC_SITE_URL=https://travelin-agency-nlcs.vercel.app
+```
+
+#### Database Configuration (Optional - for full functionality)
 ```
 DB_HOST=your-mysql-host
 DB_PORT=3306
 DB_USER=your-database-user
 DB_PASSWORD=your-database-password
 DB_NAME=your-database-name
+JWT_SECRET=your-super-secret-jwt-key-here
 ```
 
-### 2. JWT Configuration
-```
-JWT_SECRET=your-super-secret-jwt-key-change-this-in-production
-```
-
-### 3. Site Configuration
-```
-PUBLIC_SITE_URL=https://travelin-agency.vercel.app
-NODE_ENV=production
-```
-
-### 4. Twilio Configuration (Optional)
+#### Optional: Twilio Configuration (for WhatsApp notifications)
 ```
 TWILIO_ACCOUNT_SID=your_twilio_account_sid
 TWILIO_AUTH_TOKEN=your_twilio_auth_token
@@ -32,51 +35,70 @@ TWILIO_PHONE_NUMBER=your_twilio_phone_number
 SALES_MANAGER_PHONE=your_sales_manager_phone
 ```
 
-## How to Set Environment Variables in Vercel
+### 3. Database Options
 
-1. Go to your Vercel dashboard
-2. Select your project
-3. Go to Settings → Environment Variables
-4. Add each variable with the correct value
-5. Make sure to set them for "Production" environment
-6. Redeploy your project
+Since Vercel doesn't provide MySQL hosting, you have these options:
 
-## Database Options for Vercel
+#### Option 1: Use Demo Mode (Recommended for testing)
+- Don't set any database environment variables
+- The site will work with demo data
+- Perfect for testing the deployment
 
-Since Vercel doesn't provide MySQL hosting, you'll need an external database:
+#### Option 2: Use PlanetScale (Recommended for production)
+1. Go to [planetscale.com](https://planetscale.com)
+2. Create a free account
+3. Create a new database
+4. Get connection details
+5. Set the database environment variables in Vercel
 
-### Recommended Options:
-1. **PlanetScale** (MySQL-compatible, serverless)
-2. **Railway** (MySQL hosting)
-3. **AWS RDS** (MySQL hosting)
-4. **DigitalOcean Managed Database**
-5. **Supabase** (PostgreSQL, but can work with some modifications)
+#### Option 3: Use Railway
+1. Go to [railway.app](https://railway.app)
+2. Create a MySQL database
+3. Get connection details
+4. Set the database environment variables in Vercel
 
-## Testing Your Setup
+#### Option 4: Use Your GoDaddy MySQL
+1. Enable remote access in cPanel
+2. Add Vercel's IP ranges to allowed hosts
+3. Use your GoDaddy database credentials
 
-After setting up environment variables, test these endpoints:
+### 4. After Setting Variables
 
-1. **Basic Function Test**: `https://your-domain.vercel.app/api/test`
-2. **Health Check**: `https://your-domain.vercel.app/api/health`
-3. **Database Test**: `https://your-domain.vercel.app/api/packages`
+1. **Redeploy** your project (Vercel will automatically redeploy when you add environment variables)
+2. **Test the endpoints**:
+   - `https://travelin-agency-nlcs.vercel.app/api/test`
+   - `https://travelin-agency-nlcs.vercel.app/api/debug`
+   - `https://travelin-agency-nlcs.vercel.app/api/health`
 
-## Common Issues
+### 5. Quick Test
 
-### 1. Database Connection Refused
-- Check if your database host allows connections from Vercel's IP ranges
-- Verify your database credentials
-- Ensure your database is running and accessible
+If you want to test immediately without setting up a database:
 
-### 2. Function Timeout
-- Database queries might be taking too long
-- Consider optimizing your queries
-- Check if your database is properly indexed
+1. Set only these variables:
+   ```
+   NODE_ENV=production
+   PUBLIC_SITE_URL=https://travelin-agency-nlcs.vercel.app
+   ```
 
-### 3. Environment Variables Not Loading
-- Make sure variables are set for the correct environment (Production)
-- Redeploy after adding new variables
-- Check variable names match exactly (case-sensitive)
+2. The site will work with demo data
+3. You can set up the database later
 
-## Quick Fix for Testing
+## Troubleshooting
 
-If you want to test without a database, you can temporarily modify the API routes to return mock data instead of querying the database.
+### If you still get 500 errors:
+1. Check the Vercel function logs
+2. Visit the debug endpoints to see what's missing
+3. Make sure all environment variable names are correct (case-sensitive)
+
+### If the site loads but shows no data:
+1. Check if database environment variables are set correctly
+2. Verify database connection details
+3. Make sure the database is accessible from Vercel
+
+## Next Steps
+
+After the site is working:
+1. Set up a proper database (PlanetScale recommended)
+2. Import your data
+3. Configure all environment variables
+4. Test all functionality
