@@ -95,8 +95,8 @@
 
       <!-- عمود الحالة -->
       <template #column-status="{ item: pkg }">
-        <span :class="getStatusColor(pkg.status)" class="px-2 py-1 text-xs font-medium rounded-full">
-          {{ getStatusName(pkg.status) }}
+        <span :class="getStatusColor(pkg)" class="px-2 py-1 text-xs font-medium rounded-full">
+          {{ getStatusName(pkg) }}
         </span>
       </template>
 
@@ -164,7 +164,11 @@ const filteredPackages = computed(() => {
 
   // تصفية الحالة
   if (statusFilter.value) {
-    filtered = filtered.filter(pkg => pkg.status === statusFilter.value)
+    filtered = filtered.filter(pkg => {
+      // Handle both old format (active: 1) and new format (status: 'active')
+      const packageStatus = pkg.status || (pkg.active === 1 ? 'active' : 'inactive')
+      return packageStatus === statusFilter.value
+    })
   }
 
   // تصفية الفئة
@@ -190,7 +194,11 @@ const totalItems = computed(() => {
   }
 
   if (statusFilter.value) {
-    filtered = filtered.filter(pkg => pkg.status === statusFilter.value)
+    filtered = filtered.filter(pkg => {
+      // Handle both old format (active: 1) and new format (status: 'active')
+      const packageStatus = pkg.status || (pkg.active === 1 ? 'active' : 'inactive')
+      return packageStatus === statusFilter.value
+    })
   }
 
   if (categoryFilter.value) {
@@ -268,40 +276,22 @@ const loadPackages = async () => {
     const result = await $fetch('/api/packages')
     console.log('API Response:', result)
     
-    if (result.success && result.data) {
+    // Fix: Handle the direct array response from API and transform data
+    if (Array.isArray(result)) {
+      // Transform the data to match frontend expectations
+      packages.value = result.map(pkg => ({
+        ...pkg,
+        status: pkg.active === 1 ? 'active' : 'inactive', // Convert active: 1 to status: 'active'
+        price: parseFloat(pkg.price) || 0 // Ensure price is a number
+      }))
+    } else if (result.success && result.data) {
       packages.value = result.data
     } else {
       packages.value = []
     }
   } catch (error) {
     console.error('خطأ في تحميل الباقات:', error)
-    // بيانات وهمية للعرض في حالة الخطأ
-    packages.value = [
-      {
-        id: 1,
-        title_ar: 'رحلة إلى دبي',
-        title_en: 'Dubai Trip',
-        description_ar: 'رحلة سياحية مميزة إلى دبي لمدة 5 أيام',
-        description_en: 'Amazing 5-day trip to Dubai',
-        price: 2500,
-        category: 'international',
-        status: 'active',
-        image: '/images/packages/dubai.jpg',
-        created_at: new Date().toISOString()
-      },
-      {
-        id: 2,
-        title_ar: 'عمرة رمضان',
-        title_en: 'Ramadan Umrah',
-        description_ar: 'برنامج عمرة رمضان المبارك',
-        description_en: 'Ramadan Umrah program',
-        price: 1800,
-        category: 'religious',
-        status: 'active',
-        image: '/images/packages/umrah.jpg',
-        created_at: new Date(Date.now() - 86400000).toISOString()
-      }
-    ]
+    packages.value = []
   } finally {
     loading.value = false
   }
@@ -310,13 +300,16 @@ const loadPackages = async () => {
 // تغيير حالة الباقة
 const togglePackageStatus = async (pkg) => {
   try {
-    const newStatus = pkg.status === 'active' ? 'inactive' : 'active'
+    // Handle both old format (active: 1) and new format (status: 'active')
+    const currentStatus = pkg.status || (pkg.active === 1 ? 'active' : 'inactive')
+    const newStatus = currentStatus === 'active' ? 'inactive' : 'active'
     
     // TODO: Add API endpoint for updating package status
     // For now, update locally
     const index = packages.value.findIndex(p => p.id === pkg.id)
     if (index !== -1) {
       packages.value[index].status = newStatus
+      packages.value[index].active = newStatus === 'active' ? 1 : 0
     }
 
     // إشعار بالنجاح
@@ -401,7 +394,9 @@ const getCategoryColor = (category) => {
   return colors[category] || 'bg-gray-100 text-gray-800'
 }
 
-const getStatusName = (status) => {
+const getStatusName = (pkg) => {
+  // Handle both old format (active: 1) and new format (status: 'active')
+  const status = pkg.status || (pkg.active === 1 ? 'active' : 'inactive')
   const statuses = {
     active: 'نشط',
     inactive: 'غير نشط',
@@ -410,7 +405,9 @@ const getStatusName = (status) => {
   return statuses[status] || status
 }
 
-const getStatusColor = (status) => {
+const getStatusColor = (pkg) => {
+  // Handle both old format (active: 1) and new format (status: 'active')
+  const status = pkg.status || (pkg.active === 1 ? 'active' : 'inactive')
   const colors = {
     active: 'bg-green-100 text-green-800',
     inactive: 'bg-red-100 text-red-800',
