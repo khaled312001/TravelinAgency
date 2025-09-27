@@ -1,0 +1,37 @@
+# Final .htaccess with image fixes
+DirectoryIndex index.php
+
+<IfModule mod_rewrite.c>
+    RewriteEngine On
+    
+    # Handle _ipx image processing requests - redirect to actual images
+    # This fixes the image loading issues
+    RewriteCond %{REQUEST_URI} ^/_ipx/.*?/images/(.*)$
+    RewriteRule ^/_ipx/.*?/images/(.*)$ /images/$1 [L]
+    
+    # Handle static files first
+    RewriteCond %{REQUEST_FILENAME} -f
+    RewriteRule ^ - [L]
+    
+    # Handle directories
+    RewriteCond %{REQUEST_FILENAME} -d
+    RewriteRule ^ - [L]
+    
+    # Handle API routes
+    RewriteCond %{REQUEST_URI} ^/api/ [NC]
+    RewriteRule ^(.*)$ api-handler.php [QSA,L]
+    
+    # Everything else goes to index.php
+    RewriteRule ^(.*)$ index.php [QSA,L]
+</IfModule>
+
+# Set proper MIME types
+<IfModule mod_mime.c>
+    AddType text/html .php
+    AddType text/html .html
+    AddType application/javascript .js
+    AddType text/css .css
+    AddType image/jpeg .jpg .jpeg
+    AddType image/png .png
+    AddType image/webp .webp
+</IfModule>
