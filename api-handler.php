@@ -505,6 +505,246 @@ switch ($cleanUri) {
         }
         break;
         
+    case "/api/content":
+        if ($_SERVER["REQUEST_METHOD"] === "GET") {
+            try {
+                // Check if content table exists
+                $stmt = $pdo->query("SHOW TABLES LIKE 'content'");
+                if ($stmt->rowCount() > 0) {
+                    $stmt = $pdo->query("SELECT id, title, title_ar, title_en, content, content_ar, content_en, type, slug, status, created_at, updated_at FROM content WHERE status = 'published' ORDER BY created_at DESC");
+                    $content = $stmt->fetchAll();
+                    echo json_encode($content, JSON_UNESCAPED_SLASHES);
+                } else {
+                    // Return sample content data
+                    $sampleContent = [
+                        [
+                            "id" => 1,
+                            "title" => "About Us",
+                            "title_ar" => "من نحن",
+                            "title_en" => "About Us",
+                            "content" => "Welcome to World Trip Agency",
+                            "content_ar" => "مرحباً بكم في وكالة السفر العالمية",
+                            "content_en" => "Welcome to World Trip Agency",
+                            "type" => "page",
+                            "slug" => "about-us",
+                            "status" => "published",
+                            "created_at" => date('Y-m-d H:i:s'),
+                            "updated_at" => date('Y-m-d H:i:s')
+                        ],
+                        [
+                            "id" => 2,
+                            "title" => "Contact Information",
+                            "title_ar" => "معلومات الاتصال",
+                            "title_en" => "Contact Information",
+                            "content" => "Get in touch with us",
+                            "content_ar" => "تواصل معنا",
+                            "content_en" => "Get in touch with us",
+                            "type" => "page",
+                            "slug" => "contact",
+                            "status" => "published",
+                            "created_at" => date('Y-m-d H:i:s'),
+                            "updated_at" => date('Y-m-d H:i:s')
+                        ]
+                    ];
+                    echo json_encode($sampleContent, JSON_UNESCAPED_SLASHES);
+                }
+            } catch (Exception $e) {
+                http_response_code(500);
+                echo json_encode(["error" => "Failed to fetch content: " . $e->getMessage()]);
+            }
+        } else {
+            http_response_code(405);
+            echo json_encode(["error" => "Method not allowed"]);
+        }
+        break;
+        
+    case "/api/bookings":
+        if ($_SERVER["REQUEST_METHOD"] === "GET") {
+            try {
+                // Check if bookings table exists
+                $stmt = $pdo->query("SHOW TABLES LIKE 'bookings'");
+                if ($stmt->rowCount() > 0) {
+                    $stmt = $pdo->query("SELECT id, user_id, package_id, destination_id, booking_date, travel_date, passengers, total_amount, status, payment_status, created_at, updated_at FROM bookings ORDER BY created_at DESC");
+                    $bookings = $stmt->fetchAll();
+                    echo json_encode($bookings, JSON_UNESCAPED_SLASHES);
+                } else {
+                    // Return sample bookings data
+                    $sampleBookings = [
+                        [
+                            "id" => 1,
+                            "user_id" => "user123",
+                            "package_id" => 1,
+                            "destination_id" => 1,
+                            "booking_date" => date('Y-m-d'),
+                            "travel_date" => date('Y-m-d', strtotime('+30 days')),
+                            "passengers" => 2,
+                            "total_amount" => 2500.00,
+                            "status" => "confirmed",
+                            "payment_status" => "paid",
+                            "created_at" => date('Y-m-d H:i:s'),
+                            "updated_at" => date('Y-m-d H:i:s')
+                        ],
+                        [
+                            "id" => 2,
+                            "user_id" => "user456",
+                            "package_id" => 2,
+                            "destination_id" => 2,
+                            "booking_date" => date('Y-m-d', strtotime('-1 day')),
+                            "travel_date" => date('Y-m-d', strtotime('+45 days')),
+                            "passengers" => 4,
+                            "total_amount" => 4800.00,
+                            "status" => "pending",
+                            "payment_status" => "pending",
+                            "created_at" => date('Y-m-d H:i:s', strtotime('-1 day')),
+                            "updated_at" => date('Y-m-d H:i:s', strtotime('-1 day'))
+                        ]
+                    ];
+                    echo json_encode($sampleBookings, JSON_UNESCAPED_SLASHES);
+                }
+            } catch (Exception $e) {
+                http_response_code(500);
+                echo json_encode(["error" => "Failed to fetch bookings: " . $e->getMessage()]);
+            }
+        } else {
+            http_response_code(405);
+            echo json_encode(["error" => "Method not allowed"]);
+        }
+        break;
+        
+    case "/api/admin/users":
+        if ($_SERVER["REQUEST_METHOD"] === "GET") {
+            try {
+                // Get query parameters
+                $queryParams = $_GET;
+                $page = isset($queryParams['page']) ? (int)$queryParams['page'] : 1;
+                $limit = isset($queryParams['limit']) ? (int)$queryParams['limit'] : 10;
+                $search = isset($queryParams['search']) ? $queryParams['search'] : '';
+                
+                $offset = ($page - 1) * $limit;
+                
+                // Build query
+                $whereClause = "WHERE 1=1";
+                $params = [];
+                
+                if (!empty($search)) {
+                    $whereClause .= " AND (email LIKE ? OR full_name LIKE ?)";
+                    $params[] = "%$search%";
+                    $params[] = "%$search%";
+                }
+                
+                // Get total count
+                $countQuery = "SELECT COUNT(*) as total FROM users $whereClause";
+                $stmt = $pdo->prepare($countQuery);
+                $stmt->execute($params);
+                $total = $stmt->fetch()['total'];
+                
+                // Get users
+                $query = "SELECT id, email, full_name, phone, role, status, created_at, updated_at FROM users $whereClause ORDER BY created_at DESC LIMIT $limit OFFSET $offset";
+                $stmt = $pdo->prepare($query);
+                $stmt->execute($params);
+                $users = $stmt->fetchAll();
+                
+                $response = [
+                    "data" => $users,
+                    "total" => $total,
+                    "page" => $page,
+                    "limit" => $limit,
+                    "total_pages" => ceil($total / $limit)
+                ];
+                
+                echo json_encode($response, JSON_UNESCAPED_SLASHES);
+            } catch (Exception $e) {
+                http_response_code(500);
+                echo json_encode(["error" => "Failed to fetch users: " . $e->getMessage()]);
+            }
+        } else {
+            http_response_code(405);
+            echo json_encode(["error" => "Method not allowed"]);
+        }
+        break;
+        
+    case "/api/cms/site-settings":
+        if ($_SERVER["REQUEST_METHOD"] === "GET") {
+            try {
+                // Get query parameters
+                $queryParams = $_GET;
+                $publicOnly = isset($queryParams['public_only']) ? $queryParams['public_only'] === 'true' : false;
+                
+                // Check if site_settings table exists
+                $stmt = $pdo->query("SHOW TABLES LIKE 'site_settings'");
+                if ($stmt->rowCount() > 0) {
+                    $whereClause = $publicOnly ? "WHERE public = 1" : "";
+                    $stmt = $pdo->query("SELECT * FROM site_settings $whereClause ORDER BY setting_key");
+                    $settings = $stmt->fetchAll();
+                    
+                    // Convert to key-value pairs
+                    $settingsArray = [];
+                    foreach ($settings as $setting) {
+                        $settingsArray[$setting['setting_key']] = $setting['setting_value'];
+                    }
+                    
+                    echo json_encode($settingsArray, JSON_UNESCAPED_SLASHES);
+                } else {
+                    // Return default site settings
+                    $defaultSettings = [
+                        "site_name" => "World Trip Agency",
+                        "site_name_ar" => "وكالة السفر العالمية",
+                        "site_description" => "Your trusted travel partner",
+                        "site_description_ar" => "شريكك الموثوق في السفر",
+                        "contact_email" => "info@worldtripagency.com",
+                        "contact_phone" => "+966501234567",
+                        "contact_address" => "Riyadh, Saudi Arabia",
+                        "contact_address_ar" => "الرياض، المملكة العربية السعودية",
+                        "social_facebook" => "https://facebook.com/worldtripagency",
+                        "social_twitter" => "https://twitter.com/worldtripagency",
+                        "social_instagram" => "https://instagram.com/worldtripagency",
+                        "currency" => "SAR",
+                        "timezone" => "Asia/Riyadh",
+                        "language" => "ar",
+                        "default_language" => "ar",
+                        "maintenance_mode" => "0",
+                        "registration_enabled" => "1",
+                        "email_notifications" => "1"
+                    ];
+                    echo json_encode($defaultSettings, JSON_UNESCAPED_SLASHES);
+                }
+            } catch (Exception $e) {
+                http_response_code(500);
+                echo json_encode(["error" => "Failed to fetch site settings: " . $e->getMessage()]);
+            }
+        } elseif ($_SERVER["REQUEST_METHOD"] === "POST") {
+            try {
+                $input = json_decode(file_get_contents("php://input"), true);
+                
+                // Check if site_settings table exists, create if not
+                $stmt = $pdo->query("SHOW TABLES LIKE 'site_settings'");
+                if ($stmt->rowCount() == 0) {
+                    $pdo->exec("CREATE TABLE site_settings (
+                        id INT AUTO_INCREMENT PRIMARY KEY,
+                        setting_key VARCHAR(255) UNIQUE NOT NULL,
+                        setting_value TEXT,
+                        public BOOLEAN DEFAULT 0,
+                        updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP
+                    )");
+                }
+                
+                // Update settings
+                foreach ($input as $key => $value) {
+                    $stmt = $pdo->prepare("INSERT INTO site_settings (setting_key, setting_value) VALUES (?, ?) ON DUPLICATE KEY UPDATE setting_value = VALUES(setting_value)");
+                    $stmt->execute([$key, $value]);
+                }
+                
+                echo json_encode(["success" => true, "message" => "Settings updated successfully"]);
+            } catch (Exception $e) {
+                http_response_code(500);
+                echo json_encode(["error" => "Failed to update site settings: " . $e->getMessage()]);
+            }
+        } else {
+            http_response_code(405);
+            echo json_encode(["error" => "Method not allowed"]);
+        }
+        break;
+        
     default:
         http_response_code(404);
         echo json_encode(["error" => "Endpoint not found"]);
