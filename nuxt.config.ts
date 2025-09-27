@@ -2,6 +2,7 @@
 const productionURL = 'https://worldtripagency.com'
 export default defineNuxtConfig({
   devtools: { enabled: false },
+  ssr: false,
   
   devServer: {
     port: 3000,
@@ -164,7 +165,7 @@ export default defineNuxtConfig({
   ],
 
   nitro: {
-    preset: 'node-server',
+    preset: 'static',
     compressPublicAssets: {
       gzip: true,
       brotli: true

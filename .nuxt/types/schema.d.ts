@@ -227,20 +227,6 @@ declare module 'nuxt/schema' {
       envPrefix: string,
    },
 
-   "nuxt-schema-org": {
-      reactive: boolean,
-
-      minify: boolean,
-
-      scriptAttributes: {
-         id: string,
-      },
-
-      identity: any,
-
-      version: string,
-   },
-
    "nuxt-simple-sitemap": {
       isI18nMapped: boolean,
 
@@ -347,6 +333,20 @@ declare module 'nuxt/schema' {
    siteUrl: string,
 
    publicSiteUrl: string,
+
+   "nuxt-schema-org": {
+      reactive: boolean,
+
+      minify: boolean,
+
+      scriptAttributes: {
+         id: string,
+      },
+
+      identity: any,
+
+      version: string,
+   },
 
    i18n: {
       baseUrl: string,
