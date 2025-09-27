@@ -48,13 +48,13 @@ try {
   console.log('');
   
   console.log('# 5. Test the API');
-  console.log('curl https://travelin-agency-nlcs.vercel.app/api/packages');
+  console.log('curl https://worldtripagency.com/api/packages');
   console.log('');
 
   console.log('🧪 TEST URLS:');
-  console.log('- API Packages: https://travelin-agency-nlcs.vercel.app/api/packages');
-  console.log('- API Destinations: https://travelin-agency-nlcs.vercel.app/api/destinations');
-  console.log('- Main Website: https://travelin-agency-nlcs.vercel.app/');
+  console.log('- API Packages: https://worldtripagency.com/api/packages');
+  console.log('- API Destinations: https://worldtripagency.com/api/destinations');
+  console.log('- Main Website: https://worldtripagency.com/');
   console.log('');
 
   console.log('🔧 WHAT THIS FIXES:');

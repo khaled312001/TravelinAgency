@@ -48,17 +48,17 @@ try {
   console.log('');
   
   console.log('# 5. Test the APIs');
-  console.log('curl -k https://travelin-agency-nlcs.vercel.app/api/packages');
-  console.log('curl -k https://travelin-agency-nlcs.vercel.app/api/cms/site-settings');
+  console.log('curl -k https://worldtripagency.com/api/packages');
+  console.log('curl -k https://worldtripagency.com/api/cms/site-settings');
   console.log('');
 
   console.log('🧪 TEST URLS:');
-  console.log('- API Packages: https://travelin-agency-nlcs.vercel.app/api/packages');
-  console.log('- API Destinations: https://travelin-agency-nlcs.vercel.app/api/destinations');
-  console.log('- CMS Site Settings: https://travelin-agency-nlcs.vercel.app/api/cms/site-settings');
-  console.log('- CMS Home Page: https://travelin-agency-nlcs.vercel.app/api/cms/pages/home');
-  console.log('- CMS Navigation: https://travelin-agency-nlcs.vercel.app/api/cms/navigation');
-  console.log('- Main Website: https://travelin-agency-nlcs.vercel.app/');
+  console.log('- API Packages: https://worldtripagency.com/api/packages');
+  console.log('- API Destinations: https://worldtripagency.com/api/destinations');
+  console.log('- CMS Site Settings: https://worldtripagency.com/api/cms/site-settings');
+  console.log('- CMS Home Page: https://worldtripagency.com/api/cms/pages/home');
+  console.log('- CMS Navigation: https://worldtripagency.com/api/cms/navigation');
+  console.log('- Main Website: https://worldtripagency.com/');
   console.log('');
 
   console.log('🔧 WHAT THIS ULTIMATE FIX DOES:');

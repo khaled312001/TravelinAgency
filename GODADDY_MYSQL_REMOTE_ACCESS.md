@@ -51,7 +51,7 @@ After configuring remote access:
 1. **Wait 5-10 minutes** for changes to propagate
 2. **Test locally**: `node test-db-connection.js`
 3. **Redeploy on Vercel**
-4. **Test the health endpoint**: `https://travelin-agency.vercel.app/api/health`
+4. **Test the health endpoint**: `https://worldtripagency.com/api/health`
 
 ## 🔧 Alternative Solutions
 

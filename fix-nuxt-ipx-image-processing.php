@@ -6,8 +6,8 @@ echo "<style>body{font-family:Arial,sans-serif;margin:20px;} .success{color:gree
 echo "<h3>🔍 Analyzing the Issue</h3>";
 echo "<div class='info'>The problem is that Nuxt.js is trying to process images through _ipx (Image Processing) but getting 503 errors:</div>";
 echo "<ul>";
-echo "<li><code>GET https://travelin-agency-nlcs.vercel.app/_ipx/w_500&f_webp&q_80/images/destinations/saudi/alula/AlUla1.jpeg 503 (Service Unavailable)</code></li>";
-echo "<li><code>GET https://travelin-agency-nlcs.vercel.app/_ipx/f_webp&q_80/images/home/services/flight_reservations.jpg 503 (Service Unavailable)</code></li>";
+echo "<li><code>GET https://worldtripagency.com/_ipx/w_500&f_webp&q_80/images/destinations/saudi/alula/AlUla1.jpeg 503 (Service Unavailable)</code></li>";
+echo "<li><code>GET https://worldtripagency.com/_ipx/f_webp&q_80/images/home/services/flight_reservations.jpg 503 (Service Unavailable)</code></li>";
 echo "</ul>";
 
 echo "<h3>🛠️ Solution: Disable _ipx and Serve Images Directly</h3>";
@@ -151,7 +151,7 @@ echo "<div class='info'>Test these URLs in your browser:</div>";
 echo "<ul>";
 foreach ($testIpxUrls as $ipxUrl) {
     $targetImage = preg_replace('/^\/_ipx\/.*?\/images\/(.*)$/', '/images/$1', $ipxUrl);
-    echo "<li><a href='https://travelin-agency-nlcs.vercel.app$ipxUrl' target='_blank'>https://travelin-agency-nlcs.vercel.app$ipxUrl</a> (should redirect to <a href='https://travelin-agency-nlcs.vercel.app$targetImage' target='_blank'>$targetImage</a>)</li>";
+    echo "<li><a href='https://worldtripagency.com$ipxUrl' target='_blank'>https://worldtripagency.com$ipxUrl</a> (should redirect to <a href='https://worldtripagency.com$targetImage' target='_blank'>$targetImage</a>)</li>";
 }
 echo "</ul>";
 

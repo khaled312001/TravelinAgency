@@ -13,25 +13,25 @@ echo ""
 
 echo "1. 🔍 Testing API Test Endpoint..."
 echo "-----------------------------------"
-curl -k -s https://travelin-agency-nlcs.vercel.app/api/test
+curl -k -s https://worldtripagency.com/api/test
 echo ""
 echo ""
 
 echo "2. 📦 Testing Packages API..."
 echo "-----------------------------"
-curl -k -s https://travelin-agency-nlcs.vercel.app/api/packages | head -c 500
+curl -k -s https://worldtripagency.com/api/packages | head -c 500
 echo ""
 echo ""
 
 echo "3. 🌍 Testing Destinations API..."
 echo "---------------------------------"
-curl -k -s https://travelin-agency-nlcs.vercel.app/api/destinations
+curl -k -s https://worldtripagency.com/api/destinations
 echo ""
 echo ""
 
 echo "4. 🔐 Testing Admin Login..."
 echo "----------------------------"
-curl -k -s -X POST https://travelin-agency-nlcs.vercel.app/api/auth/login \\
+curl -k -s -X POST https://worldtripagency.com/api/auth/login \\
   -H "Content-Type: application/json" \\
   -d '{"email":"admin@wonderland.com","password":"admin123"}'
 echo ""
@@ -40,23 +40,23 @@ echo ""
 echo "5. 🖼️ Testing Image Loading..."
 echo "------------------------------"
 echo "Testing IPX image optimization:"
-curl -k -s -I https://travelin-agency-nlcs.vercel.app/_ipx/q_80/images/home/logo/WonderlandLogo.svg
+curl -k -s -I https://worldtripagency.com/_ipx/q_80/images/home/logo/WonderlandLogo.svg
 echo ""
 
 echo "6. 📊 API Response Analysis..."
 echo "-----------------------------"
 echo "Packages count:"
-curl -k -s https://travelin-agency-nlcs.vercel.app/api/packages | grep -o '"id"' | wc -l
+curl -k -s https://worldtripagency.com/api/packages | grep -o '"id"' | wc -l
 echo ""
 
 echo "Destinations count:"
-curl -k -s https://travelin-agency-nlcs.vercel.app/api/destinations | grep -o '"id"' | wc -l
+curl -k -s https://worldtripagency.com/api/destinations | grep -o '"id"' | wc -l
 echo ""
 
 echo "7. 🎯 Frontend Compatibility Test..."
 echo "-----------------------------------"
 echo "Checking if packages have required fields:"
-curl -k -s https://travelin-agency-nlcs.vercel.app/api/packages | grep -o '"title"' | wc -l
+curl -k -s https://worldtripagency.com/api/packages | grep -o '"title"' | wc -l
 echo ""
 
 echo "8. ✅ Final Status Check..."
@@ -78,21 +78,21 @@ console.log('');
 console.log('# Or test individual endpoints:');
 console.log('');
 console.log('# 1. Test API status');
-console.log('curl -k https://travelin-agency-nlcs.vercel.app/api/test');
+console.log('curl -k https://worldtripagency.com/api/test');
 console.log('');
 console.log('# 2. Test packages (should show 10 packages with proper structure)');
-console.log('curl -k https://travelin-agency-nlcs.vercel.app/api/packages | head -c 1000');
+console.log('curl -k https://worldtripagency.com/api/packages | head -c 1000');
 console.log('');
 console.log('# 3. Test destinations (should show sample data or database data)');
-console.log('curl -k https://travelin-agency-nlcs.vercel.app/api/destinations');
+console.log('curl -k https://worldtripagency.com/api/destinations');
 console.log('');
 console.log('# 4. Test admin login');
-console.log('curl -k -X POST https://travelin-agency-nlcs.vercel.app/api/auth/login \\');
+console.log('curl -k -X POST https://worldtripagency.com/api/auth/login \\');
 console.log('  -H "Content-Type: application/json" \\');
 console.log('  -d \'{"email":"admin@wonderland.com","password":"admin123"}\'');
 console.log('');
 console.log('# 5. Test website loading');
-console.log('curl -k -I https://travelin-agency-nlcs.vercel.app/');
+console.log('curl -k -I https://worldtripagency.com/');
 console.log('');
 console.log('🎯 Expected Results:');
 console.log('✅ API test: {"status":"working","database":"connected"}');

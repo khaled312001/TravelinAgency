@@ -85,7 +85,7 @@ npm run build
 
 2. **Test HTTPS Redirect:**
    - Visit: http://worldtripagency.com/admin/login
-   - Should automatically redirect to: https://travelin-agency-nlcs.vercel.app/admin/login
+   - Should automatically redirect to: https://worldtripagency.com/admin/login
 
 ### Step 4: Test Security Headers
 
@@ -117,7 +117,7 @@ Use online tools to verify security headers:
    - Check if "Force HTTPS" is enabled in cPanel
 
 2. **Verify .htaccess is working:**
-   - Test with: https://travelin-agency-nlcs.vercel.app/.htaccess
+   - Test with: https://worldtripagency.com/.htaccess
    - Should return 403 Forbidden (not 404)
 
 3. **Check file permissions:**

@@ -17,7 +17,7 @@ find . -name "_nuxt" -type d 2>/dev/null || echo "_nuxt directory not found"
 echo ""
 echo "3. 🧪 Testing static file serving..."
 echo "-----------------------------------"
-curl -k https://travelin-agency-nlcs.vercel.app/test.php
+curl -k https://worldtripagency.com/test.php
 
 echo ""
 echo "4. 🔧 Checking .htaccess for static file handling..."
@@ -57,7 +57,7 @@ EOF
 echo ""
 echo "6. 🧪 Testing the main website..."
 echo "--------------------------------"
-curl -k https://travelin-agency-nlcs.vercel.app/ | head -20
+curl -k https://worldtripagency.com/ | head -20
 
 echo ""
 echo "✅ Nuxt.js assets fix complete!"

@@ -23,10 +23,10 @@ echo 5. Set permissions: folders=755, files=644
 echo.
 
 echo 🧪 Testing URLs:
-echo - Working Test: https://travelin-agency-nlcs.vercel.app/index-working.php
-echo - Main Site: https://travelin-agency-nlcs.vercel.app/
-echo - API Test: https://travelin-agency-nlcs.vercel.app/api/test
-echo - API Packages: https://travelin-agency-nlcs.vercel.app/api/packages
+echo - Working Test: https://worldtripagency.com/index-working.php
+echo - Main Site: https://worldtripagency.com/
+echo - API Test: https://worldtripagency.com/api/test
+echo - API Packages: https://worldtripagency.com/api/packages
 echo.
 
 echo ⚠️  Important Notes:

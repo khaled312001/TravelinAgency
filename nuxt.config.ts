@@ -1,5 +1,5 @@
 // https://nuxt.com/docs/api/configuration/nuxt-config
-const productionURL = 'https://travelin-agency-nlcs.vercel.app'
+const productionURL = 'https://worldtripagency.com'
 export default defineNuxtConfig({
   devtools: { enabled: false },
   
@@ -57,7 +57,7 @@ export default defineNuxtConfig({
         : 'http://localhost:3000'),
       
       // Public site URL for links in notifications
-      publicSiteUrl: process.env.PUBLIC_SITE_URL || 'https://travelin-agency-nlcs.vercel.app'
+      publicSiteUrl: process.env.PUBLIC_SITE_URL || 'https://worldtripagency.com'
     }
   },
 

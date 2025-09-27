@@ -60,7 +60,7 @@ Once the test passes:
 
 2. **Redeploy your Vercel application**
 
-3. **Test**: https://travelin-agency.vercel.app/api/health
+3. **Test**: https://worldtripagency.com/api/health
 
 ## 🔒 Security Note
 

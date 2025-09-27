@@ -854,7 +854,7 @@ function getSampleSiteSettings() {
     return [
         'siteName' => 'World Trip Agency',
         'siteDescription' => 'Your trusted travel partner for unforgettable experiences',
-        'siteUrl' => 'https://travelin-agency-nlcs.vercel.app',
+        'siteUrl' => 'https://worldtripagency.com',
         'contactEmail' => 'info@worldtripagency.com',
         'contactPhone' => '+966 50 123 4567',
         'socialMedia' => [

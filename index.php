@@ -118,9 +118,9 @@ foreach ($nuxtHtmlPaths as $nuxtHtmlFile) {
         $content = file_get_contents($nuxtHtmlFile);
         
         // Replace any localhost references with your domain
-        $content = str_replace('http://localhost:3000', 'https://travelin-agency-nlcs.vercel.app', $content);
+        $content = str_replace('http://localhost:3000', 'https://worldtripagency.com', $content);
         $content = str_replace('localhost:3000', 'worldtripagency.com', $content);
-        $content = str_replace('http://localhost', 'https://travelin-agency-nlcs.vercel.app', $content);
+        $content = str_replace('http://localhost', 'https://worldtripagency.com', $content);
         $content = str_replace('localhost', 'worldtripagency.com', $content);
         
         // Set proper headers

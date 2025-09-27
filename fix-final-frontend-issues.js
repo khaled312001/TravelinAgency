@@ -14,11 +14,11 @@ echo ""
 echo "1. 🔍 Testing current API responses..."
 echo "-------------------------------------"
 echo "Packages API:"
-curl -k https://travelin-agency-nlcs.vercel.app/api/packages | head -3
+curl -k https://worldtripagency.com/api/packages | head -3
 
 echo ""
 echo "Destinations API:"
-curl -k https://travelin-agency-nlcs.vercel.app/api/destinations | head -3
+curl -k https://worldtripagency.com/api/destinations | head -3
 
 echo ""
 echo "2. 🔧 Creating enhanced index.php for better image handling..."
@@ -227,15 +227,15 @@ echo ""
 echo "4. 🧪 Testing the fixes..."
 echo "-------------------------"
 echo "Testing main website:"
-curl -k https://travelin-agency-nlcs.vercel.app/ | head -5
+curl -k https://worldtripagency.com/ | head -5
 
 echo ""
 echo "Testing API endpoints:"
-curl -k https://travelin-agency-nlcs.vercel.app/api/packages | head -3
+curl -k https://worldtripagency.com/api/packages | head -3
 
 echo ""
 echo "Testing image access:"
-curl -I https://travelin-agency-nlcs.vercel.app/images/packages/imported/dubai-luxury.jpg 2>/dev/null | head -3
+curl -I https://worldtripagency.com/images/packages/imported/dubai-luxury.jpg 2>/dev/null | head -3
 
 echo ""
 echo "✅ Final frontend fixes applied!"
@@ -250,8 +250,8 @@ console.log('========================');
 console.log('Run these commands on your GoDaddy server:');
 console.log('');
 console.log('# 1. Test current API responses');
-console.log('curl -k https://travelin-agency-nlcs.vercel.app/api/packages');
-console.log('curl -k https://travelin-agency-nlcs.vercel.app/api/destinations');
+console.log('curl -k https://worldtripagency.com/api/packages');
+console.log('curl -k https://worldtripagency.com/api/destinations');
 console.log('');
 console.log('# 2. Create enhanced index.php for better image handling');
 console.log('cat > index.php << "EOF"');
@@ -436,7 +436,7 @@ console.log('RewriteRule ^(.*)$ /index.php [QSA,L]');
 console.log('EOF');
 console.log('');
 console.log('# 4. Test the fixes');
-console.log('curl -k https://travelin-agency-nlcs.vercel.app/');
-console.log('curl -k https://travelin-agency-nlcs.vercel.app/api/packages');
+console.log('curl -k https://worldtripagency.com/');
+console.log('curl -k https://worldtripagency.com/api/packages');
 console.log('');
 console.log('🎯 This should fix all remaining frontend issues!');

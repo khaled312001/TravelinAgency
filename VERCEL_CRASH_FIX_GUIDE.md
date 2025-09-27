@@ -1,7 +1,7 @@
 # Vercel Serverless Function Crash Fix Guide
 
 ## Problem
-Your website at https://travelin-agency.vercel.app/ is showing:
+Your website at https://worldtripagency.com/ is showing:
 ```
 500: INTERNAL_SERVER_ERROR
 Code: FUNCTION_INVOCATION_FAILED
@@ -20,8 +20,8 @@ The crash is most likely caused by one of these issues:
 ### Step 1: Deploy Debug Endpoints
 I've created two debug endpoints to help diagnose the issue:
 
-1. **Basic Test**: `https://travelin-agency.vercel.app/api/test`
-2. **Debug Info**: `https://travelin-agency.vercel.app/api/debug`
+1. **Basic Test**: `https://worldtripagency.com/api/test`
+2. **Debug Info**: `https://worldtripagency.com/api/debug`
 
 ### Step 2: Check Environment Variables
 Go to your Vercel dashboard and verify these environment variables are set:
@@ -73,9 +73,9 @@ If you have GoDaddy hosting with MySQL:
 
 After setting environment variables:
 
-1. **Test Basic API**: Visit `https://travelin-agency.vercel.app/api/test`
-2. **Test Debug Info**: Visit `https://travelin-agency.vercel.app/api/debug`
-3. **Test Health Check**: Visit `https://travelin-agency.vercel.app/api/health`
+1. **Test Basic API**: Visit `https://worldtripagency.com/api/test`
+2. **Test Debug Info**: Visit `https://worldtripagency.com/api/debug`
+3. **Test Health Check**: Visit `https://worldtripagency.com/api/health`
 
 ### Step 5: Deploy Changes
 

@@ -13,12 +13,12 @@ echo "======================"
 echo ""
 echo "1. 🔍 Checking current API response..."
 echo "-------------------------------------"
-curl -k https://travelin-agency-nlcs.vercel.app/api/packages | head -5
+curl -k https://worldtripagency.com/api/packages | head -5
 
 echo ""
 echo "2. 🔧 Testing destinations API..."
 echo "--------------------------------"
-curl -k https://travelin-agency-nlcs.vercel.app/api/destinations
+curl -k https://worldtripagency.com/api/destinations
 
 echo ""
 echo "3. 📁 Checking for image directories..."
@@ -29,7 +29,7 @@ ls -la output/public/images/ 2>/dev/null || echo "output/public/images/ not foun
 echo ""
 echo "4. 🧪 Testing image access..."
 echo "----------------------------"
-curl -I https://travelin-agency-nlcs.vercel.app/images/packages/imported/dubai-luxury.jpg 2>/dev/null | head -3
+curl -I https://worldtripagency.com/images/packages/imported/dubai-luxury.jpg 2>/dev/null | head -3
 
 echo ""
 echo "5. 🔧 Fixing .htaccess for better image handling..."
@@ -68,7 +68,7 @@ EOF
 echo ""
 echo "6. 🧪 Testing the main website..."
 echo "--------------------------------"
-curl -k https://travelin-agency-nlcs.vercel.app/ | head -10
+curl -k https://worldtripagency.com/ | head -10
 
 echo ""
 echo "✅ Final fixes applied!"
@@ -83,10 +83,10 @@ console.log('===================');
 console.log('Run these commands on your GoDaddy server:');
 console.log('');
 console.log('# 1. Test current API response');
-console.log('curl -k https://travelin-agency-nlcs.vercel.app/api/packages');
+console.log('curl -k https://worldtripagency.com/api/packages');
 console.log('');
 console.log('# 2. Test destinations API');
-console.log('curl -k https://travelin-agency-nlcs.vercel.app/api/destinations');
+console.log('curl -k https://worldtripagency.com/api/destinations');
 console.log('');
 console.log('# 3. Check image directories');
 console.log('ls -la public/images/');
@@ -125,6 +125,6 @@ console.log('RewriteRule ^(.*)$ /index.php [QSA,L]');
 console.log('EOF');
 console.log('');
 console.log('# 5. Test the website');
-console.log('curl -k https://travelin-agency-nlcs.vercel.app/');
+console.log('curl -k https://worldtripagency.com/');
 console.log('');
 console.log('🎯 This should fix the remaining issues!');

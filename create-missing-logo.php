@@ -49,7 +49,7 @@ echo "<h3>🎯 Test the Logo</h3>";
 echo "<div class='info'>Test these URLs:</div>";
 echo "<ul>";
 echo "<li><a href='/images/home/logo/WonderlandLogoWhite.svg' target='_blank'>Direct access: /images/home/logo/WonderlandLogoWhite.svg</a></li>";
-echo "<li><a href='https://travelin-agency-nlcs.vercel.app/images/home/logo/WonderlandLogoWhite.svg' target='_blank'>Full URL: https://travelin-agency-nlcs.vercel.app/images/home/logo/WonderlandLogoWhite.svg</a></li>";
+echo "<li><a href='https://worldtripagency.com/images/home/logo/WonderlandLogoWhite.svg' target='_blank'>Full URL: https://worldtripagency.com/images/home/logo/WonderlandLogoWhite.svg</a></li>";
 echo "</ul>";
 
 echo "<h3>📋 Manual Commands</h3>";

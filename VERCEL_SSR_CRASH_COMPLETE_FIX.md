@@ -69,7 +69,7 @@ if (process.server) {
 
 ## Current Status
 
-The website should now load successfully at `https://travelin-agency.vercel.app/` with:
+The website should now load successfully at `https://worldtripagency.com/` with:
 
 ### ✅ Working Features
 - **Hero Section** - Displays properly
@@ -95,7 +95,7 @@ git push origin main
 ## Testing After Deployment
 
 ### 1. Test Main Page
-- Visit: `https://travelin-agency.vercel.app/`
+- Visit: `https://worldtripagency.com/`
 - Should load without errors
 - All sections should display properly
 
@@ -104,7 +104,7 @@ git push origin main
 - `/api/debug` - Should show environment status
 
 ### 3. Test Admin Panel
-- Visit: `https://travelin-agency.vercel.app/admin/login`
+- Visit: `https://worldtripagency.com/admin/login`
 - Should load without crashes
 - Auth checks will happen on client-side
 

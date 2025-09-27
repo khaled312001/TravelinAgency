@@ -129,7 +129,7 @@ User-agent: Cloudflare
 Allow: /
 
 # Sitemap
-Sitemap: https://travelin-agency-nlcs.vercel.app/sitemap.xml
+Sitemap: https://worldtripagency.com/sitemap.xml
 
 # Disallow admin areas
 Disallow: /admin/
@@ -143,25 +143,25 @@ Disallow: /output/
 <?xml version="1.0" encoding="UTF-8"?>
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
     <url>
-        <loc>https://travelin-agency-nlcs.vercel.app/</loc>
+        <loc>https://worldtripagency.com/</loc>
         <lastmod>2025-09-27</lastmod>
         <changefreq>daily</changefreq>
         <priority>1.0</priority>
     </url>
     <url>
-        <loc>https://travelin-agency-nlcs.vercel.app/packages</loc>
+        <loc>https://worldtripagency.com/packages</loc>
         <lastmod>2025-09-27</lastmod>
         <changefreq>weekly</changefreq>
         <priority>0.8</priority>
     </url>
     <url>
-        <loc>https://travelin-agency-nlcs.vercel.app/destinations</loc>
+        <loc>https://worldtripagency.com/destinations</loc>
         <lastmod>2025-09-27</lastmod>
         <changefreq>weekly</changefreq>
         <priority>0.8</priority>
     </url>
     <url>
-        <loc>https://travelin-agency-nlcs.vercel.app/about</loc>
+        <loc>https://worldtripagency.com/about</loc>
         <lastmod>2025-09-27</lastmod>
         <changefreq>monthly</changefreq>
         <priority>0.6</priority>
@@ -228,15 +228,15 @@ Browser Cache TTL: Respect Existing Headers
 ### 1. اختبار الصور
 ```bash
 # اختبار مسارات مختلفة للصور
-curl -I https://travelin-agency-nlcs.vercel.app/images/home/logo/WonderlandLogoWhite.svg
-curl -I https://travelin-agency-nlcs.vercel.app/public/images/home/logo/WonderlandLogoWhite.svg
-curl -I https://travelin-agency-nlcs.vercel.app/output/public/images/home/logo/WonderlandLogoWhite.svg
+curl -I https://worldtripagency.com/images/home/logo/WonderlandLogoWhite.svg
+curl -I https://worldtripagency.com/public/images/home/logo/WonderlandLogoWhite.svg
+curl -I https://worldtripagency.com/output/public/images/home/logo/WonderlandLogoWhite.svg
 ```
 
 ### 2. اختبار Cloudflare Headers
 ```bash
 # فحص headers من Cloudflare
-curl -I https://travelin-agency-nlcs.vercel.app/ | grep -i cloudflare
+curl -I https://worldtripagency.com/ | grep -i cloudflare
 ```
 
 ### 3. اختبار السرعة

@@ -39,7 +39,7 @@ git push origin main
 ## ✅ Expected Results
 
 After deployment, your website should:
-- ✅ **Load successfully** at `https://travelin-agency.vercel.app/`
+- ✅ **Load successfully** at `https://worldtripagency.com/`
 - ✅ **Display all sections** (hero, services, destinations, packages)
 - ✅ **Work with SSR** (server-side rendering)
 - ✅ **No more module errors** in Vercel logs

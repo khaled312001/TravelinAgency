@@ -190,17 +190,17 @@ echo ""
 echo "5. 🧪 Testing the deployment..."
 echo "-------------------------------"
 echo "Testing main page..."
-curl -k https://travelin-agency-nlcs.vercel.app/ | head -20
+curl -k https://worldtripagency.com/ | head -20
 
 echo ""
 echo "Testing API..."
-curl -k https://travelin-agency-nlcs.vercel.app/api/packages | head -5
+curl -k https://worldtripagency.com/api/packages | head -5
 
 echo ""
 echo "✅ DEPLOYMENT COMPLETE!"
 echo "======================"
 echo "Your complete Nuxt.js website is now live at:"
-echo "🌍 https://travelin-agency-nlcs.vercel.app/"
+echo "🌍 https://worldtripagency.com/"
 echo ""
 echo "Features now available:"
 echo "✅ Complete Nuxt.js frontend"

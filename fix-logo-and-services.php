@@ -90,7 +90,7 @@ echo "\n# Set permissions\n";
 echo "chmod -R 644 public/images/home/logo/\n";
 echo "chmod -R 644 public/images/home/services/\n";
 echo "\n# Test the logo\n";
-echo "curl -I https://travelin-agency-nlcs.vercel.app/images/home/logo/WonderlandLogoWhite.svg";
+echo "curl -I https://worldtripagency.com/images/home/logo/WonderlandLogoWhite.svg";
 echo "</pre>";
 
 echo "<h3>🎯 Alternative: Use Placeholder Images</h3>";

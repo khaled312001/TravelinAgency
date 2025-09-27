@@ -152,7 +152,7 @@ $robotsContent = 'User-agent: *
 Allow: /
 
 # Sitemap
-Sitemap: https://travelin-agency-nlcs.vercel.app/sitemap.xml
+Sitemap: https://worldtripagency.com/sitemap.xml
 
 # Disallow admin areas
 Disallow: /admin/
@@ -170,25 +170,25 @@ if (file_put_contents('robots.txt', $robotsContent)) {
 $sitemapContent = '<?xml version="1.0" encoding="UTF-8"?>
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
     <url>
-        <loc>https://travelin-agency-nlcs.vercel.app/</loc>
+        <loc>https://worldtripagency.com/</loc>
         <lastmod>' . date('Y-m-d') . '</lastmod>
         <changefreq>daily</changefreq>
         <priority>1.0</priority>
     </url>
     <url>
-        <loc>https://travelin-agency-nlcs.vercel.app/packages</loc>
+        <loc>https://worldtripagency.com/packages</loc>
         <lastmod>' . date('Y-m-d') . '</lastmod>
         <changefreq>weekly</changefreq>
         <priority>0.8</priority>
     </url>
     <url>
-        <loc>https://travelin-agency-nlcs.vercel.app/destinations</loc>
+        <loc>https://worldtripagency.com/destinations</loc>
         <lastmod>' . date('Y-m-d') . '</lastmod>
         <changefreq>weekly</changefreq>
         <priority>0.8</priority>
     </url>
     <url>
-        <loc>https://travelin-agency-nlcs.vercel.app/about</loc>
+        <loc>https://worldtripagency.com/about</loc>
         <lastmod>' . date('Y-m-d') . '</lastmod>
         <changefreq>monthly</changefreq>
         <priority>0.6</priority>
@@ -212,7 +212,7 @@ $testPaths = [
     '/output/public/images/home/services/support_24_7.jpg'
 ];
 
-$baseUrl = 'https://travelin-agency-nlcs.vercel.app';
+$baseUrl = 'https://worldtripagency.com';
 
 echo "<h4>📋 اختبار جميع مسارات الصور</h4>";
 foreach ($testPaths as $path) {

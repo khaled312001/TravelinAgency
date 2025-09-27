@@ -88,13 +88,13 @@ try {
 
   console.log('\n🎉 Deployment completed successfully!');
   console.log('\n📋 Next steps:');
-  console.log('1. Test your website: https://travelin-agency-nlcs.vercel.app/');
-  console.log('2. Test PHP: https://travelin-agency-nlcs.vercel.app/test.php');
+  console.log('1. Test your website: https://worldtripagency.com/');
+  console.log('2. Test PHP: https://worldtripagency.com/test.php');
   console.log('3. Update .env file with your database credentials if needed');
   console.log('4. Check file permissions in cPanel if issues persist');
   
   console.log('\n📁 Backup created in:', backupDir);
-  console.log('🌐 Your website should now work at: https://travelin-agency-nlcs.vercel.app/');
+  console.log('🌐 Your website should now work at: https://worldtripagency.com/');
 
 } catch (error) {
   console.error('❌ Deployment failed:', error.message);

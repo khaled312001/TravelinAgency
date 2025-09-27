@@ -50,7 +50,7 @@ DB_NAME=travel
 JWT_SECRET=your-super-secret-jwt-key-change-this-in-production
 
 # Site Configuration
-PUBLIC_SITE_URL=https://travelin-agency-nlcs.vercel.app/
+PUBLIC_SITE_URL=https://worldtripagency.com/
 NODE_ENV=production
 ```
 
@@ -108,6 +108,6 @@ If you continue to have issues:
 ## Quick Test
 
 After deployment, test these URLs:
-- `https://travelin-agency-nlcs.vercel.app/` (main page)
-- `https://travelin-agency-nlcs.vercel.app/api/` (API endpoints)
-- `https://travelin-agency-nlcs.vercel.app/images/` (static files)
+- `https://worldtripagency.com/` (main page)
+- `https://worldtripagency.com/api/` (API endpoints)
+- `https://worldtripagency.com/images/` (static files)

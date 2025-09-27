@@ -4,22 +4,22 @@ console.log("===================");
 const testCommands = `
 # Test 1: Check if packages API returns data in correct format
 echo "Testing packages API response format..."
-curl -k https://travelin-agency-nlcs.vercel.app/api/packages | head -10
+curl -k https://worldtripagency.com/api/packages | head -10
 
 # Test 2: Check if images are accessible
 echo "Testing image accessibility..."
-curl -I https://travelin-agency-nlcs.vercel.app/images/destinations/global/Barcelona/Barcelona1.jpeg
-curl -I https://travelin-agency-nlcs.vercel.app/images/packages/pexels-photo-338515.jpg
+curl -I https://worldtripagency.com/images/destinations/global/Barcelona/Barcelona1.jpeg
+curl -I https://worldtripagency.com/images/packages/pexels-photo-338515.jpg
 
 # Test 3: Check all missing API endpoints
 echo "Testing missing API endpoints..."
-curl -k https://travelin-agency-nlcs.vercel.app/api/destinations
-curl -k https://travelin-agency-nlcs.vercel.app/api/content
-curl -k https://travelin-agency-nlcs.vercel.app/api/bookings
-curl -k https://travelin-agency-nlcs.vercel.app/api/admin/users
-curl -k https://travelin-agency-nlcs.vercel.app/api/contact-messages
-curl -k https://travelin-agency-nlcs.vercel.app/api/seo
-curl -k https://travelin-agency-nlcs.vercel.app/api/admin/stats
+curl -k https://worldtripagency.com/api/destinations
+curl -k https://worldtripagency.com/api/content
+curl -k https://worldtripagency.com/api/bookings
+curl -k https://worldtripagency.com/api/admin/users
+curl -k https://worldtripagency.com/api/contact-messages
+curl -k https://worldtripagency.com/api/seo
+curl -k https://worldtripagency.com/api/admin/stats
 
 echo ""
 echo "🎯 EXPECTED RESULTS:"

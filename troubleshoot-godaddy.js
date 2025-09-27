@@ -32,9 +32,9 @@ console.log('     📄 Files: 644');
 console.log('     📁 Folders: 755\n');
 
 console.log('3. 🧪 TEST STEP BY STEP:');
-console.log('   a) First test: https://travelin-agency-nlcs.vercel.app/simple-test.php');
-console.log('   b) If that works, test: https://travelin-agency-nlcs.vercel.app/');
-console.log('   c) If that works, test: https://travelin-agency-nlcs.vercel.app/test.php\n');
+console.log('   a) First test: https://worldtripagency.com/simple-test.php');
+console.log('   b) If that works, test: https://worldtripagency.com/');
+console.log('   c) If that works, test: https://worldtripagency.com/test.php\n');
 
 console.log('4. 🚨 IF STILL 500 ERROR:');
 console.log('   - Check cPanel Error Logs');
@@ -72,9 +72,9 @@ console.log('4. Test step by step');
 console.log('5. Check error logs if issues persist\n');
 
 console.log('🌐 TEST URLS:');
-console.log('- Simple test: https://travelin-agency-nlcs.vercel.app/simple-test.php');
-console.log('- Main site: https://travelin-agency-nlcs.vercel.app/');
-console.log('- Debug test: https://travelin-agency-nlcs.vercel.app/test.php\n');
+console.log('- Simple test: https://worldtripagency.com/simple-test.php');
+console.log('- Main site: https://worldtripagency.com/');
+console.log('- Debug test: https://worldtripagency.com/test.php\n');
 
 console.log('📞 If nothing works, contact GoDaddy support with:');
 console.log('- Your domain: worldtripagency.com');

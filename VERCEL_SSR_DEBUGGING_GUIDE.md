@@ -34,13 +34,13 @@ git push origin main
 ```
 
 ### Step 2: Test Each Page
-1. **Test Minimal Page**: `https://travelin-agency.vercel.app/test-minimal`
+1. **Test Minimal Page**: `https://worldtripagency.com/test-minimal`
    - Should work if basic Nuxt is functioning
    
-2. **Test Simple Page**: `https://travelin-agency.vercel.app/test-simple`
+2. **Test Simple Page**: `https://worldtripagency.com/test-simple`
    - Should work if layout components are fine
    
-3. **Test Main Page**: `https://travelin-agency.vercel.app/`
+3. **Test Main Page**: `https://worldtripagency.com/`
    - Should work with SSR disabled
 
 ### Step 3: Analyze Results

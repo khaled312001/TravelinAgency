@@ -122,12 +122,12 @@ echo "<h4>📋 Testing _ipx Redirects</h4>";
 foreach ($testUrls as $url) {
     $targetImage = preg_replace('/^\/_ipx\/.*?\/images\/(.*)$/', '/images/$1', $url);
     
-    echo "<div class='info'>Testing: <a href='https://travelin-agency-nlcs.vercel.app$url' target='_blank'>$url</a></div>";
-    echo "<div class='info'>Should redirect to: <a href='https://travelin-agency-nlcs.vercel.app$targetImage' target='_blank'>$targetImage</a></div>";
+    echo "<div class='info'>Testing: <a href='https://worldtripagency.com$url' target='_blank'>$url</a></div>";
+    echo "<div class='info'>Should redirect to: <a href='https://worldtripagency.com$targetImage' target='_blank'>$targetImage</a></div>";
     
     // Test with cURL
     $ch = curl_init();
-    curl_setopt($ch, CURLOPT_URL, 'https://travelin-agency-nlcs.vercel.app' . $url);
+    curl_setopt($ch, CURLOPT_URL, 'https://worldtripagency.com' . $url);
     curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
     curl_setopt($ch, CURLOPT_HEADER, true);
     curl_setopt($ch, CURLOPT_NOBODY, true);
@@ -142,7 +142,7 @@ foreach ($testUrls as $url) {
     
     if ($httpCode == 200) {
         echo "<div class='success'>✅ _ipx redirect working - HTTP $httpCode</div>";
-        if ($finalUrl != 'https://travelin-agency-nlcs.vercel.app' . $url) {
+        if ($finalUrl != 'https://worldtripagency.com' . $url) {
             echo "<div class='success'>✅ Redirected to: $finalUrl</div>";
         }
     } else {

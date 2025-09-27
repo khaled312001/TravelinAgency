@@ -9,7 +9,7 @@
    - Files: 644
    - .htaccess: 644
 
-3. **Test**: Visit https://travelin-agency-nlcs.vercel.app/test.php to verify PHP is working
+3. **Test**: Visit https://worldtripagency.com/test.php to verify PHP is working
 
 4. **Environment**: Rename .env.example to .env and update with your database credentials
 
@@ -40,4 +40,4 @@ public_html/
 │       └── images/
 └── .env (rename from .env.example)
 
-Your website should now work at: https://travelin-agency-nlcs.vercel.app/
+Your website should now work at: https://worldtripagency.com/

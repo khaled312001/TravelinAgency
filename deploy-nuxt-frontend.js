@@ -179,7 +179,7 @@ echo "?>"
 echo "EOF"
 echo ""
 echo "# 6. Test the deployment"
-echo "curl -k https://travelin-agency-nlcs.vercel.app/"
+echo "curl -k https://worldtripagency.com/"
 echo ""
 echo "✅ After running these commands, your domain will show the complete Nuxt.js website!"
 `;

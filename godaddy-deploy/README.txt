@@ -30,13 +30,13 @@ All files in this 'godaddy-deploy' folder are ready to be uploaded to your GoDad
 - output/ (Nuxt.js build output)
 
 ## Test Your Website:
-- Main site: https://travelin-agency-nlcs.vercel.app/
-- PHP test: https://travelin-agency-nlcs.vercel.app/test.php
-- API test: https://travelin-agency-nlcs.vercel.app/api/
+- Main site: https://worldtripagency.com/
+- PHP test: https://worldtripagency.com/test.php
+- API test: https://worldtripagency.com/api/
 
 ## Troubleshooting:
 - If you get 500 errors, check the .htaccess file
 - If static files don't load, check the public/ directory
 - If API doesn't work, check the server/ directory
 
-Your website should now work at: https://travelin-agency-nlcs.vercel.app/
+Your website should now work at: https://worldtripagency.com/

@@ -44,7 +44,7 @@ SALES_MANAGER_PHONE=your_sales_manager_phone
 
 After setting the environment variables:
 
-1. **Visit the health check endpoint**: `https://travelin-agency.vercel.app/api/health`
+1. **Visit the health check endpoint**: `https://worldtripagency.com/api/health`
 2. **Check the response** - it should show `"status": "healthy"` and `"database": "connected"`
 3. **If still failing**, check the Vercel function logs for specific error messages
 

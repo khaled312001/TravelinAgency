@@ -78,9 +78,9 @@ echo "\n# Fix permissions\n";
 echo "chmod 644 index.php\n";
 echo "chmod 644 .htaccess\n";
 echo "\n# Test the site\n";
-echo "curl -I https://travelin-agency-nlcs.vercel.app/";
+echo "curl -I https://worldtripagency.com/";
 echo "</pre>";
 
 echo "<h3>🎯 Expected Result</h3>";
-echo "<div class='success'>After the fix, https://travelin-agency-nlcs.vercel.app/ should display the webpage instead of downloading a file.</div>";
+echo "<div class='success'>After the fix, https://worldtripagency.com/ should display the webpage instead of downloading a file.</div>";
 ?>

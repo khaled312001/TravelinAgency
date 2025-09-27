@@ -30,7 +30,7 @@ echo "4. 🧪 Testing simple PHP file..."
 echo "-------------------------------"
 echo "<?php echo 'PHP is working'; ?>" > test-simple.php
 chmod 644 test-simple.php
-curl -k https://travelin-agency-nlcs.vercel.app/test-simple.php
+curl -k https://worldtripagency.com/test-simple.php
 
 echo ""
 echo "5. 🔍 Checking current API handler content..."
@@ -46,11 +46,11 @@ chmod 644 api-handler.php
 echo ""
 echo "7. 🧪 Testing API endpoints..."
 echo "-----------------------------"
-curl -k https://travelin-agency-nlcs.vercel.app/api/test
+curl -k https://worldtripagency.com/api/test
 echo ""
-curl -k https://travelin-agency-nlcs.vercel.app/api/packages
+curl -k https://worldtripagency.com/api/packages
 echo ""
-curl -k -X POST https://travelin-agency-nlcs.vercel.app/api/auth/login \\
+curl -k -X POST https://worldtripagency.com/api/auth/login \\
   -H "Content-Type: application/json" \\
   -d '{"email":"admin@wonderland.com","password":"admin123"}'
 
@@ -74,6 +74,6 @@ console.log('tail -20 error_log');
 console.log('php -l api-handler.php');
 console.log('cp api-handler-working.php api-handler.php');
 console.log('chmod 644 api-handler.php');
-console.log('curl -k https://travelin-agency-nlcs.vercel.app/api/test');
+console.log('curl -k https://worldtripagency.com/api/test');
 console.log('');
 console.log('🎯 This will diagnose and fix the API 500 error!');

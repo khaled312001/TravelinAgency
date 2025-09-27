@@ -261,7 +261,7 @@ console.log('# 4. Execute database setup');
 console.log('mysql -u travel -p travel < setup-real-database.sql');
 console.log('');
 console.log('# 5. Test the updated packages API');
-console.log('curl -k https://travelin-agency-nlcs.vercel.app/api/packages');
+console.log('curl -k https://worldtripagency.com/api/packages');
 console.log('');
 console.log('🎯 This will:');
 console.log('✅ Add real packages data from your database');

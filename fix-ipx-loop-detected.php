@@ -175,7 +175,7 @@ $testPaths = [
     '/output/public/images/home/logo/WonderlandLogoWhite.svg'
 ];
 
-$baseUrl = 'https://travelin-agency-nlcs.vercel.app';
+$baseUrl = 'https://worldtripagency.com';
 
 echo "<h4>📋 اختبار مسارات الصور</h4>";
 foreach ($testPaths as $path) {

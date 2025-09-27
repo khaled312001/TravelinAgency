@@ -51,7 +51,7 @@ Created two debug endpoints to help diagnose issues:
 
 ## Current Status
 
-The website should now load successfully at `https://travelin-agency.vercel.app/` with:
+The website should now load successfully at `https://worldtripagency.com/` with:
 - Hero section displaying properly
 - Services section working
 - Destinations sections working (using static data)
@@ -68,9 +68,9 @@ git push origin main
 
 ### 2. Test the Website
 After deployment, test:
-- Main page: `https://travelin-agency.vercel.app/`
-- Debug endpoint: `https://travelin-agency.vercel.app/api/debug`
-- Test endpoint: `https://travelin-agency.vercel.app/api/test`
+- Main page: `https://worldtripagency.com/`
+- Debug endpoint: `https://worldtripagency.com/api/debug`
+- Test endpoint: `https://worldtripagency.com/api/test`
 
 ### 3. Set Up Database (Optional)
 To enable full functionality:

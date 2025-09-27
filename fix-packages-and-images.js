@@ -7,7 +7,7 @@ console.log("==========================================");
 // 1. First, let's check the current API response structure
 const apiTest = `
 # Test the packages API response
-curl -k https://travelin-agency-nlcs.vercel.app/api/packages | head -20
+curl -k https://worldtripagency.com/api/packages | head -20
 `;
 
 // 2. Create missing image directories and placeholder images
@@ -79,7 +79,7 @@ cp output/public/images/destinations/global/Barcelona/Barcelona1.jpeg output/pub
 const fixApiResponse = `
 # Let's check what the frontend expects vs what we're returning
 echo "Current API response structure:"
-curl -k https://travelin-agency-nlcs.vercel.app/api/packages | jq '.[0]' 2>/dev/null || curl -k https://travelin-agency-nlcs.vercel.app/api/packages | head -5
+curl -k https://worldtripagency.com/api/packages | jq '.[0]' 2>/dev/null || curl -k https://worldtripagency.com/api/packages | head -5
 
 echo ""
 echo "Testing if the issue is in the frontend processing..."
@@ -89,12 +89,12 @@ echo "Testing if the issue is in the frontend processing..."
 const testFix = `
 # Test the fixes
 echo "Testing image accessibility:"
-curl -I https://travelin-agency-nlcs.vercel.app/images/destinations/global/Barcelona/Barcelona1.jpeg
-curl -I https://travelin-agency-nlcs.vercel.app/images/packages/pexels-photo-338515.jpg
+curl -I https://worldtripagency.com/images/destinations/global/Barcelona/Barcelona1.jpeg
+curl -I https://worldtripagency.com/images/packages/pexels-photo-338515.jpg
 
 echo ""
 echo "Testing packages API:"
-curl -k https://travelin-agency-nlcs.vercel.app/api/packages | jq '. | length' 2>/dev/null || echo "API returns data"
+curl -k https://worldtripagency.com/api/packages | jq '. | length' 2>/dev/null || echo "API returns data"
 `;
 
 const commands = `
