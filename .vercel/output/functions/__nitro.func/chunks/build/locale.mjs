@@ -1,2 +1,9 @@
-const e=defineEventHandler((e=>{const r=e.path||e.req.url||"";("/"===r||""===r)&&e.res.setHeader("X-Locale-Override","true")}));export{e as default};
+const locale = defineEventHandler((event) => {
+  const path = event.path || event.req.url || "";
+  if (path === "/" || path === "") {
+    event.res.setHeader("X-Locale-Override", "true");
+  }
+});
+
+export { locale as default };
 //# sourceMappingURL=locale.mjs.map

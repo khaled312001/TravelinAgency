@@ -1,2 +1,27 @@
-import{A as e}from"../_/nitro.mjs";import{A as o,$ as r}from"./server.mjs";import{_ as i}from"./useAuth.mjs";import"node:http";import"node:https";import"node:events";import"node:buffer";import"vue";import"@iconify/utils";import"node:crypto";import"consola";import"node:url";import"ipx";import"node:fs";import"node:path";import"vue-router";import"@iconify/vue";import"../routes/renderer.mjs";import"vue-bundle-renderer/runtime";import"unhead/server";import"unhead/utils";import"vue/server-renderer";import"devalue";import"unhead/plugins";import"@unhead/schema-org";import"@unhead/schema-org/vue";import"floating-vue";const t=o((async o=>{let t,n;console.log("🚀 Admin middleware called for:",o.path);const{user:m,checkAuth:l}=i();if("/admin/login"===o.path)return void console.log("⏭️ Skipping middleware for login page");let a=m.value;if(a)console.log("✅ User already authenticated from cookie:",a.email);else{console.log("👤 No user in state, checking auth...");try{[t,n]=e((()=>l(!0))),t=await t,n(),a=t}catch(e){return console.error("❌ Auth check failed:",e),r("/admin/login")}}if(!a||!a.role||!["admin","super_admin","moderator"].includes(a.role))return console.log("❌ No authenticated admin user found, redirecting to login"),r("/admin/login");console.log("✅ User has admin privileges:",a.email,"role:",a.role),console.log("✅ Middleware completed successfully for:",o.path)}));export{t as default};
+import { d as defineNuxtRouteMiddleware } from './server.mjs';
+import 'vue';
+import '../_/nitro.mjs';
+import 'node:http';
+import 'node:https';
+import 'node:events';
+import 'node:buffer';
+import 'node:fs';
+import 'node:path';
+import 'node:crypto';
+import 'vue-router';
+import 'vue/server-renderer';
+
+const admin = defineNuxtRouteMiddleware(async (to) => {
+  console.log("🚀 Admin middleware called for:", to.path);
+  if (to.path === "/admin/login") {
+    console.log("⏭️ Skipping middleware for login page");
+    return;
+  }
+  {
+    console.log("⏭️ Skipping auth check on server-side");
+    return;
+  }
+});
+
+export { admin as default };
 //# sourceMappingURL=admin.mjs.map

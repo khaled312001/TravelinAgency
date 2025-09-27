@@ -1,2 +1,4522 @@
-import e from"node:process";globalThis._importMeta_=globalThis._importMeta_||{url:"file:///_entry.js",env:e.env};import t from"node:http";import s from"node:https";import{EventEmitter as a}from"node:events";import{Buffer as l}from"node:buffer";import{toValue as c}from"vue";import{getIcons as u}from"@iconify/utils";import{createHash as d}from"node:crypto";import{consola as h}from"consola";import{fileURLToPath as m}from"node:url";import{ipxFSStorage as f,ipxHttpStorage as g,createIPX as v,createIPXH3Handler as _}from"ipx";import{promises as x,existsSync as R}from"node:fs";import{resolve as j,dirname as k,join as C}from"node:path";const $=/"(?:_|\\u0{2}5[Ff]){2}(?:p|\\u0{2}70)(?:r|\\u0{2}72)(?:o|\\u0{2}6[Ff])(?:t|\\u0{2}74)(?:o|\\u0{2}6[Ff])(?:_|\\u0{2}5[Ff]){2}"\s*:/,E=/"(?:c|\\u0063)(?:o|\\u006[Ff])(?:n|\\u006[Ee])(?:s|\\u0073)(?:t|\\u0074)(?:r|\\u0072)(?:u|\\u0075)(?:c|\\u0063)(?:t|\\u0074)(?:o|\\u006[Ff])(?:r|\\u0072)"\s*:/,T=/^\s*["[{]|^\s*-?\d{1,16}(\.\d{1,17})?([Ee][+-]?\d+)?\s*$/;function jsonParseTransform(e,t){if(!("__proto__"===e||"constructor"===e&&t&&"object"==typeof t&&"prototype"in t))return t;!function(e){console.warn(`[destr] Dropping "${e}" key to prevent prototype pollution.`)}(e)}function destr(e,t={}){if("string"!=typeof e)return e;if('"'===e[0]&&'"'===e[e.length-1]&&-1===e.indexOf("\\"))return e.slice(1,-1);const s=e.trim();if(s.length<=9)switch(s.toLowerCase()){case"true":return!0;case"false":return!1;case"undefined":return;case"null":return null;case"nan":return Number.NaN;case"infinity":return Number.POSITIVE_INFINITY;case"-infinity":return Number.NEGATIVE_INFINITY}if(!T.test(e)){if(t.strict)throw new SyntaxError("[destr] Invalid JSON");return e}try{if($.test(e)||E.test(e)){if(t.strict)throw new Error("[destr] Possible prototype pollution");return JSON.parse(e,jsonParseTransform)}return JSON.parse(e)}catch(s){if(t.strict)throw s;return e}}const O=/#/g,H=/&/g,U=/\//g,N=/=/g,P=/\+/g,L=/%5e/gi,I=/%60/gi,M=/%7c/gi,q=/%20/gi;function encodeQueryValue(e){return(t="string"==typeof e?e:JSON.stringify(e),encodeURI(""+t).replace(M,"|")).replace(P,"%2B").replace(q,"+").replace(O,"%23").replace(H,"%26").replace(I,"`").replace(L,"^").replace(U,"%2F");var t}function encodeQueryKey(e){return encodeQueryValue(e).replace(N,"%3D")}function decode$1(e=""){try{return decodeURIComponent(""+e)}catch{return""+e}}function decodeQueryValue(e){return decode$1(e.replace(P," "))}function parseQuery(e=""){const t=Object.create(null);"?"===e[0]&&(e=e.slice(1));for(const s of e.split("&")){const e=s.match(/([^=]+)=?(.*)/)||[];if(e.length<2)continue;const a=decode$1(e[1].replace(P," "));if("__proto__"===a||"constructor"===a)continue;const l=decodeQueryValue(e[2]||"");void 0===t[a]?t[a]=l:Array.isArray(t[a])?t[a].push(l):t[a]=[t[a],l]}return t}function stringifyQuery(e){return Object.keys(e).filter((t=>void 0!==e[t])).map((t=>{return s=t,"number"!=typeof(a=e[t])&&"boolean"!=typeof a||(a=String(a)),a?Array.isArray(a)?a.map((e=>`${encodeQueryKey(s)}=${encodeQueryValue(e)}`)).join("&"):`${encodeQueryKey(s)}=${encodeQueryValue(a)}`:encodeQueryKey(s);var s,a})).filter(Boolean).join("&")}const B=/^[\s\w\0+.-]{2,}:([/\\]{1,2})/,F=/^[\s\w\0+.-]{2,}:([/\\]{2})?/,D=/^([/\\]\s*){2,}[^/\\]/,W=/^\.?\//;function hasProtocol(e,t={}){return"boolean"==typeof t&&(t={acceptRelative:t}),t.strict?B.test(e):F.test(e)||!!t.acceptRelative&&D.test(e)}function withoutTrailingSlash(e="",t){return(function(e=""){return e.endsWith("/")}(e)?e.slice(0,-1):e)||"/"}function withTrailingSlash(e="",t){return e.endsWith("/")?e:e+"/"}function withLeadingSlash(e=""){return function(e=""){return e.startsWith("/")}(e)?e:"/"+e}function withBase(e,t){if(isEmptyURL(t)||hasProtocol(e))return e;const s=withoutTrailingSlash(t);return e.startsWith(s)?e:joinURL(s,e)}function withoutBase(e,t){if(isEmptyURL(t))return e;const s=withoutTrailingSlash(t);if(!e.startsWith(s))return e;const a=e.slice(s.length);return"/"===a[0]?a:"/"+a}function withQuery(e,t){const s=parseURL(e),a={...parseQuery(s.search),...t};return s.search=stringifyQuery(a),function(e){const t=e.pathname||"",s=e.search?(e.search.startsWith("?")?"":"?")+e.search:"",a=e.hash||"",l=e.auth?e.auth+"@":"",c=e.host||"",u=e.protocol||e[K]?(e.protocol||"")+"//":"";return u+l+c+t+s+a}(s)}function getQuery$1(e){return parseQuery(parseURL(e).search)}function isEmptyURL(e){return!e||"/"===e}function joinURL(e,...t){let s=e||"";for(const e of t.filter((e=>function(e){return e&&"/"!==e}(e))))if(s){const t=e.replace(W,"");s=withTrailingSlash(s)+t}else s=e;return s}function joinRelativeURL(...e){const t=/\/(?!\/)/,s=e.filter(Boolean),a=[];let l=0;for(const e of s)if(e&&"/"!==e)for(const[s,c]of e.split(t).entries())if(c&&"."!==c)if(".."!==c)1===s&&a[a.length-1]?.endsWith(":/")?a[a.length-1]+="/"+c:(a.push(c),l++);else{if(1===a.length&&hasProtocol(a[0]))continue;a.pop(),l--}let c=a.join("/");return l>=0?s[0]?.startsWith("/")&&!c.startsWith("/")?c="/"+c:s[0]?.startsWith("./")&&!c.startsWith("./")&&(c="./"+c):c="../".repeat(-1*l)+c,s[s.length-1]?.endsWith("/")&&!c.endsWith("/")&&(c+="/"),c}function withHttps(e){return function(e,t){let s=e.match(F);s||(s=e.match(/^\/{2,}/));if(!s)return t+e;return t+e.slice(s[0].length)}(e,"https://")}const K=Symbol.for("ufo:protocolRelative");function parseURL(e="",t){const s=e.match(/^[\s\0]*(blob:|data:|javascript:|vbscript:)(.*)/i);if(s){const[,e,t=""]=s;return{protocol:e.toLowerCase(),pathname:t,href:e+t,auth:"",host:"",search:"",hash:""}}if(!hasProtocol(e,{acceptRelative:!0}))return t?parseURL(t+e):parsePath(e);const[,a="",l,c=""]=e.replace(/\\/g,"/").match(/^[\s\0]*([\w+.-]{2,}:)?\/\/([^/@]+@)?(.*)/)||[];let[,u="",d=""]=c.match(/([^#/?]*)(.*)?/)||[];"file:"===a&&(d=d.replace(/\/(?=[A-Za-z]:)/,""));const{pathname:h,search:m,hash:f}=parsePath(d);return{protocol:a.toLowerCase(),auth:l?l.slice(0,Math.max(0,l.length-1)):"",host:u,pathname:h,search:m,hash:f,[K]:!a}}function parsePath(e=""){const[t="",s="",a=""]=(e.match(/([^#?]*)(\?[^#]*)?(#.*)?/)||[]).splice(1);return{pathname:t,search:s,hash:a}}function decode(e){return e.includes("%")?decodeURIComponent(e):e}function tryDecode(e,t){try{return t(e)}catch{return e}}const X=/^[\u0009\u0020-\u007E\u0080-\u00FF]+$/;function serialize$2(e,t,s){const a=s||{},l=a.encode||encodeURIComponent;if("function"!=typeof l)throw new TypeError("option encode is invalid");if(!X.test(e))throw new TypeError("argument name is invalid");const c=l(t);if(c&&!X.test(c))throw new TypeError("argument val is invalid");let u=e+"="+c;if(void 0!==a.maxAge&&null!==a.maxAge){const e=a.maxAge-0;if(Number.isNaN(e)||!Number.isFinite(e))throw new TypeError("option maxAge is invalid");u+="; Max-Age="+Math.floor(e)}if(a.domain){if(!X.test(a.domain))throw new TypeError("option domain is invalid");u+="; Domain="+a.domain}if(a.path){if(!X.test(a.path))throw new TypeError("option path is invalid");u+="; Path="+a.path}if(a.expires){if(d=a.expires,!("[object Date]"===Object.prototype.toString.call(d)||d instanceof Date)||Number.isNaN(a.expires.valueOf()))throw new TypeError("option expires is invalid");u+="; Expires="+a.expires.toUTCString()}var d;if(a.httpOnly&&(u+="; HttpOnly"),a.secure&&(u+="; Secure"),a.priority){switch("string"==typeof a.priority?a.priority.toLowerCase():a.priority){case"low":u+="; Priority=Low";break;case"medium":u+="; Priority=Medium";break;case"high":u+="; Priority=High";break;default:throw new TypeError("option priority is invalid")}}if(a.sameSite){switch("string"==typeof a.sameSite?a.sameSite.toLowerCase():a.sameSite){case!0:u+="; SameSite=Strict";break;case"lax":u+="; SameSite=Lax";break;case"strict":u+="; SameSite=Strict";break;case"none":u+="; SameSite=None";break;default:throw new TypeError("option sameSite is invalid")}}return a.partitioned&&(u+="; Partitioned"),u}function parseSetCookie(e,t){const s=(e||"").split(";").filter((e=>"string"==typeof e&&!!e.trim())),a=function(e){let t="",s="";const a=e.split("=");a.length>1?(t=a.shift(),s=a.join("=")):s=e;return{name:t,value:s}}(s.shift()||""),l=a.name;let c=a.value;try{c=!1===t?.decode?c:(t?.decode||decodeURIComponent)(c)}catch{}const u={name:l,value:c};for(const e of s){const t=e.split("="),s=(t.shift()||"").trimStart().toLowerCase(),a=t.join("=");switch(s){case"expires":u.expires=new Date(a);break;case"max-age":u.maxAge=Number.parseInt(a,10);break;case"secure":u.secure=!0;break;case"httponly":u.httpOnly=!0;break;case"samesite":u.sameSite=a;break;default:u[s]=a}}return u}const J=0,Q=1,V=2;function createRouter$1(e={}){const t={options:e,rootNode:createRadixNode(),staticRoutesMap:{}},normalizeTrailingSlash=t=>e.strictTrailingSlash?t:t.replace(/\/$/,"")||"/";if(e.routes)for(const s in e.routes)insert(t,normalizeTrailingSlash(s),e.routes[s]);return{ctx:t,lookup:e=>function(e,t){const s=e.staticRoutesMap[t];if(s)return s.data;const a=t.split("/"),l={};let c=!1,u=null,d=e.rootNode,h=null;for(let e=0;e<a.length;e++){const t=a[e];null!==d.wildcardChildNode&&(u=d.wildcardChildNode,h=a.slice(e).join("/"));const s=d.children.get(t);if(void 0===s){if(d&&d.placeholderChildren.length>1){const t=a.length-e;d=d.placeholderChildren.find((e=>e.maxDepth===t))||null}else d=d.placeholderChildren[0]||null;if(!d)break;d.paramName&&(l[d.paramName]=t),c=!0}else d=s}null!==d&&null!==d.data||null===u||(d=u,l[d.paramName||"_"]=h,c=!0);if(!d)return null;if(c)return{...d.data,params:c?l:void 0};return d.data}(t,normalizeTrailingSlash(e)),insert:(e,s)=>insert(t,normalizeTrailingSlash(e),s),remove:e=>function(e,t){let s=!1;const a=t.split("/");let l=e.rootNode;for(const e of a)if(l=l.children.get(e),!l)return s;if(l.data){const e=a.at(-1)||"";l.data=null,0===Object.keys(l.children).length&&l.parent&&(l.parent.children.delete(e),l.parent.wildcardChildNode=null,l.parent.placeholderChildren=[]),s=!0}return s}(t,normalizeTrailingSlash(e))}}function insert(e,t,s){let a=!0;const l=t.split("/");let c=e.rootNode,u=0;const d=[c];for(const e of l){let t;if(t=c.children.get(e))c=t;else{const s=getNodeType(e);t=createRadixNode({type:s,parent:c}),c.children.set(e,t),s===V?(t.paramName="*"===e?"_"+u++:e.slice(1),c.placeholderChildren.push(t),a=!1):s===Q&&(c.wildcardChildNode=t,t.paramName=e.slice(3)||"_",a=!1),d.push(t),c=t}}for(const[e,t]of d.entries())t.maxDepth=Math.max(d.length-e,t.maxDepth||0);return c.data=s,!0===a&&(e.staticRoutesMap[t]=c),c}function createRadixNode(e={}){return{type:e.type||J,maxDepth:0,parent:e.parent||null,children:new Map,data:e.data||null,paramName:e.paramName||null,wildcardChildNode:null,placeholderChildren:[]}}function getNodeType(e){return e.startsWith("**")?Q:":"===e[0]||"*"===e?V:J}function toRouteMatcher(e){return function(e,t){return{ctx:{table:e},matchAll:s=>_matchRoutes(s,e,t)}}(_routerNodeToTable("",e.ctx.rootNode),e.ctx.options.strictTrailingSlash)}function _matchRoutes(e,t,s){!0!==s&&e.endsWith("/")&&(e=e.slice(0,-1)||"/");const a=[];for(const[s,l]of _sortRoutesMap(t.wildcard))(e===s||e.startsWith(s+"/"))&&a.push(l);for(const[s,l]of _sortRoutesMap(t.dynamic))if(e.startsWith(s+"/")){const t="/"+e.slice(s.length).split("/").splice(2).join("/");a.push(..._matchRoutes(t,l))}const l=t.static.get(e);return l&&a.push(l),a.filter(Boolean)}function _sortRoutesMap(e){return[...e.entries()].sort(((e,t)=>e[0].length-t[0].length))}function _routerNodeToTable(e,t){const s={static:new Map,wildcard:new Map,dynamic:new Map};return function _addNode(e,t){if(e)if(t.type!==J||e.includes("*")||e.includes(":")){if(t.type===Q)s.wildcard.set(e.replace("/**",""),t.data);else if(t.type===V){const a=_routerNodeToTable("",t);return t.data&&a.static.set("/",t.data),void s.dynamic.set(e.replace(/\/\*|\/:\w+/,""),a)}}else t.data&&s.static.set(e,t.data);for(const[s,a]of t.children.entries())_addNode(`${e}/${s}`.replace("//","/"),a)}(e,t),s}function isPlainObject(e){if(null===e||"object"!=typeof e)return!1;const t=Object.getPrototypeOf(e);return(null===t||t===Object.prototype||null===Object.getPrototypeOf(t))&&(!(Symbol.iterator in e)&&(!(Symbol.toStringTag in e)||"[object Module]"===Object.prototype.toString.call(e)))}function _defu(e,t,s=".",a){if(!isPlainObject(t))return _defu(e,{},s,a);const l=Object.assign({},t);for(const t in e){if("__proto__"===t||"constructor"===t)continue;const c=e[t];null!=c&&(a&&a(l,t,c,s)||(Array.isArray(c)&&Array.isArray(l[t])?l[t]=[...c,...l[t]]:isPlainObject(c)&&isPlainObject(l[t])?l[t]=_defu(c,l[t],(s?`${s}.`:"")+t.toString(),a):l[t]=c))}return l}function createDefu(e){return(...t)=>t.reduce(((t,s)=>_defu(t,s,"",e)),{})}const Y=createDefu(),G=createDefu(((e,t,s)=>{if(void 0!==e[t]&&"function"==typeof s)return e[t]=s(e[t]),!0}));function o(e){throw new Error(`${e} is not implemented yet!`)}let Z=class i extends a{__unenv__={};readableEncoding=null;readableEnded=!0;readableFlowing=!1;readableHighWaterMark=0;readableLength=0;readableObjectMode=!1;readableAborted=!1;readableDidRead=!1;closed=!1;errored=null;readable=!1;destroyed=!1;static from(e,t){return new i(t)}constructor(e){super()}_read(e){}read(e){}setEncoding(e){return this}pause(){return this}resume(){return this}isPaused(){return!0}unpipe(e){return this}unshift(e,t){}wrap(e){return this}push(e,t){return!1}_destroy(e,t){this.removeAllListeners()}destroy(e){return this.destroyed=!0,this._destroy(e),this}pipe(e,t){return{}}compose(e,t){throw new Error("Method not implemented.")}[Symbol.asyncDispose](){return this.destroy(),Promise.resolve()}async*[Symbol.asyncIterator](){throw o("Readable.asyncIterator")}iterator(e){throw o("Readable.iterator")}map(e,t){throw o("Readable.map")}filter(e,t){throw o("Readable.filter")}forEach(e,t){throw o("Readable.forEach")}reduce(e,t,s){throw o("Readable.reduce")}find(e,t){throw o("Readable.find")}findIndex(e,t){throw o("Readable.findIndex")}some(e,t){throw o("Readable.some")}toArray(e){throw o("Readable.toArray")}every(e,t){throw o("Readable.every")}flatMap(e,t){throw o("Readable.flatMap")}drop(e,t){throw o("Readable.drop")}take(e,t){throw o("Readable.take")}asIndexedPairs(e){throw o("Readable.asIndexedPairs")}},ee=class extends a{__unenv__={};writable=!0;writableEnded=!1;writableFinished=!1;writableHighWaterMark=0;writableLength=0;writableObjectMode=!1;writableCorked=0;closed=!1;errored=null;writableNeedDrain=!1;destroyed=!1;_data;_encoding="utf8";constructor(e){super()}pipe(e,t){return{}}_write(e,t,s){if(this.writableEnded)s&&s();else{if(void 0===this._data)this._data=e;else{const s="string"==typeof this._data?l.from(this._data,this._encoding||t||"utf8"):this._data,a="string"==typeof e?l.from(e,t||this._encoding||"utf8"):e;this._data=l.concat([s,a])}this._encoding=t,s&&s()}}_writev(e,t){}_destroy(e,t){}_final(e){}write(e,t,s){const a="string"==typeof t?this._encoding:"utf8",l="function"==typeof t?t:"function"==typeof s?s:void 0;return this._write(e,a,l),!0}setDefaultEncoding(e){return this}end(e,t,s){const a="function"==typeof e?e:"function"==typeof t?t:"function"==typeof s?s:void 0;if(this.writableEnded)return a&&a(),this;const l=e===a?void 0:e;if(l){const e=t===a?void 0:t;this.write(l,e,a)}return this.writableEnded=!0,this.writableFinished=!0,this.emit("close"),this.emit("finish"),this}cork(){}uncork(){}destroy(e){return this.destroyed=!0,delete this._data,this.removeAllListeners(),this}compose(e,t){throw new Error("Method not implemented.")}};const te=class{allowHalfOpen=!0;_destroy;constructor(e=new Z,t=new ee){Object.assign(this,e),Object.assign(this,t),this._destroy=function(...e){return function(...t){for(const s of e)s(...t)}}(e._destroy,t._destroy)}};const re=(Object.assign(te.prototype,Z.prototype),Object.assign(te.prototype,ee.prototype),te);class A extends re{__unenv__={};bufferSize=0;bytesRead=0;bytesWritten=0;connecting=!1;destroyed=!1;pending=!1;localAddress="";localPort=0;remoteAddress="";remoteFamily="";remotePort=0;autoSelectFamilyAttemptedAddresses=[];readyState="readOnly";constructor(e){super()}write(e,t,s){return!1}connect(e,t,s){return this}end(e,t,s){return this}setEncoding(e){return this}pause(){return this}resume(){return this}setTimeout(e,t){return this}setNoDelay(e){return this}setKeepAlive(e,t){return this}address(){return{}}unref(){return this}ref(){return this}destroySoon(){this.destroy()}resetAndDestroy(){const e=new Error("ERR_SOCKET_CLOSED");return e.code="ERR_SOCKET_CLOSED",this.destroy(e),this}}class y extends Z{aborted=!1;httpVersion="1.1";httpVersionMajor=1;httpVersionMinor=1;complete=!0;connection;socket;headers={};trailers={};method="GET";url="/";statusCode=200;statusMessage="";closed=!1;errored=null;readable=!1;constructor(e){super(),this.socket=this.connection=e||new A}get rawHeaders(){const e=this.headers,t=[];for(const s in e)if(Array.isArray(e[s]))for(const a of e[s])t.push(s,a);else t.push(s,e[s]);return t}get rawTrailers(){return[]}setTimeout(e,t){return this}get headersDistinct(){return p(this.headers)}get trailersDistinct(){return p(this.trailers)}}function p(e){const t={};for(const[s,a]of Object.entries(e))s&&(t[s]=(Array.isArray(a)?a:[a]).filter(Boolean));return t}class w extends ee{statusCode=200;statusMessage="";upgrading=!1;chunkedEncoding=!1;shouldKeepAlive=!1;useChunkedEncodingByDefault=!1;sendDate=!1;finished=!1;headersSent=!1;strictContentLength=!1;connection=null;socket=null;req;_headers={};constructor(e){super(),this.req=e}assignSocket(e){e._httpMessage=this,this.socket=e,this.connection=e,this.emit("socket",e),this._flush()}_flush(){this.flushHeaders()}detachSocket(e){}writeContinue(e){}writeHead(e,t,s){e&&(this.statusCode=e),"string"==typeof t&&(this.statusMessage=t,t=void 0);const a=s||t;if(a&&!Array.isArray(a))for(const e in a)this.setHeader(e,a[e]);return this.headersSent=!0,this}writeProcessing(){}setTimeout(e,t){return this}appendHeader(e,t){e=e.toLowerCase();const s=this._headers[e],a=[...Array.isArray(s)?s:[s],...Array.isArray(t)?t:[t]].filter(Boolean);return this._headers[e]=a.length>1?a:a[0],this}setHeader(e,t){return this._headers[e.toLowerCase()]=t,this}setHeaders(e){for(const[t,s]of Object.entries(e))this.setHeader(t,s);return this}getHeader(e){return this._headers[e.toLowerCase()]}getHeaders(){return this._headers}getHeaderNames(){return Object.keys(this._headers)}hasHeader(e){return e.toLowerCase()in this._headers}removeHeader(e){delete this._headers[e.toLowerCase()]}addTrailers(e){}flushHeaders(){}writeEarlyHints(e,t){"function"==typeof t&&t()}}const oe=(()=>{const n=function(){};return n.prototype=Object.create(null),n})();function S(e={}){if(e instanceof Headers)return e;const t=new Headers;for(const[s,a]of Object.entries(e))if(void 0!==a){if(Array.isArray(a)){for(const e of a)t.append(s,String(e));continue}t.set(s,String(a))}return t}const ne=new Set([101,204,205,304]);async function b(e,t){const s=new y,a=new w(s);let l;if(s.url=t.url?.toString()||"/",!s.url.startsWith("/")){const e=new URL(s.url);l=e.host,s.url=e.pathname+e.search+e.hash}s.method=t.method||"GET",s.headers=function(e={}){const t=new oe,s=Array.isArray(e)||function(e){return"function"==typeof e?.entries}(e)?e:Object.entries(e);for(const[e,a]of s)if(a){if(void 0===t[e]){t[e]=a;continue}t[e]=[...Array.isArray(t[e])?t[e]:[t[e]],...Array.isArray(a)?a:[a]]}return t}(t.headers||{}),s.headers.host||(s.headers.host=t.host||l||"localhost"),s.connection.encrypted=s.connection.encrypted||"https"===t.protocol,s.body=t.body||null,s.__unenv__=t.context,await e(s,a);let c=a._data;(ne.has(a.statusCode)||"HEAD"===s.method.toUpperCase())&&(c=null,delete a._headers["content-length"]);const u={status:a.statusCode,statusText:a.statusMessage,headers:a._headers,body:c};return s.destroy(),a.destroy(),u}function hasProp(e,t){try{return t in e}catch{return!1}}class H3Error extends Error{static __h3_error__=!0;statusCode=500;fatal=!1;unhandled=!1;statusMessage;data;cause;constructor(e,t={}){super(e,t),t.cause&&!this.cause&&(this.cause=t.cause)}toJSON(){const e={message:this.message,statusCode:sanitizeStatusCode(this.statusCode,500)};return this.statusMessage&&(e.statusMessage=sanitizeStatusMessage(this.statusMessage)),void 0!==this.data&&(e.data=this.data),e}}function createError$1(e){if("string"==typeof e)return new H3Error(e);if(isError(e))return e;const t=new H3Error(e.message??e.statusMessage??"",{cause:e.cause||e});if(hasProp(e,"stack"))try{Object.defineProperty(t,"stack",{get:()=>e.stack})}catch{try{t.stack=e.stack}catch{}}if(e.data&&(t.data=e.data),e.statusCode?t.statusCode=sanitizeStatusCode(e.statusCode,t.statusCode):e.status&&(t.statusCode=sanitizeStatusCode(e.status,t.statusCode)),e.statusMessage?t.statusMessage=e.statusMessage:e.statusText&&(t.statusMessage=e.statusText),t.statusMessage){const e=t.statusMessage;sanitizeStatusMessage(t.statusMessage)!==e&&console.warn("[h3] Please prefer using `message` for longer error messages instead of `statusMessage`. In the future, `statusMessage` will be sanitized by default.")}return void 0!==e.fatal&&(t.fatal=e.fatal),void 0!==e.unhandled&&(t.unhandled=e.unhandled),t}function isError(e){return!0===e?.constructor?.__h3_error__}function process$1(e,t){const s={},a=t.find((e=>"content-disposition"===e[0]))?.[1]||"";for(const e of a.split(";")){const t=e.split("=");if(2!==t.length)continue;const a=(t[0]||"").trim();if("name"===a||"filename"===a){const e=(t[1]||"").trim().replace(/"/g,"");s[a]=Buffer.from(e,"latin1").toString("utf8")}}const l=t.find((e=>"content-type"===e[0]))?.[1]||"";return l&&(s.type=l),s.data=Buffer.from(e),s}function getQuery(e){return getQuery$1(e.path||"")}function getRouterParam(e,t,s={}){const a=function(e,t={}){let s=e.context.params||{};if(t.decode){s={...s};for(const e in s)s[e]=decode$1(s[e])}return s}(e,s);return a[t]}function getMethod(e,t="GET"){return(e.node.req.method||t).toUpperCase()}function getRequestHeaders(e){const t={};for(const s in e.node.req.headers){const a=e.node.req.headers[s];t[s]=Array.isArray(a)?a.filter(Boolean).join(", "):a}return t}function getRequestHeader(e,t){return getRequestHeaders(e)[t.toLowerCase()]}const se=getRequestHeader;function getRequestHost(e,t={}){if(t.xForwardedHost){const t=e.node.req.headers["x-forwarded-host"];if(t)return t}return e.node.req.headers.host||"localhost"}function getRequestProtocol(e,t={}){return!1!==t.xForwardedProto&&"https"===e.node.req.headers["x-forwarded-proto"]||e.node.req.connection?.encrypted?"https":"http"}function getRequestURL(e,t={}){const s=getRequestHost(e,t),a=getRequestProtocol(e,t),l=(e.node.req.originalUrl||e.path).replace(/^[/\\]+/g,"/");return new URL(l,`${a}://${s}`)}const ae=Symbol.for("h3RawBody"),ie=Symbol.for("h3ParsedBody"),le=["PATCH","POST","PUT","DELETE"];function readRawBody(e,t="utf8"){!function(e,t){if(!function(e,t){if("string"==typeof t){if(e.method===t)return!0}else if(t.includes(e.method))return!0;return!1}(e,t))throw createError$1({statusCode:405,statusMessage:"HTTP method is not allowed."})}(e,le);const s=e._requestBody||e.web?.request?.body||e.node.req[ae]||e.node.req.rawBody||e.node.req.body;if(s){const e=Promise.resolve(s).then((e=>Buffer.isBuffer(e)?e:"function"==typeof e.pipeTo?new Promise(((t,s)=>{const a=[];e.pipeTo(new WritableStream({write(e){a.push(e)},close(){t(Buffer.concat(a))},abort(e){s(e)}})).catch(s)})):"function"==typeof e.pipe?new Promise(((t,s)=>{const a=[];e.on("data",(e=>{a.push(e)})).on("end",(()=>{t(Buffer.concat(a))})).on("error",s)})):e.constructor===Object?Buffer.from(JSON.stringify(e)):e instanceof URLSearchParams?Buffer.from(e.toString()):Buffer.from(e)));return t?e.then((e=>e.toString(t))):e}if(!Number.parseInt(e.node.req.headers["content-length"]||"")&&!String(e.node.req.headers["transfer-encoding"]??"").split(",").map((e=>e.trim())).filter(Boolean).includes("chunked"))return Promise.resolve(void 0);const a=e.node.req[ae]=new Promise(((t,s)=>{const a=[];e.node.req.on("error",(e=>{s(e)})).on("data",(e=>{a.push(e)})).on("end",(()=>{t(Buffer.concat(a))}))}));return t?a.then((e=>e.toString(t))):a}async function readBody(e,t={}){const s=e.node.req;if(hasProp(s,ie))return s[ie];const a=s.headers["content-type"]||"",l=await readRawBody(e);let c;return c="application/json"===a?_parseJSON(l,t.strict??!0):a.startsWith("application/x-www-form-urlencoded")?function(e){const t=new URLSearchParams(e),s=Object.create(null);for(const[e,a]of t.entries())hasProp(s,e)?(Array.isArray(s[e])||(s[e]=[s[e]]),s[e].push(a)):s[e]=a;return s}(l):a.startsWith("text/")?l:_parseJSON(l,t.strict??!1),s[ie]=c,c}async function readMultipartFormData(e){const t=getRequestHeader(e,"content-type");if(!t||!t.startsWith("multipart/form-data"))return;const s=t.match(/boundary=([^;]*)(;|$)/i)?.[1];if(!s)return;const a=await readRawBody(e,!1);return a?function(e,t){let s="",a=0,l=[];const c=[];let u=[];for(let d=0;d<e.length;d++){const h=d>0?e[d-1]:null,m=e[d];10===m||13===m||(s+=String.fromCodePoint(m));const f=10===m&&13===h;if(0===a&&f)"--"+t===s&&(a=1),s="";else if(1===a&&f){if(s.length>0){const e=s.indexOf(":");if(e>0){const t=s.slice(0,e).toLowerCase(),a=s.slice(e+1).trim();u.push([t,a])}}else a=2,l=[];s=""}else if(2===a){if(s.length>t.length+4&&(s=""),"--"+t===s){const e=l.length-s.length,t=l.slice(0,e-1);c.push(process$1(t,u)),l=[],u=[],s="",a=3}else l.push(m);f&&(s="")}else 3===a&&f&&(a=1)}return c}(a,s):void 0}function _parseJSON(e="",t){if(e)try{return destr(e,{strict:t})}catch{throw createError$1({statusCode:400,statusMessage:"Bad Request",message:"Invalid JSON body"})}}function handleCacheHeaders(e,t){const s=["public",...t.cacheControls||[]];let a=!1;if(void 0!==t.maxAge&&s.push("max-age="+ +t.maxAge,"s-maxage="+ +t.maxAge),t.modifiedTime){const s=new Date(t.modifiedTime),l=e.node.req.headers["if-modified-since"];e.node.res.setHeader("last-modified",s.toUTCString()),l&&new Date(l)>=t.modifiedTime&&(a=!0)}if(t.etag){e.node.res.setHeader("etag",t.etag);e.node.req.headers["if-none-match"]===t.etag&&(a=!0)}return e.node.res.setHeader("cache-control",s.join(", ")),!!a&&(e.node.res.statusCode=304,e.handled||e.node.res.end(),!0)}const ce={html:"text/html",json:"application/json"},ue=/[^\u0009\u0020-\u007E]/g;function sanitizeStatusMessage(e=""){return e.replace(ue,"")}function sanitizeStatusCode(e,t=200){return e?("string"==typeof e&&(e=Number.parseInt(e,10)),e<100||e>999?t:e):t}function getDistinctCookieKey(e,t){return[e,t.domain||"",t.path||"/",Boolean(t.secure),Boolean(t.httpOnly),Boolean(t.sameSite)].join(";")}function parseCookies(e){return function(e){if("string"!=typeof e)throw new TypeError("argument str must be a string");const t={},s={},a=s.decode||decode;let l=0;for(;l<e.length;){const c=e.indexOf("=",l);if(-1===c)break;let u=e.indexOf(";",l);if(-1===u)u=e.length;else if(u<c){l=e.lastIndexOf(";",c-1)+1;continue}const d=e.slice(l,c).trim();if(!s?.filter||s?.filter(d)){if(void 0===t[d]){let s=e.slice(c+1,u).trim();34===s.codePointAt(0)&&(s=s.slice(1,-1)),t[d]=tryDecode(s,a)}l=u+1}else l=u+1}return t}(e.node.req.headers.cookie||"")}function getCookie(e,t){return parseCookies(e)[t]}function setCookie(e,t,s,a={}){a.path||(a={path:"/",...a});const l=serialize$2(t,s,a),c=splitCookiesString(e.node.res.getHeader("set-cookie"));if(0===c.length)return void e.node.res.setHeader("set-cookie",l);const u=getDistinctCookieKey(t,a);e.node.res.removeHeader("set-cookie");for(const t of c){const s=parseSetCookie(t);getDistinctCookieKey(s.name,s)!==u&&e.node.res.appendHeader("set-cookie",t)}e.node.res.appendHeader("set-cookie",l)}function deleteCookie(e,t,s){setCookie(e,t,"",{...s,maxAge:0})}function splitCookiesString(e){if(Array.isArray(e))return e.flatMap((e=>splitCookiesString(e)));if("string"!=typeof e)return[];const t=[];let s,a,l,c,u,d=0;const skipWhitespace=()=>{for(;d<e.length&&/\s/.test(e.charAt(d));)d+=1;return d<e.length};for(;d<e.length;){for(s=d,u=!1;skipWhitespace();)if(a=e.charAt(d),","===a){for(l=d,d+=1,skipWhitespace(),c=d;d<e.length&&(a=e.charAt(d),"="!==a&&";"!==a&&","!==a);)d+=1;d<e.length&&"="===e.charAt(d)?(u=!0,d=c,t.push(e.slice(s,l)),s=d):d=l+1}else d+=1;(!u||d>=e.length)&&t.push(e.slice(s))}return t}const de="undefined"==typeof setImmediate?e=>e():setImmediate;function send(e,t,s){return s&&function(e,t){t&&304!==e.node.res.statusCode&&!e.node.res.getHeader("content-type")&&e.node.res.setHeader("content-type",t)}(e,s),new Promise((s=>{de((()=>{e.handled||e.node.res.end(t),s()}))}))}function setResponseStatus(e,t,s){t&&(e.node.res.statusCode=sanitizeStatusCode(t,e.node.res.statusCode)),s&&(e.node.res.statusMessage=sanitizeStatusMessage(s))}function getResponseStatus(e){return e.node.res.statusCode}function getResponseStatusText(e){return e.node.res.statusMessage}function sendRedirect(e,t,s=302){e.node.res.statusCode=sanitizeStatusCode(s,e.node.res.statusCode),e.node.res.setHeader("location",t);return send(e,`<!DOCTYPE html><html><head><meta http-equiv="refresh" content="0; url=${t.replace(/"/g,"%22")}"></head></html>`,ce.html)}function setResponseHeaders(e,t){for(const[s,a]of Object.entries(t))e.node.res.setHeader(s,a)}const pe=setResponseHeaders;function setResponseHeader(e,t,s){e.node.res.setHeader(t,s)}const he=setResponseHeader;function sendStream(e,t){if(!t||"object"!=typeof t)throw new Error("[h3] Invalid stream provided.");if(e.node.res._data=t,!e.node.res.socket)return e._handled=!0,Promise.resolve();if(hasProp(t,"pipeTo")&&"function"==typeof t.pipeTo)return t.pipeTo(new WritableStream({write(t){e.node.res.write(t)}})).then((()=>{e.node.res.end()}));if(hasProp(t,"pipe")&&"function"==typeof t.pipe)return new Promise(((s,a)=>{t.pipe(e.node.res),t.on&&(t.on("end",(()=>{e.node.res.end(),s()})),t.on("error",(e=>{a(e)}))),e.node.res.on("close",(()=>{t.abort&&t.abort()}))}));throw new Error("[h3] Invalid or incompatible stream provided.")}function sendWebResponse(e,t){for(const[s,a]of t.headers)"set-cookie"===s?e.node.res.appendHeader(s,splitCookiesString(a)):e.node.res.setHeader(s,a);if(t.status&&(e.node.res.statusCode=sanitizeStatusCode(t.status,e.node.res.statusCode)),t.statusText&&(e.node.res.statusMessage=sanitizeStatusMessage(t.statusText)),t.redirected&&e.node.res.setHeader("location",t.url),t.body)return sendStream(e,t.body);e.node.res.end()}const me=new Set(["PATCH","POST","PUT","DELETE"]),fe=new Set(["transfer-encoding","accept-encoding","connection","keep-alive","upgrade","expect","host","accept"]);async function proxyRequest(e,t,s={}){let a,l;me.has(e.method)&&(s.streamRequest?(a=function(e){if(!le.includes(e.method))return;const t=e.web?.request?.body||e._requestBody;return t||(ae in e.node.req||"rawBody"in e.node.req||"body"in e.node.req||"__unenv__"in e.node.req?new ReadableStream({async start(t){const s=await readRawBody(e,!1);s&&t.enqueue(s),t.close()}}):new ReadableStream({start:t=>{e.node.req.on("data",(e=>{t.enqueue(e)})),e.node.req.on("end",(()=>{t.close()})),e.node.req.on("error",(e=>{t.error(e)}))}}))}(e),l="half"):a=await readRawBody(e,!1).catch((()=>{})));const c=s.fetchOptions?.method||e.method,u=function(e,...t){const s=t.filter(Boolean);if(0===s.length)return e;const a=new Headers(e);for(const e of s)for(const[t,s]of Object.entries(e))void 0!==s&&a.set(t,s);return a}(getProxyRequestHeaders(e,{host:t.startsWith("/")}),s.fetchOptions?.headers,s.headers);return async function(e,t,s={}){let a;try{a=await _getFetch(s.fetch)(t,{headers:s.headers,ignoreResponseError:!0,...s.fetchOptions})}catch(e){throw createError$1({status:502,statusMessage:"Bad Gateway",cause:e})}e.node.res.statusCode=sanitizeStatusCode(a.status,e.node.res.statusCode),e.node.res.statusMessage=sanitizeStatusMessage(a.statusText);const l=[];for(const[t,s]of a.headers.entries())"content-encoding"!==t&&"content-length"!==t&&("set-cookie"!==t?e.node.res.setHeader(t,s):l.push(...splitCookiesString(s)));l.length>0&&e.node.res.setHeader("set-cookie",l.map((e=>(s.cookieDomainRewrite&&(e=rewriteCookieProperty(e,s.cookieDomainRewrite,"domain")),s.cookiePathRewrite&&(e=rewriteCookieProperty(e,s.cookiePathRewrite,"path")),e))));s.onResponse&&await s.onResponse(e,a);if(void 0!==a._data)return a._data;if(e.handled)return;if(!1===s.sendStream){const t=new Uint8Array(await a.arrayBuffer());return e.node.res.end(t)}if(a.body)for await(const t of a.body)e.node.res.write(t);return e.node.res.end()}(e,t,{...s,fetchOptions:{method:c,body:a,duplex:l,...s.fetchOptions,headers:u}})}function getProxyRequestHeaders(e,t){const s=Object.create(null),a=getRequestHeaders(e);for(const e in a)(!fe.has(e)||"host"===e&&t?.host)&&(s[e]=a[e]);return s}function fetchWithEvent(e,t,s,a){return _getFetch(a?.fetch)(t,{...s,context:s?.context||e.context,headers:{...getProxyRequestHeaders(e,{host:"string"==typeof t&&t.startsWith("/")}),...s?.headers}})}function _getFetch(e){if(e)return e;if(globalThis.fetch)return globalThis.fetch;throw new Error("fetch is not available. Try importing `node-fetch-native/polyfill` for Node.js.")}function rewriteCookieProperty(e,t,s){const a="string"==typeof t?{"*":t}:t;return e.replace(new RegExp(`(;\\s*${s}=)([^;]+)`,"gi"),((e,t,s)=>{let l;if(s in a)l=a[s];else{if(!("*"in a))return e;l=a["*"]}return l?t+l:""}))}class H3Event{__is_event__=!0;node;web;context={};_method;_path;_headers;_requestBody;_handled=!1;_onBeforeResponseCalled;_onAfterResponseCalled;constructor(e,t){this.node={req:e,res:t}}get method(){return this._method||(this._method=(this.node.req.method||"GET").toUpperCase()),this._method}get path(){return this._path||this.node.req.url||"/"}get headers(){return this._headers||(this._headers=function(e){const t=new Headers;for(const[s,a]of Object.entries(e))if(Array.isArray(a))for(const e of a)t.append(s,e);else a&&t.set(s,a);return t}(this.node.req.headers)),this._headers}get handled(){return this._handled||this.node.res.writableEnded||this.node.res.headersSent}respondWith(e){return Promise.resolve(e).then((e=>sendWebResponse(this,e)))}toString(){return`[${this.method}] ${this.path}`}toJSON(){return this.toString()}get req(){return this.node.req}get res(){return this.node.res}}function isEvent(e){return hasProp(e,"__is_event__")}function createEvent(e,t){return new H3Event(e,t)}function defineEventHandler(e){if("function"==typeof e)return e.__is_handler__=!0,e;const t={onRequest:_normalizeArray(e.onRequest),onBeforeResponse:_normalizeArray(e.onBeforeResponse)},_handler=s=>async function(e,t,s){if(s.onRequest)for(const t of s.onRequest)if(await t(e),e.handled)return;const a=await t(e),l={body:a};if(s.onBeforeResponse)for(const t of s.onBeforeResponse)await t(e,l);return l.body}(s,e.handler,t);return _handler.__is_handler__=!0,_handler.__resolve__=e.handler.__resolve__,_handler.__websocket__=e.websocket,_handler}function _normalizeArray(e){return e?Array.isArray(e)?e:[e]:void 0}const ge=defineEventHandler;function isEventHandler(e){return hasProp(e,"__is_handler__")}function toEventHandler(e,t,s){return isEventHandler(e)||console.warn("[h3] Implicit event handler conversion is deprecated. Use `eventHandler()` or `fromNodeMiddleware()` to define event handlers.",s&&"/"!==s?`\n     Route: ${s}`:"",`\n     Handler: ${e}`),e}const lazyEventHandler=function(e){let t,s;const resolveHandler=()=>s?Promise.resolve(s):(t||(t=Promise.resolve(e()).then((e=>{const t=e.default||e;if("function"!=typeof t)throw new TypeError("Invalid lazy handler result. It should be a function:",t);return s={handler:toEventHandler(e.default||e)},s}))),t),a=ge((e=>s?s.handler(e):resolveHandler().then((t=>t.handler(e)))));return a.__resolve__=resolveHandler,a};function createApp(e={}){const t=[],s=function(e,t){const s=t.debug?2:void 0;return ge((async a=>{a.node.req.originalUrl=a.node.req.originalUrl||a.node.req.url||"/";const l=a._path||a.node.req.url||"/";let c;t.onRequest&&await t.onRequest(a);for(const u of e){if(u.route.length>1){if(!l.startsWith(u.route))continue;c=l.slice(u.route.length)||"/"}else c=l;if(u.match&&!u.match(c,a))continue;a._path=c,a.node.req.url=c;const e=await u.handler(a),d=void 0===e?void 0:await e;if(void 0!==d){const e={body:d};return t.onBeforeResponse&&(a._onBeforeResponseCalled=!0,await t.onBeforeResponse(a,e)),await handleHandlerResponse(a,e.body,s),void(t.onAfterResponse&&(a._onAfterResponseCalled=!0,await t.onAfterResponse(a,e)))}if(a.handled)return void(t.onAfterResponse&&(a._onAfterResponseCalled=!0,await t.onAfterResponse(a,void 0)))}if(!a.handled)throw createError$1({statusCode:404,statusMessage:`Cannot find any path matching ${a.path||"/"}.`});t.onAfterResponse&&(a._onAfterResponseCalled=!0,await t.onAfterResponse(a,void 0))}))}(t,e),a=function(e){return async t=>{let s;for(const a of e){if("/"===a.route&&!a.handler.__resolve__)continue;if(!t.startsWith(a.route))continue;if(s=t.slice(a.route.length)||"/",a.match&&!a.match(s,void 0))continue;let e={route:a.route,handler:a.handler};if(e.handler.__resolve__){const t=await e.handler.__resolve__(s);if(!t)continue;e={...e,...t,route:joinURL(e.route||"/",t.route||"/")}}return e}}}(t);s.__resolve__=a;const l=function(e){let t;return()=>(t||(t=e()),t)}((()=>{return t=a,{...e.websocket,async resolve(e){const s=e.request?.url||e.url||"/",{pathname:a}="string"==typeof s?parseURL(s):s,l=await t(a);return l?.handler?.__websocket__||{}}};var t})),c={use:(e,t,s)=>use(c,e,t,s),resolve:a,handler:s,stack:t,options:e,get websocket(){return l()}};return c}function use(e,t,s,a){if(Array.isArray(t))for(const l of t)use(e,l,s,a);else if(Array.isArray(s))for(const l of s)use(e,t,l,a);else"string"==typeof t?e.stack.push(normalizeLayer({...a,route:t,handler:s})):"function"==typeof t?e.stack.push(normalizeLayer({...s,handler:t})):e.stack.push(normalizeLayer({...t}));return e}function normalizeLayer(e){let t=e.handler;return t.handler&&(t=t.handler),e.lazy?t=lazyEventHandler(t):isEventHandler(t)||(t=toEventHandler(t,0,e.route)),{route:withoutTrailingSlash(e.route),match:e.match,handler:t}}function handleHandlerResponse(e,t,s){if(null===t)return function(e,t){if(e.handled)return;t||200===e.node.res.statusCode||(t=e.node.res.statusCode);const s=sanitizeStatusCode(t,204);204===s&&e.node.res.removeHeader("content-length"),e.node.res.writeHead(s),e.node.res.end()}(e);if(t){if(a=t,"undefined"!=typeof Response&&a instanceof Response)return sendWebResponse(e,t);if(function(e){if(!e||"object"!=typeof e)return!1;if("function"==typeof e.pipe){if("function"==typeof e._read)return!0;if("function"==typeof e.abort)return!0}return"function"==typeof e.pipeTo}(t))return sendStream(e,t);if(t.buffer)return send(e,t);if(t.arrayBuffer&&"function"==typeof t.arrayBuffer)return t.arrayBuffer().then((s=>send(e,Buffer.from(s),t.type)));if(t instanceof Error)throw createError$1(t);if("function"==typeof t.end)return!0}var a;const l=typeof t;if("string"===l)return send(e,t,ce.html);if("object"===l||"boolean"===l||"number"===l)return send(e,JSON.stringify(t,void 0,s),ce.json);if("bigint"===l)return send(e,t.toString(),ce.json);throw createError$1({statusCode:500,statusMessage:`[h3] Cannot send ${l} as response.`})}const ye=["connect","delete","get","head","options","post","put","trace","patch"];function toNodeListener(e){return async function(t,s){const a=createEvent(t,s);try{await e.handler(a)}catch(t){const s=createError$1(t);if(isError(t)||(s.unhandled=!0),setResponseStatus(a,s.statusCode,s.statusMessage),e.options.onError&&await e.options.onError(s,a),a.handled)return;(s.unhandled||s.fatal)&&console.error("[h3]",s.fatal?"[fatal]":"[unhandled]",s),e.options.onBeforeResponse&&!a._onBeforeResponseCalled&&await e.options.onBeforeResponse(a,{body:s}),await function(e,t,s){if(e.handled)return;const a=isError(t)?t:createError$1(t),l={statusCode:a.statusCode,statusMessage:a.statusMessage,stack:[],data:a.data};if(s&&(l.stack=(a.stack||"").split("\n").map((e=>e.trim()))),e.handled)return;setResponseStatus(e,Number.parseInt(a.statusCode),a.statusMessage),e.node.res.setHeader("content-type",ce.json),e.node.res.end(JSON.stringify(l,void 0,2))}(a,s,!!e.options.debug),e.options.onAfterResponse&&!a._onAfterResponseCalled&&await e.options.onAfterResponse(a,{body:s})}}}function flatHooks(e,t={},s){for(const a in e){const l=e[a],c=s?`${s}:${a}`:a;"object"==typeof l&&null!==l?flatHooks(l,t,c):"function"==typeof l&&(t[c]=l)}return t}const we={run:e=>e()},be=void 0!==console.createTask?console.createTask:()=>we;function serialTaskCaller(e,t){const s=t.shift(),a=be(s);return e.reduce(((e,s)=>e.then((()=>a.run((()=>s(...t)))))),Promise.resolve())}function parallelTaskCaller(e,t){const s=t.shift(),a=be(s);return Promise.all(e.map((e=>a.run((()=>e(...t))))))}function callEachWith(e,t){for(const s of[...e])s(t)}class Hookable{constructor(){this._hooks={},this._before=void 0,this._after=void 0,this._deprecatedMessages=void 0,this._deprecatedHooks={},this.hook=this.hook.bind(this),this.callHook=this.callHook.bind(this),this.callHookWith=this.callHookWith.bind(this)}hook(e,t,s={}){if(!e||"function"!=typeof t)return()=>{};const a=e;let l;for(;this._deprecatedHooks[e];)l=this._deprecatedHooks[e],e=l.to;if(l&&!s.allowDeprecated){let e=l.message;e||(e=`${a} hook has been deprecated`+(l.to?`, please use ${l.to}`:"")),this._deprecatedMessages||(this._deprecatedMessages=new Set),this._deprecatedMessages.has(e)||(console.warn(e),this._deprecatedMessages.add(e))}if(!t.name)try{Object.defineProperty(t,"name",{get:()=>"_"+e.replace(/\W+/g,"_")+"_hook_cb",configurable:!0})}catch{}return this._hooks[e]=this._hooks[e]||[],this._hooks[e].push(t),()=>{t&&(this.removeHook(e,t),t=void 0)}}hookOnce(e,t){let s,_function=(...e)=>("function"==typeof s&&s(),s=void 0,_function=void 0,t(...e));return s=this.hook(e,_function),s}removeHook(e,t){if(this._hooks[e]){const s=this._hooks[e].indexOf(t);-1!==s&&this._hooks[e].splice(s,1),0===this._hooks[e].length&&delete this._hooks[e]}}deprecateHook(e,t){this._deprecatedHooks[e]="string"==typeof t?{to:t}:t;const s=this._hooks[e]||[];delete this._hooks[e];for(const t of s)this.hook(e,t)}deprecateHooks(e){Object.assign(this._deprecatedHooks,e);for(const t in e)this.deprecateHook(t,e[t])}addHooks(e){const t=flatHooks(e),s=Object.keys(t).map((e=>this.hook(e,t[e])));return()=>{for(const e of s.splice(0,s.length))e()}}removeHooks(e){const t=flatHooks(e);for(const e in t)this.removeHook(e,t[e])}removeAllHooks(){for(const e in this._hooks)delete this._hooks[e]}callHook(e,...t){return t.unshift(e),this.callHookWith(serialTaskCaller,e,...t)}callHookParallel(e,...t){return t.unshift(e),this.callHookWith(parallelTaskCaller,e,...t)}callHookWith(e,t,...s){const a=this._before||this._after?{name:t,args:s,context:{}}:void 0;this._before&&callEachWith(this._before,a);const l=e(t in this._hooks?[...this._hooks[t]]:[],s);return l instanceof Promise?l.finally((()=>{this._after&&a&&callEachWith(this._after,a)})):(this._after&&a&&callEachWith(this._after,a),l)}beforeEach(e){return this._before=this._before||[],this._before.push(e),()=>{if(void 0!==this._before){const t=this._before.indexOf(e);-1!==t&&this._before.splice(t,1)}}}afterEach(e){return this._after=this._after||[],this._after.push(e),()=>{if(void 0!==this._after){const t=this._after.indexOf(e);-1!==t&&this._after.splice(t,1)}}}}function createHooks(){return new Hookable}const ve=globalThis.Headers,_e=globalThis.AbortController,xe=globalThis.fetch||(()=>{throw new Error("[node-fetch-native] Failed to fetch: `globalThis.fetch` is not available!")});class FetchError extends Error{constructor(e,t){super(e,t),this.name="FetchError",t?.cause&&!this.cause&&(this.cause=t.cause)}}const Se=new Set(Object.freeze(["PATCH","POST","PUT","DELETE"]));function isPayloadMethod(e="GET"){return Se.has(e.toUpperCase())}const Re=new Set(["image/svg","application/xml","application/xhtml","application/html"]),je=/^application\/(?:[\w!#$%&*.^`~-]*\+)?json(;.+)?$/i;function resolveFetchOptions(e,t,s,a){const l=function(e,t,s){if(!t)return new s(e);const a=new s(t);if(e)for(const[t,l]of Symbol.iterator in e||Array.isArray(e)?e:new s(e))a.set(t,l);return a}(t?.headers??e?.headers,s?.headers,a);let c;return(s?.query||s?.params||t?.params||t?.query)&&(c={...s?.params,...s?.query,...t?.params,...t?.query}),{...s,...t,query:c,params:c,headers:l}}async function callHooks(e,t){if(t)if(Array.isArray(t))for(const s of t)await s(e);else await t(e)}const ke=new Set([408,409,425,429,500,502,503,504]),Ce=new Set([101,204,205,304]);function createFetch(e={}){const{fetch:t=globalThis.fetch,Headers:s=globalThis.Headers,AbortController:a=globalThis.AbortController}=e;async function onError(e){const t=e.error&&"AbortError"===e.error.name&&!e.options.timeout||!1;if(!1!==e.options.retry&&!t){let t;t="number"==typeof e.options.retry?e.options.retry:isPayloadMethod(e.options.method)?0:1;const s=e.response&&e.response.status||500;if(t>0&&(Array.isArray(e.options.retryStatusCodes)?e.options.retryStatusCodes.includes(s):ke.has(s))){const s="function"==typeof e.options.retryDelay?e.options.retryDelay(e):e.options.retryDelay||0;return s>0&&await new Promise((e=>setTimeout(e,s))),$fetchRaw(e.request,{...e.options,retry:t-1})}}const s=function(e){const t=e.error?.message||e.error?.toString()||"",s=e.request?.method||e.options?.method||"GET",a=e.request?.url||String(e.request)||"/",l=`[${s}] ${JSON.stringify(a)}`,c=e.response?`${e.response.status} ${e.response.statusText}`:"<no response>",u=new FetchError(`${l}: ${c}${t?` ${t}`:""}`,e.error?{cause:e.error}:void 0);for(const t of["request","options","response"])Object.defineProperty(u,t,{get:()=>e[t]});for(const[t,s]of[["data","_data"],["status","status"],["statusCode","status"],["statusText","statusText"],["statusMessage","statusText"]])Object.defineProperty(u,t,{get:()=>e.response&&e.response[s]});return u}(e);throw Error.captureStackTrace&&Error.captureStackTrace(s,$fetchRaw),s}const $fetchRaw=async function(l,c={}){const u={request:l,options:resolveFetchOptions(l,c,e.defaults,s),response:void 0,error:void 0};let d;if(u.options.method&&(u.options.method=u.options.method.toUpperCase()),u.options.onRequest&&await callHooks(u,u.options.onRequest),"string"==typeof u.request&&(u.options.baseURL&&(u.request=withBase(u.request,u.options.baseURL)),u.options.query&&(u.request=withQuery(u.request,u.options.query),delete u.options.query),"query"in u.options&&delete u.options.query,"params"in u.options&&delete u.options.params),u.options.body&&isPayloadMethod(u.options.method)&&(!function(e){if(void 0===e)return!1;const t=typeof e;return"string"===t||"number"===t||"boolean"===t||null===t||"object"===t&&(!!Array.isArray(e)||!e.buffer&&(e.constructor&&"Object"===e.constructor.name||"function"==typeof e.toJSON))}(u.options.body)?("pipeTo"in u.options.body&&"function"==typeof u.options.body.pipeTo||"function"==typeof u.options.body.pipe)&&("duplex"in u.options||(u.options.duplex="half")):(u.options.body="string"==typeof u.options.body?u.options.body:JSON.stringify(u.options.body),u.options.headers=new s(u.options.headers||{}),u.options.headers.has("content-type")||u.options.headers.set("content-type","application/json"),u.options.headers.has("accept")||u.options.headers.set("accept","application/json"))),!u.options.signal&&u.options.timeout){const e=new a;d=setTimeout((()=>{const t=new Error("[TimeoutError]: The operation was aborted due to timeout");t.name="TimeoutError",t.code=23,e.abort(t)}),u.options.timeout),u.options.signal=e.signal}try{u.response=await t(u.request,u.options)}catch(e){return u.error=e,u.options.onRequestError&&await callHooks(u,u.options.onRequestError),await onError(u)}finally{d&&clearTimeout(d)}if((u.response.body||u.response._bodyInit)&&!Ce.has(u.response.status)&&"HEAD"!==u.options.method){const e=(u.options.parseResponse?"json":u.options.responseType)||function(e=""){if(!e)return"json";const t=e.split(";").shift()||"";return je.test(t)?"json":Re.has(t)||t.startsWith("text/")?"text":"blob"}(u.response.headers.get("content-type")||"");switch(e){case"json":{const e=await u.response.text(),t=u.options.parseResponse||destr;u.response._data=t(e);break}case"stream":u.response._data=u.response.body||u.response._bodyInit;break;default:u.response._data=await u.response[e]()}}return u.options.onResponse&&await callHooks(u,u.options.onResponse),!u.options.ignoreResponseError&&u.response.status>=400&&u.response.status<600?(u.options.onResponseError&&await callHooks(u,u.options.onResponseError),await onError(u)):u.response},$fetch=async function(e,t){return(await $fetchRaw(e,t))._data};return $fetch.raw=$fetchRaw,$fetch.native=(...e)=>t(...e),$fetch.create=(t={},s={})=>createFetch({...e,...s,defaults:{...e.defaults,...s.defaults,...t}}),$fetch}const $e=globalThis.fetch?(...e)=>globalThis.fetch(...e):function(){if(!JSON.parse(e.env.FETCH_KEEP_ALIVE||"false"))return xe;const a={keepAlive:!0},l=new t.Agent(a),c=new s.Agent(a),u={agent:e=>"http:"===e.protocol?l:c};return function(e,t){return xe(e,{...u,...t})}}(),Ae=globalThis.Headers||ve,Ee=globalThis.AbortController||_e;function asyncCall(e,...t){try{return(s=e(...t))&&"function"==typeof s.then?s:Promise.resolve(s)}catch(e){return Promise.reject(e)}var s}function stringify(e){if(function(e){const t=typeof e;return null===e||"object"!==t&&"function"!==t}(e))return String(e);if(function(e){const t=Object.getPrototypeOf(e);return!t||t.isPrototypeOf(Object)}(e)||Array.isArray(e))return JSON.stringify(e);if("function"==typeof e.toJSON)return stringify(e.toJSON());throw new Error("[unstorage] Cannot stringify value!")}createFetch({fetch:$e,Headers:Ae,AbortController:Ee});const Te="base64:";function serializeRaw(e){return"string"==typeof e?e:Te+function(e){if(globalThis.Buffer)return Buffer.from(e).toString("base64");return globalThis.btoa(String.fromCodePoint(...e))}(e)}function deserializeRaw(e){return"string"!=typeof e?e:e.startsWith(Te)?function(e){if(globalThis.Buffer)return Buffer.from(e,"base64");return Uint8Array.from(globalThis.atob(e),(e=>e.codePointAt(0)))}(e.slice(7)):e}const Oe=["has","hasItem","get","getItem","getItemRaw","set","setItem","setItemRaw","del","remove","removeItem","getMeta","setMeta","removeMeta","getKeys","clear","mount","unmount"];function normalizeKey$1(e){return e&&e.split("?")[0]?.replace(/[/\\]/g,":").replace(/:+/g,":").replace(/^:|:$/g,"")||""}function joinKeys(...e){return normalizeKey$1(e.join(":"))}function normalizeBaseKey(e){return(e=normalizeKey$1(e))?e+":":""}const memory=()=>{const e=new Map;return{name:"memory",getInstance:()=>e,hasItem:t=>e.has(t),getItem:t=>e.get(t)??null,getItemRaw:t=>e.get(t)??null,setItem(t,s){e.set(t,s)},setItemRaw(t,s){e.set(t,s)},removeItem(t){e.delete(t)},getKeys:()=>[...e.keys()],clear(){e.clear()},dispose(){e.clear()}}};function watch(e,t,s){return e.watch?e.watch(((e,a)=>t(e,s+a))):()=>{}}async function dispose(e){"function"==typeof e.dispose&&await asyncCall(e.dispose)}const He={},normalizeKey=function(e){return e&&e.split("?")[0]?.replace(/[/\\]/g,":").replace(/:+/g,":").replace(/^:|:$/g,"")||""},ze={getKeys:()=>Promise.resolve(Object.keys(He)),hasItem:e=>(e=normalizeKey(e),Promise.resolve(e in He)),getItem:e=>(e=normalizeKey(e),Promise.resolve(He[e]?He[e].import():null)),getMeta:e=>(e=normalizeKey(e),Promise.resolve(He[e]?He[e].meta:{}))};function createError(e,t,s){const a=new Error(`[unstorage] [${e}] ${t}`,s);return Error.captureStackTrace&&Error.captureStackTrace(a,createError),a}function ignoreNotfound(e){return"ENOENT"===e.code||"EISDIR"===e.code?null:e}function ignoreExists(e){return"EEXIST"===e.code?null:e}async function writeFile(e,t,s){return await ensuredir(k(e)),x.writeFile(e,t,s)}function readFile(e,t){return x.readFile(e,t).catch(ignoreNotfound)}function readdir(e){return x.readdir(e,{withFileTypes:!0}).catch(ignoreNotfound).then((e=>e||[]))}async function ensuredir(e){R(e)||(await ensuredir(k(e)).catch(ignoreExists),await x.mkdir(e).catch(ignoreExists))}async function readdirRecursive(e,t,s){if(t&&t(e))return[];const a=await readdir(e),l=[];return await Promise.all(a.map((async a=>{const c=j(e,a.name);if(a.isDirectory()){if(void 0===s||s>0){const e=await readdirRecursive(c,t,void 0===s?void 0:s-1);l.push(...e.map((e=>a.name+"/"+e)))}}else t&&t(a.name)||l.push(a.name)}))),l}async function rmRecursive(e){const t=await readdir(e);await Promise.all(t.map((t=>{const s=j(e,t.name);return t.isDirectory()?rmRecursive(s).then((()=>x.rmdir(s))):x.unlink(s)})))}const Ue=/\.\.:|\.\.$/,Ne="fs-lite",unstorage_47drivers_47fs_45lite=(e={})=>{if(!e.base)throw t=Ne,s="base",Array.isArray(s)?createError(t,`Missing some of the required options ${s.map((e=>"`"+e+"`")).join(", ")}`):createError(t,`Missing required option \`${s}\`.`);var t,s;e.base=j(e.base);const r=t=>{if(Ue.test(t))throw createError(Ne,`Invalid key: ${JSON.stringify(t)}. It should not contain .. segments`);return C(e.base,t.replace(/:/g,"/"))};return{name:Ne,options:e,flags:{maxDepth:!0},hasItem:e=>R(r(e)),getItem:e=>readFile(r(e),"utf8"),getItemRaw:e=>readFile(r(e)),async getMeta(e){const{atime:t,mtime:s,size:a,birthtime:l,ctime:c}=await x.stat(r(e)).catch((()=>({})));return{atime:t,mtime:s,size:a,birthtime:l,ctime:c}},setItem(t,s){if(!e.readOnly)return writeFile(r(t),s,"utf8")},setItemRaw(t,s){if(!e.readOnly)return writeFile(r(t),s)},removeItem(t){var s;if(!e.readOnly)return s=r(t),x.unlink(s).catch(ignoreNotfound)},getKeys:(t,s)=>readdirRecursive(r("."),e.ignore,s?.maxDepth),async clear(){e.readOnly||e.noClear||await rmRecursive(r("."))}}},Pe=function(e={}){const t={mounts:{"":e.driver||memory()},mountpoints:[""],watching:!1,watchListeners:[],unwatch:{}},getMount=e=>{for(const s of t.mountpoints)if(e.startsWith(s))return{base:s,relativeKey:e.slice(s.length),driver:t.mounts[s]};return{base:"",relativeKey:e,driver:t.mounts[""]}},getMounts=(e,s)=>t.mountpoints.filter((t=>t.startsWith(e)||s&&e.startsWith(t))).map((s=>({relativeBase:e.length>s.length?e.slice(s.length):void 0,mountpoint:s,driver:t.mounts[s]}))),onChange=(e,s)=>{if(t.watching){s=normalizeKey$1(s);for(const a of t.watchListeners)a(e,s)}},stopWatch=async()=>{if(t.watching){for(const e in t.unwatch)await t.unwatch[e]();t.unwatch={},t.watching=!1}},runBatch=(e,t,s)=>{const a=new Map,getBatch=e=>{let t=a.get(e.base);return t||(t={driver:e.driver,base:e.base,items:[]},a.set(e.base,t)),t};for(const s of e){const e="string"==typeof s,a=normalizeKey$1(e?s:s.key),l=e?void 0:s.value,c=e||!s.options?t:{...t,...s.options},u=getMount(a);getBatch(u).items.push({key:a,value:l,relativeKey:u.relativeKey,options:c})}return Promise.all([...a.values()].map((e=>s(e)))).then((e=>e.flat()))},s={hasItem(e,t={}){e=normalizeKey$1(e);const{relativeKey:s,driver:a}=getMount(e);return asyncCall(a.hasItem,s,t)},getItem(e,t={}){e=normalizeKey$1(e);const{relativeKey:s,driver:a}=getMount(e);return asyncCall(a.getItem,s,t).then((e=>destr(e)))},getItems:(e,t={})=>runBatch(e,t,(e=>e.driver.getItems?asyncCall(e.driver.getItems,e.items.map((e=>({key:e.relativeKey,options:e.options}))),t).then((t=>t.map((t=>({key:joinKeys(e.base,t.key),value:destr(t.value)}))))):Promise.all(e.items.map((t=>asyncCall(e.driver.getItem,t.relativeKey,t.options).then((e=>({key:t.key,value:destr(e)})))))))),getItemRaw(e,t={}){e=normalizeKey$1(e);const{relativeKey:s,driver:a}=getMount(e);return a.getItemRaw?asyncCall(a.getItemRaw,s,t):asyncCall(a.getItem,s,t).then((e=>deserializeRaw(e)))},async setItem(e,t,a={}){if(void 0===t)return s.removeItem(e);e=normalizeKey$1(e);const{relativeKey:l,driver:c}=getMount(e);c.setItem&&(await asyncCall(c.setItem,l,stringify(t),a),c.watch||onChange("update",e))},async setItems(e,t){await runBatch(e,t,(async e=>{if(e.driver.setItems)return asyncCall(e.driver.setItems,e.items.map((e=>({key:e.relativeKey,value:stringify(e.value),options:e.options}))),t);e.driver.setItem&&await Promise.all(e.items.map((t=>asyncCall(e.driver.setItem,t.relativeKey,stringify(t.value),t.options))))}))},async setItemRaw(e,t,a={}){if(void 0===t)return s.removeItem(e,a);e=normalizeKey$1(e);const{relativeKey:l,driver:c}=getMount(e);if(c.setItemRaw)await asyncCall(c.setItemRaw,l,t,a);else{if(!c.setItem)return;await asyncCall(c.setItem,l,serializeRaw(t),a)}c.watch||onChange("update",e)},async removeItem(e,t={}){"boolean"==typeof t&&(t={removeMeta:t}),e=normalizeKey$1(e);const{relativeKey:s,driver:a}=getMount(e);a.removeItem&&(await asyncCall(a.removeItem,s,t),(t.removeMeta||t.removeMata)&&await asyncCall(a.removeItem,s+"$",t),a.watch||onChange("remove",e))},async getMeta(e,t={}){"boolean"==typeof t&&(t={nativeOnly:t}),e=normalizeKey$1(e);const{relativeKey:s,driver:a}=getMount(e),l=Object.create(null);if(a.getMeta&&Object.assign(l,await asyncCall(a.getMeta,s,t)),!t.nativeOnly){const e=await asyncCall(a.getItem,s+"$",t).then((e=>destr(e)));e&&"object"==typeof e&&("string"==typeof e.atime&&(e.atime=new Date(e.atime)),"string"==typeof e.mtime&&(e.mtime=new Date(e.mtime)),Object.assign(l,e))}return l},setMeta(e,t,s={}){return this.setItem(e+"$",t,s)},removeMeta(e,t={}){return this.removeItem(e+"$",t)},async getKeys(e,t={}){e=normalizeBaseKey(e);const s=getMounts(e,!0);let a=[];const l=[];let c=!0;for(const e of s){e.driver.flags?.maxDepth||(c=!1);const s=await asyncCall(e.driver.getKeys,e.relativeBase,t);for(const t of s){const s=e.mountpoint+normalizeKey$1(t);a.some((e=>s.startsWith(e)))||l.push(s)}a=[e.mountpoint,...a.filter((t=>!t.startsWith(e.mountpoint)))]}const u=void 0!==t.maxDepth&&!c;return l.filter((s=>(!u||function(e,t){if(void 0===t)return!0;let s=0,a=e.indexOf(":");for(;a>-1;)s++,a=e.indexOf(":",a+1);return s<=t}(s,t.maxDepth))&&function(e,t){return t?e.startsWith(t)&&"$"!==e[e.length-1]:"$"!==e[e.length-1]}(s,e)))},async clear(e,t={}){e=normalizeBaseKey(e),await Promise.all(getMounts(e,!1).map((async e=>{if(e.driver.clear)return asyncCall(e.driver.clear,e.relativeBase,t);if(e.driver.removeItem){const s=await e.driver.getKeys(e.relativeBase||"",t);return Promise.all(s.map((s=>e.driver.removeItem(s,t))))}})))},async dispose(){await Promise.all(Object.values(t.mounts).map((e=>dispose(e))))},watch:async e=>(await(async()=>{if(!t.watching){t.watching=!0;for(const e in t.mounts)t.unwatch[e]=await watch(t.mounts[e],onChange,e)}})(),t.watchListeners.push(e),async()=>{t.watchListeners=t.watchListeners.filter((t=>t!==e)),0===t.watchListeners.length&&await stopWatch()}),async unwatch(){t.watchListeners=[],await stopWatch()},mount(e,a){if((e=normalizeBaseKey(e))&&t.mounts[e])throw new Error(`already mounted at ${e}`);return e&&(t.mountpoints.push(e),t.mountpoints.sort(((e,t)=>t.length-e.length))),t.mounts[e]=a,t.watching&&Promise.resolve(watch(a,onChange,e)).then((s=>{t.unwatch[e]=s})).catch(console.error),s},async unmount(e,s=!0){(e=normalizeBaseKey(e))&&t.mounts[e]&&(t.watching&&e in t.unwatch&&(t.unwatch[e]?.(),delete t.unwatch[e]),s&&await dispose(t.mounts[e]),t.mountpoints=t.mountpoints.filter((t=>t!==e)),delete t.mounts[e])},getMount(e=""){e=normalizeKey$1(e)+":";const t=getMount(e);return{driver:t.driver,base:t.base}},getMounts(e="",t={}){e=normalizeKey$1(e);return getMounts(e,t.parents).map((e=>({driver:e.driver,base:e.mountpoint})))},keys:(e,t={})=>s.getKeys(e,t),get:(e,t={})=>s.getItem(e,t),set:(e,t,a={})=>s.setItem(e,t,a),has:(e,t={})=>s.hasItem(e,t),del:(e,t={})=>s.removeItem(e,t),remove:(e,t={})=>s.removeItem(e,t)};return s}({});function useStorage(e=""){return e?function(e,t){if(!(t=normalizeBaseKey(t)))return e;const s={...e};for(const a of Oe)s[a]=(s="",...l)=>e[a](t+s,...l);return s.getKeys=(s="",...a)=>e.getKeys(t+s,...a).then((e=>e.map((e=>e.slice(t.length))))),s}(Pe,e):Pe}function serialize$1(e){return"string"==typeof e?`'${e}'`:(new Le).serialize(e)}Pe.mount("/assets",ze),Pe.mount("data",unstorage_47drivers_47fs_45lite({driver:"fsLite",base:"./.data/kv"}));const Le=function(){class o{#e=new Map;compare(e,t){const s=typeof e,a=typeof t;return"string"===s&&"string"===a?e.localeCompare(t):"number"===s&&"number"===a?e-t:String.prototype.localeCompare.call(this.serialize(e,!0),this.serialize(t,!0))}serialize(e,t){if(null===e)return"null";switch(typeof e){case"string":return t?e:`'${e}'`;case"bigint":return`${e}n`;case"object":return this.$object(e);case"function":return this.$function(e)}return String(e)}serializeObject(e){const t=Object.prototype.toString.call(e);if("[object Object]"!==t)return this.serializeBuiltInType(t.length<10?`unknown:${t}`:t.slice(8,-1),e);const s=e.constructor,a=s===Object||void 0===s?"":s.name;if(""!==a&&globalThis[a]===s)return this.serializeBuiltInType(a,e);if("function"==typeof e.toJSON){const t=e.toJSON();return a+(null!==t&&"object"==typeof t?this.$object(t):`(${this.serialize(t)})`)}return this.serializeObjectEntries(a,Object.entries(e))}serializeBuiltInType(e,t){const s=this["$"+e];if(s)return s.call(this,t);if("function"==typeof t?.entries)return this.serializeObjectEntries(e,t.entries());throw new Error(`Cannot serialize ${e}`)}serializeObjectEntries(e,t){const s=Array.from(t).sort(((e,t)=>this.compare(e[0],t[0])));let a=`${e}{`;for(let e=0;e<s.length;e++){const[t,l]=s[e];a+=`${this.serialize(t,!0)}:${this.serialize(l)}`,e<s.length-1&&(a+=",")}return a+"}"}$object(e){let t=this.#e.get(e);return void 0===t&&(this.#e.set(e,`#${this.#e.size}`),t=this.serializeObject(e),this.#e.set(e,t)),t}$function(e){const t=Function.prototype.toString.call(e);return"[native code] }"===t.slice(-15)?`${e.name||""}()[native]`:`${e.name}(${e.length})${t.replace(/\s*\n\s*/g,"")}`}$Array(e){let t="[";for(let s=0;s<e.length;s++)t+=this.serialize(e[s]),s<e.length-1&&(t+=",");return t+"]"}$Date(e){try{return`Date(${e.toISOString()})`}catch{return"Date(null)"}}$ArrayBuffer(e){return`ArrayBuffer[${new Uint8Array(e).join(",")}]`}$Set(e){return`Set${this.$Array(Array.from(e).sort(((e,t)=>this.compare(e,t))))}`}$Map(e){return this.serializeObjectEntries("Map",e.entries())}}for(const e of["Error","RegExp","URL"])o.prototype["$"+e]=function(t){return`${e}(${t})`};for(const e of["Int8Array","Uint8Array","Uint8ClampedArray","Int16Array","Uint16Array","Int32Array","Uint32Array","Float32Array","Float64Array"])o.prototype["$"+e]=function(t){return`${e}[${t.join(",")}]`};for(const e of["BigInt64Array","BigUint64Array"])o.prototype["$"+e]=function(t){return`${e}[${t.join("n,")}${t.length>0?"n":""}]`};return o}();function isEqual(e,t){return e===t||serialize$1(e)===serialize$1(t)}const Ie=globalThis.process?.getBuiltinModule?.("crypto")?.hash,Me="sha256",qe="base64url";function digest(e){if(Ie)return Ie(Me,e,qe);const t=d(Me).update(e);return globalThis.process?.versions?.webcontainer?t.digest().toString(qe):t.digest(qe)}const Be=(()=>{class Hasher2{buff="";#t=new Map;write(e){this.buff+=e}dispatch(e){return this[null===e?"null":typeof e](e)}object(e){if(e&&"function"==typeof e.toJSON)return this.object(e.toJSON());const t=Object.prototype.toString.call(e);let s="";const a=t.length;s=a<10?"unknown:["+t+"]":t.slice(8,a-1),s=s.toLowerCase();let l=null;if(void 0!==(l=this.#t.get(e)))return this.dispatch("[CIRCULAR:"+l+"]");if(this.#t.set(e,this.#t.size),"undefined"!=typeof Buffer&&Buffer.isBuffer&&Buffer.isBuffer(e))return this.write("buffer:"),this.write(e.toString("utf8"));if("object"!==s&&"function"!==s&&"asyncfunction"!==s)this[s]?this[s](e):this.unknown(e,s);else{const t=Object.keys(e).sort(),s=[];this.write("object:"+(t.length+s.length)+":");const dispatchForKey=t=>{this.dispatch(t),this.write(":"),this.dispatch(e[t]),this.write(",")};for(const e of t)dispatchForKey(e);for(const e of s)dispatchForKey(e)}}array(e,t){if(t=void 0!==t&&t,this.write("array:"+e.length+":"),!t||e.length<=1){for(const t of e)this.dispatch(t);return}const s=new Map,a=e.map((e=>{const t=new Hasher2;t.dispatch(e);for(const[e,a]of t.#t)s.set(e,a);return t.toString()}));return this.#t=s,a.sort(),this.array(a,!1)}date(e){return this.write("date:"+e.toJSON())}symbol(e){return this.write("symbol:"+e.toString())}unknown(e,t){if(this.write(t),e)return this.write(":"),e&&"function"==typeof e.entries?this.array([...e.entries()],!0):void 0}error(e){return this.write("error:"+e.toString())}boolean(e){return this.write("bool:"+e)}string(e){this.write("string:"+e.length+":"),this.write(e)}function(e){this.write("fn:"),!function(e){if("function"!=typeof e)return!1;return"[native code] }"===Function.prototype.toString.call(e).slice(-15)}(e)?this.dispatch(e.toString()):this.dispatch("[native]")}number(e){return this.write("number:"+e)}null(){return this.write("Null")}undefined(){return this.write("Undefined")}regexp(e){return this.write("regex:"+e.toString())}arraybuffer(e){return this.write("arraybuffer:"),this.dispatch(new Uint8Array(e))}url(e){return this.write("url:"+e.toString())}map(e){this.write("map:");const t=[...e];return this.array(t,!1)}set(e){this.write("set:");const t=[...e];return this.array(t,!1)}bigint(e){return this.write("bigint:"+e.toString())}}for(const e of["uint8array","uint8clampedarray","unt8array","uint16array","unt16array","uint32array","unt32array","float32array","float64array"])Hasher2.prototype[e]=function(t){return this.write(e+":"),this.array([...t],!1)};return Hasher2})();function hash(e){return digest("string"==typeof e?e:function(e){const t=new Be;return t.dispatch(e),t.buff}(e)).replace(/[-_]/g,"").slice(0,10)}function defineCachedFunction(e,t={}){t={name:"_",base:"/cache",swr:!0,maxAge:1,...t};const s={},a=t.group||"nitro/functions",l=t.name||e.name||"_",c=t.integrity||hash([e,t]),u=t.validate||(e=>void 0!==e.value);return async(...d)=>{if(await(t.shouldBypassCache?.(...d)))return e(...d);const h=await(t.getKey||getKey)(...d),m=await(t.shouldInvalidateCache?.(...d)),f=await async function(e,d,h,m){const f=[t.base,a,l,e+".json"].filter(Boolean).join(":").replace(/:\/$/,":index");let g=await useStorage().getItem(f).catch((e=>{console.error("[cache] Cache read error.",e),useNitroApp().captureError(e,{event:m,tags:["cache"]})}))||{};if("object"!=typeof g){g={};const e=new Error("Malformed data read from cache.");console.error("[cache]",e),useNitroApp().captureError(e,{event:m,tags:["cache"]})}const v=1e3*(t.maxAge??0);v&&(g.expires=Date.now()+v);const _=h||g.integrity!==c||v&&Date.now()-(g.mtime||0)>v||!1===u(g),x=_?(async()=>{const a=s[e];a||(void 0!==g.value&&(t.staleMaxAge||0)>=0&&!1===t.swr&&(g.value=void 0,g.integrity=void 0,g.mtime=void 0,g.expires=void 0),s[e]=Promise.resolve(d()));try{g.value=await s[e]}catch(t){throw a||delete s[e],t}if(!a&&(g.mtime=Date.now(),g.integrity=c,delete s[e],!1!==u(g))){let e;t.maxAge&&!t.swr&&(e={ttl:t.maxAge});const s=useStorage().setItem(f,g,e).catch((e=>{console.error("[cache] Cache write error.",e),useNitroApp().captureError(e,{event:m,tags:["cache"]})}));m?.waitUntil&&m.waitUntil(s)}})():Promise.resolve();return void 0===g.value?await x:_&&m&&m.waitUntil&&m.waitUntil(x),t.swr&&!1!==u(g)?(x.catch((e=>{console.error("[cache] SWR handler error.",e),useNitroApp().captureError(e,{event:m,tags:["cache"]})})),g):x.then((()=>g))}(h,(()=>e(...d)),m,d[0]&&isEvent(d[0])?d[0]:void 0);let g=f.value;return t.transform&&(g=await t.transform(f,...d)||g),g}}function getKey(...e){return e.length>0?hash(e):""}function escapeKey(e){return String(e).replace(/\W/g,"")}function defineCachedEventHandler(e,t={name:"_",base:"/cache",swr:!0,maxAge:1}){const s=(t.varies||[]).filter(Boolean).map((e=>e.toLowerCase())).sort(),a={...t,getKey:async e=>{const a=await(t.getKey?.(e));if(a)return escapeKey(a);const l=e.node.req.originalUrl||e.node.req.url||e.path;let c;try{c=escapeKey(decodeURI(parseURL(l).pathname)).slice(0,16)||"index"}catch{c="-"}return[`${c}.${hash(l)}`,...s.map((t=>[t,e.node.req.headers[t]])).map((([e,t])=>`${escapeKey(e)}.${hash(t)}`))].join(":")},validate:e=>!!e.value&&(!(e.value.code>=400)&&(void 0!==e.value.body&&("undefined"!==e.value.headers.etag&&"undefined"!==e.value.headers["last-modified"]))),group:t.group||"nitro/handlers",integrity:t.integrity||hash([e,t])},l=function(e,t={}){return defineCachedFunction(e,t)}((async l=>{const c={};for(const e of s){const t=l.node.req.headers[e];void 0!==t&&(c[e]=t)}const u=cloneWithProxy(l.node.req,{headers:c}),d={};let h;const m=createEvent(u,cloneWithProxy(l.node.res,{statusCode:200,writableEnded:!1,writableFinished:!1,headersSent:!1,closed:!1,getHeader:e=>d[e],setHeader(e,t){return d[e]=t,this},getHeaderNames:()=>Object.keys(d),hasHeader:e=>e in d,removeHeader(e){delete d[e]},getHeaders:()=>d,end(e,t,s){return"string"==typeof e&&(h=e),"function"==typeof t&&t(),"function"==typeof s&&s(),this},write:(e,t,s)=>("string"==typeof e&&(h=e),"function"==typeof t&&t(void 0),"function"==typeof s&&s(),!0),writeHead(e,t){if(this.statusCode=e,t){if(Array.isArray(t)||"string"==typeof t)throw new TypeError("Raw headers  is not supported.");for(const e in t){const s=t[e];void 0!==s&&this.setHeader(e,s)}}return this}}));m.fetch=(e,t)=>fetchWithEvent(m,e,t,{fetch:useNitroApp().localFetch}),m.$fetch=(e,t)=>fetchWithEvent(m,e,t,{fetch:globalThis.$fetch}),m.waitUntil=l.waitUntil,m.context=l.context,m.context.cache={options:a};const f=await e(m)||h,g=m.node.res.getHeaders();g.etag=String(g.Etag||g.etag||`W/"${hash(f)}"`),g["last-modified"]=String(g["Last-Modified"]||g["last-modified"]||(new Date).toUTCString());const v=[];t.swr?(t.maxAge&&v.push(`s-maxage=${t.maxAge}`),t.staleMaxAge?v.push(`stale-while-revalidate=${t.staleMaxAge}`):v.push("stale-while-revalidate")):t.maxAge&&v.push(`max-age=${t.maxAge}`),v.length>0&&(g["cache-control"]=v.join(", "));return{code:m.node.res.statusCode,headers:g,body:f}}),a);return defineEventHandler((async s=>{if(t.headersOnly){if(handleCacheHeaders(s,{maxAge:t.maxAge}))return;return e(s)}const a=await l(s);if(s.node.res.headersSent||s.node.res.writableEnded)return a.body;if(!handleCacheHeaders(s,{modifiedTime:new Date(a.headers["last-modified"]),etag:a.headers.etag,maxAge:t.maxAge})){s.node.res.statusCode=a.code;for(const e in a.headers){const t=a.headers[e];"set-cookie"===e?s.node.res.appendHeader(e,splitCookiesString(t)):void 0!==t&&s.node.res.setHeader(e,t)}return a.body}}))}function cloneWithProxy(e,t){return new Proxy(e,{get:(e,s,a)=>s in t?t[s]:Reflect.get(e,s,a),set:(e,s,a,l)=>s in t?(t[s]=a,!0):Reflect.set(e,s,a,l)})}const Fe=defineCachedEventHandler;function klona(e){if("object"!=typeof e)return e;var t,s,a=Object.prototype.toString.call(e);if("[object Object]"===a){if(e.constructor!==Object&&"function"==typeof e.constructor)for(t in s=new e.constructor,e)e.hasOwnProperty(t)&&s[t]!==e[t]&&(s[t]=klona(e[t]));else for(t in s={},e)"__proto__"===t?Object.defineProperty(s,t,{value:klona(e[t]),configurable:!0,enumerable:!0,writable:!0}):s[t]=klona(e[t]);return s}if("[object Array]"===a){for(t=e.length,s=Array(t);t--;)s[t]=klona(e[t]);return s}return"[object Set]"===a?(s=new Set,e.forEach((function(e){s.add(klona(e))})),s):"[object Map]"===a?(s=new Map,e.forEach((function(e,t){s.set(klona(t),klona(e))})),s):"[object Date]"===a?new Date(+e):"[object RegExp]"===a?((s=new RegExp(e.source,e.flags)).lastIndex=e.lastIndex,s):"[object DataView]"===a?new e.constructor(klona(e.buffer)):"[object ArrayBuffer]"===a?e.slice(0):"Array]"===a.slice(-6)?new e.constructor(e):e}const De=G({nuxt:{},icon:{provider:"server",class:"",aliases:{},iconifyApiEndpoint:"https://api.iconify.design",localApiEndpoint:"/api/_nuxt_icon",fallbackToApi:!0,cssSelectorPrefix:"i-",cssWherePseudo:!0,mode:"css",attrs:{"aria-hidden":!0},collections:["material-symbols"],fetchTimeout:1500}}),We=/\d/,Ke=["-","_","/","."];function isUppercase(e=""){if(!We.test(e))return e!==e.toLowerCase()}function splitByCase(e,t){const s=Ke,a=[];if(!e||"string"!=typeof e)return a;let l,c,u="";for(const t of e){const e=s.includes(t);if(!0===e){a.push(u),u="",l=void 0;continue}const d=isUppercase(t);if(!1===c){if(!1===l&&!0===d){a.push(u),u=t,l=d;continue}if(!0===l&&!1===d&&u.length>1){const e=u.at(-1);a.push(u.slice(0,Math.max(0,u.length-1))),u=e+t,l=d;continue}}u+=t,l=d,c=e}return a.push(u),a}function camelCase(e,t){return function(e){return e?e[0].toLowerCase()+e.slice(1):""}(function(e){return e?(Array.isArray(e)?e:splitByCase(e)).map((e=>function(e){return e?e[0].toUpperCase()+e.slice(1):""}(e))).join(""):""}(e||""))}function snakeCase(e){return function(e,t){return e?(Array.isArray(e)?e:splitByCase(e)).map((e=>e.toLowerCase())).join(t):""}(e||"","_")}function getEnv(t,s){const a=snakeCase(t).toUpperCase();return destr(e.env[s.prefix+a]??e.env[s.altPrefix+a])}function _isObject(e){return"object"==typeof e&&!Array.isArray(e)}function applyEnv(t,s,a=""){for(const l in t){const c=a?`${a}_${l}`:l,u=getEnv(c,s);_isObject(t[l])?_isObject(u)?(t[l]={...t[l],...u},applyEnv(t[l],s,c)):void 0===u?applyEnv(t[l],s,c):t[l]=u??t[l]:t[l]=u??t[l],s.envExpansion&&"string"==typeof t[l]&&(t[l]=t[l].replace(Xe,((t,s)=>e.env[s]||t)))}return t}const Xe=/\{\{([^{}]*)\}\}/g;const Je={app:{baseURL:"/",buildId:"4f5ee2e9-7305-477c-ba66-148da9bfd488",buildAssetsDir:"/_nuxt/",cdnURL:""},nitro:{envPrefix:"NUXT_",routeRules:{"/__nuxt_error":{cache:!1,isr:!1},"/images/**":{static:!0,isr:!1},"/icons/**":{static:!0,isr:!1},"/api/**":{headers:{"Cache-Control":"no-cache, no-store, must-revalidate",Pragma:"no-cache",Expires:"0"}},"/sitemap.xsl":{headers:{"Content-Type":"application/xslt+xml"}},"/sitemap_index.xml":{swr:600,cache:{varies:["X-Forwarded-Host","X-Forwarded-Proto","Host"],swr:!0,maxAge:600},isr:!0},"/index-sitemap.xml":{swr:600,cache:{varies:["X-Forwarded-Host","X-Forwarded-Proto","Host"],swr:!0,maxAge:600},isr:!0},"/en-US-sitemap.xml":{swr:600,cache:{varies:["X-Forwarded-Host","X-Forwarded-Proto","Host"],swr:!0,maxAge:600},isr:!0},"/ar-SA-sitemap.xml":{swr:600,cache:{varies:["X-Forwarded-Host","X-Forwarded-Proto","Host"],swr:!0,maxAge:600},isr:!0},"/_nuxt/builds/meta/**":{headers:{"cache-control":"public, max-age=31536000, immutable"}},"/_nuxt/builds/**":{headers:{"cache-control":"public, max-age=1, immutable"}},"/_nuxt/**":{headers:{"cache-control":"public, max-age=31536000, immutable"}}}},public:{siteUrl:"https://travelin-agency.vercel.app",publicSiteUrl:"https://travelin-agency.vercel.app",i18n:{baseUrl:"",defaultLocale:"ar-SA",defaultDirection:"ltr",strategy:"prefix_except_default",lazy:!0,rootRedirect:"",routesNameSeparator:"___",defaultLocaleRouteNameSuffix:"default",skipSettingLocaleOnNavigate:!1,differentDomains:!1,trailingSlash:!0,configLocales:[{code:"en-US",language:"en-US",name:"English",dir:"ltr"},{code:"ar-SA",language:"ar-SA",name:"العربية",dir:"rtl"}],locales:{"en-US":{domain:""},"ar-SA":{domain:""}},detectBrowserLanguage:!1,experimental:{localeDetector:"",switchLocalePathLinkSSR:!1,autoImportTranslationFunctions:!1},multiDomainLocales:!1},aos:{offset:15,duration:600,easing:"ease-out-quad",once:!0,delay:100,mirror:!0}},dbHost:"localhost",dbPort:"3306",dbUser:"travel",dbPassword:"support@Passord123",dbName:"travel",jwtSecret:"your-super-secret-jwt-key-change-this-in-production",twilioAccountSid:"your_twilio_account_sid",twilioAuthToken:"your_twilio_auth_token",twilioPhoneNumber:"your_twilio_phone_number",salesManagerPhone:"your_sales_manager_phone","nuxt-schema-org":{reactive:!1,minify:!0,scriptAttributes:{id:"schema-org-graph"},identity:"",version:"3.4.7"},"nuxt-simple-sitemap":{isI18nMapped:!0,sitemapName:"sitemap.xml",isMultiSitemap:!0,excludeAppSources:[],autoLastmod:!1,defaultSitemapsChunkSize:1e3,sortEntries:!0,debug:!1,discoverImages:!0,isNuxtContentDocumentDriven:!1,xsl:"/__sitemap__/style.xsl",xslTips:!0,xslColumns:[{label:"URL",width:"50%"},{label:"Images",width:"25%",select:"count(image:image)"},{label:"Last Updated",width:"25%",select:"concat(substring(sitemap:lastmod,0,11),concat(' ', substring(sitemap:lastmod,12,5)),concat(' ', substring(sitemap:lastmod,20,6)))"}],credits:!0,version:"4.4.0",sitemaps:{index:{sitemapName:"index",_route:"sitemap_index.xml",sitemaps:[],include:[],exclude:[]},"en-US":{include:[],exclude:["/_nuxt/**","/api/**"],includeAppSources:!0,sitemapName:"en-US",_route:"en-US-sitemap.xml",_hasSourceChunk:!1},"ar-SA":{include:[],exclude:["/_nuxt/**","/api/**"],includeAppSources:!0,sitemapName:"ar-SA",_route:"ar-SA-sitemap.xml",_hasSourceChunk:!1}},autoI18n:{differentDomains:!1,defaultLocale:"ar-SA",locales:[{code:"en-US",language:"en-US",name:"English",dir:"ltr"},{code:"ar-SA",language:"ar-SA",name:"العربية",dir:"rtl"}],strategy:"prefix_except_default"}},icon:{serverKnownCssClasses:[]},"nuxt-site-config":{stack:[{_context:"system",_priority:-15,name:"TravelinAgency",env:"production"},{_context:"package.json",_priority:-10,name:"nuxt-app"},{_context:"@nuxtjs/i18n",defaultLocale:"ar-SA"}],version:"2.2.21",debug:!1},ipx:{baseURL:"/_ipx",alias:{},fs:{dir:"../../static"},http:{domains:["images.unsplash.com","images.pexels.com"]}}},Qe={prefix:"NITRO_",altPrefix:Je.nitro.envPrefix??e.env.NITRO_ENV_PREFIX??"_",envExpansion:Je.nitro.envExpansion??e.env.NITRO_ENV_EXPANSION??!1},Ve=_deepFreeze(applyEnv(klona(Je),Qe));function useRuntimeConfig(e){if(!e)return Ve;if(e.context.nitro.runtimeConfig)return e.context.nitro.runtimeConfig;const t=klona(Je);return applyEnv(t,Qe),e.context.nitro.runtimeConfig=t,t}const Ye=_deepFreeze(klona(De));function useAppConfig(e){if(!e)return Ye;if(e.context.nitro.appConfig)return e.context.nitro.appConfig;const t=klona(De);return e.context.nitro.appConfig=t,t}function _deepFreeze(e){const t=Object.getOwnPropertyNames(e);for(const s of t){const t=e[s];t&&"object"==typeof t&&_deepFreeze(t)}return Object.freeze(e)}new Proxy(Object.create(null),{get:(e,t)=>{console.warn("Please use `useRuntimeConfig()` instead of accessing config directly.");const s=useRuntimeConfig();if(t in s)return s[t]}});const Ge="undefined"!=typeof globalThis?globalThis:"undefined"!=typeof self?self:"undefined"!=typeof global?global:{},Ze="__unctx__",et=Ge[Ze]||(Ge[Ze]=function(e={}){const t={};return{get:(s,a={})=>(t[s]||(t[s]=function(e={}){let t,s=!1;const checkConflict=e=>{if(t&&t!==e)throw new Error("Context conflict")};let a;if(e.asyncContext){const t=e.AsyncLocalStorage||globalThis.AsyncLocalStorage;t?a=new t:console.warn("[unctx] `AsyncLocalStorage` is not provided.")}const _getCurrentInstance=()=>{if(a){const e=a.getStore();if(void 0!==e)return e}return t};return{use:()=>{const e=_getCurrentInstance();if(void 0===e)throw new Error("Context is not available");return e},tryUse:()=>_getCurrentInstance(),set:(e,a)=>{a||checkConflict(e),t=e,s=!0},unset:()=>{t=void 0,s=!1},call:(e,l)=>{checkConflict(e),t=e;try{return a?a.run(e,l):l()}finally{s||(t=void 0)}},async callAsync(e,l){t=e;const onRestore=()=>{t=e},onLeave=()=>t===e?onRestore:void 0;rt.add(onLeave);try{const c=a?a.run(e,l):l();return s||(t=void 0),await c}finally{rt.delete(onLeave)}}}}({...e,...a})),t[s])}}()),getContext=(e,t={})=>et.get(e,t),tt="__unctx_async_handlers__",rt=Ge[tt]||(Ge[tt]=new Set);function executeAsync(e){const t=[];for(const e of rt){const s=e();s&&t.push(s)}const restore=()=>{for(const e of t)e()};let s=e();return s&&"object"==typeof s&&"catch"in s&&(s=s.catch((e=>{throw restore(),e}))),[s,restore]}const ot=toRouteMatcher(createRouter$1({routes:useRuntimeConfig().nitro.routeRules}));function getRouteRules(e){return e.context._nitro=e.context._nitro||{},e.context._nitro.routeRules||(e.context._nitro.routeRules=getRouteRulesForPath(withoutBase(e.path.split("?")[0],useRuntimeConfig().app.baseURL))),e.context._nitro.routeRules}function getRouteRulesForPath(e){return Y({},...ot.matchAll(e).reverse())}function joinHeaders(e){return Array.isArray(e)?e.join(", "):String(e)}function normalizeCookieHeader(e=""){return splitCookiesString(joinHeaders(e))}function normalizeCookieHeaders(e){const t=new Headers;for(const[s,a]of e)if("set-cookie"===s)for(const e of normalizeCookieHeader(a))t.append("set-cookie",e);else t.set(s,joinHeaders(a));return t}function hasReqHeader(e,t,s){const a=getRequestHeader(e,t);return a&&"string"==typeof a&&a.toLowerCase().includes(s)}function defaultHandler(e,t,s){const a=e.unhandled||e.fatal,l=e.statusCode||500,c=e.statusMessage||"Server Error",u=getRequestURL(t,{xForwardedHost:!0,xForwardedProto:!0});if(404===l){const e="/";if(/^\/[^/]/.test(e)&&!u.pathname.startsWith(e)){return{status:302,statusText:"Found",headers:{location:`${e}${u.pathname.slice(1)}${u.search}`},body:"Redirecting..."}}}if(a&&!s?.silent){const s=[e.unhandled&&"[unhandled]",e.fatal&&"[fatal]"].filter(Boolean).join(" ");console.error(`[request error] ${s} [${t.method}] ${u}\n`,e)}const d={"content-type":"application/json","x-content-type-options":"nosniff","x-frame-options":"DENY","referrer-policy":"no-referrer","content-security-policy":"script-src 'none'; frame-ancestors 'none';"};setResponseStatus(t,l,c),404!==l&&function(e,t){return e.node.res.getHeader(t)}(t,"cache-control")||(d["cache-control"]="no-cache");return{status:l,statusText:c,headers:d,body:{error:!0,url:u.href,statusCode:l,statusMessage:c,message:a?"Server Error":e.message,data:a?void 0:e.data}}}const nt=[async function(e,t,{defaultHandler:s}){if(function(e){return!hasReqHeader(e,"accept","text/html")&&(hasReqHeader(e,"accept","application/json")||hasReqHeader(e,"user-agent","curl/")||hasReqHeader(e,"user-agent","httpie/")||hasReqHeader(e,"sec-fetch-mode","cors")||e.path.startsWith("/api/")||e.path.endsWith(".json"))}(t))return;const a=await s(e,t,{json:!0});if(404===(e.statusCode||500)&&302===a.status)return setResponseHeaders(t,a.headers),setResponseStatus(t,a.status,a.statusText),send(t,JSON.stringify(a.body,null,2));const l=a.body,c=new URL(l.url);l.url=c.pathname+c.search+c.hash,l.message||="Server Error",l.data||=e.data,delete a.headers["content-type"],delete a.headers["content-security-policy"],setResponseHeaders(t,a.headers);const u=getRequestHeaders(t),d=t.path.startsWith("/__nuxt_error")||!!u["x-nuxt-error"]?null:await useNitroApp().localFetch(withQuery(joinURL(useRuntimeConfig(t).app.baseURL,"/__nuxt_error"),l),{headers:{...u,"x-nuxt-error":"true"},redirect:"manual"}).catch((()=>null));if(t.handled)return;if(!d){const{template:e}=await import("./error-500.mjs");return setResponseHeader(t,"Content-Type","text/html;charset=UTF-8"),send(t,e(l))}const h=await d.text();for(const[e,s]of d.headers.entries())setResponseHeader(t,e,s);return setResponseStatus(t,d.status&&200!==d.status?d.status:a.status,d.statusText||a.statusText),send(t,h)},function(e,t){const s=defaultHandler(e,t);return setResponseHeaders(t,s.headers),setResponseStatus(t,s.status,s.statusText),send(t,JSON.stringify(s.body,null,2))}];function defineRenderHandler(e){const t=useRuntimeConfig();return ge((async s=>{const a=useNitroApp(),l={event:s,render:e,response:void 0};if(await a.hooks.callHook("render:before",l),!l.response){if(s.path===`${t.app.baseURL}favicon.ico`)return setResponseHeader(s,"Content-Type","image/x-icon"),send(s,"data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7");if(l.response=await l.render(s),!l.response){const e=getResponseStatus(s);return setResponseStatus(s,200===e?500:e),send(s,"No response returned from render handler: "+s.path)}}return await a.hooks.callHook("render:response",l.response,l),l.response.headers&&setResponseHeaders(s,l.response.headers),(l.response.statusCode||l.response.statusMessage)&&setResponseStatus(s,l.response.statusCode,l.response.statusMessage),l.response.body}))}function buildAssetsURL(...e){return joinRelativeURL(publicAssetsURL(),useRuntimeConfig().app.buildAssetsDir,...e)}function publicAssetsURL(...e){const t=useRuntimeConfig().app,s=t.cdnURL||t.baseURL;return e.length?joinRelativeURL(s,...e):s}function createSiteConfigStack(e){const t=e?.debug||!1,s=[];return{stack:s,push:function(e){if(!e||"object"!=typeof e||0===Object.keys(e).length)return;if(!e._context&&t){let t=new Error("tmp").stack?.split("\n")[2].split(" ")[5];t?.includes("/")&&(t="anonymous"),e._context=t}const a={};for(const t in e){const s=e[t];void 0!==s&&""!==s&&(a[t]=s)}Object.keys(a).filter((e=>!e.startsWith("_"))).length>0&&s.push(a)},get:function(e){const t={};e?.debug&&(t._context={});for(const a in s.sort(((e,t)=>(e._priority||0)-(t._priority||0))))for(const l in s[a]){const u=l,d=e?.resolveRefs?c(s[a][l]):s[a][l];l.startsWith("_")||void 0===d||(t[l]=d,e?.debug&&(t._context[u]=s[a]._context?.[u]||s[a]._context||"anonymous"))}return e?.skipNormalize?t:function(e){void 0!==e.indexable&&(e.indexable="false"!==String(e.indexable)),void 0===e.trailingSlash||e.trailingSlash||(e.trailingSlash="false"!==String(e.trailingSlash)),e.url&&!hasProtocol(e.url,{acceptRelative:!0,strict:!1})&&(e.url=withHttps(e.url));const t=Object.keys(e).sort(((e,t)=>e.localeCompare(t))),s={};for(const a of t)s[a]=e[a];return s}(t)}}}function useNitroOrigin(t){e.env.NITRO_SSL_CERT,e.env.NITRO_SSL_KEY;let s=e.env.NITRO_HOST||e.env.HOST||!1,a=!1,l="https";return s=getRequestHost(t,{xForwardedHost:!0})||s,l=getRequestProtocol(t,{xForwardedProto:!0})||l,"string"==typeof s&&s.includes(":")&&(a=s.split(":").pop(),s=s.split(":")[0]),a=a?`:${a}`:"",withTrailingSlash(`${l}://${s}${a}`)}function useSiteConfig(e,t){e.context.siteConfig=e.context.siteConfig||createSiteConfigStack();const s=Y(t,useRuntimeConfig(e)["nuxt-site-config"],{debug:!1});return e.context.siteConfig.get(s)}function resolveSitePath(e,t){let s=e;if(hasProtocol(e,{strict:!1,acceptRelative:!0})){s=parseURL(e).pathname}const a=withLeadingSlash(t.base||"/");"/"!==a&&s.startsWith(a)&&(s=s.slice(a.length));let l=withoutTrailingSlash(t.absolute?t.siteUrl:"");"/"!==a&&l.endsWith(a)&&(l=l.slice(0,l.indexOf(a)));const c=t.withBase?withBase(a,l||"/"):l,u=withBase(s,c);return"/"!==s||t.withBase?fixSlashes(t.trailingSlash,u):withTrailingSlash(u)}function fixSlashes(e,t){const s=parseURL(t);if(function(e){const t=e.split("/").pop();return!!(t||e).match(/\.[0-9a-z]+$/i)?.[0]}(s.pathname))return t;const a=e?withTrailingSlash(s.pathname):withoutTrailingSlash(s.pathname);return`${s.protocol?`${s.protocol}//`:""}${s.host||""}${a}${s.search||""}${s.hash||""}`}function createSitePathResolver(e,t={}){const s=useSiteConfig(e),a=useNitroOrigin(e),l=useRuntimeConfig(e).app.baseURL||"/";return e=>resolveSitePath(e,{...t,siteUrl:!1!==t.canonical?s.url:a,trailingSlash:s.trailingSlash,base:l})}const st="abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ_$",at=/[<>\b\f\n\r\t\0\u2028\u2029]/g,it=/^(?:do|if|in|for|int|let|new|try|var|byte|case|char|else|enum|goto|long|this|void|with|await|break|catch|class|const|final|float|short|super|throw|while|yield|delete|double|export|import|native|return|switch|throws|typeof|boolean|default|extends|finally|package|private|abstract|continue|debugger|function|volatile|interface|protected|transient|implements|instanceof|synchronized)$/,lt={"<":"\\u003C",">":"\\u003E","/":"\\u002F","\\":"\\\\","\b":"\\b","\f":"\\f","\n":"\\n","\r":"\\r","\t":"\\t","\0":"\\0","\u2028":"\\u2028","\u2029":"\\u2029"},ct=Object.getOwnPropertyNames(Object.prototype).sort().join("\0");function devalue(e){const t=new Map;let s=0;function log(e){s<100&&(console.warn(e),s+=1)}!function walk(e){if("function"!=typeof e){if(t.has(e))t.set(e,t.get(e)+1);else if(t.set(e,1),!isPrimitive(e)){switch(getType(e)){case"Number":case"String":case"Boolean":case"Date":case"RegExp":return;case"Array":e.forEach(walk);break;case"Set":case"Map":Array.from(e).forEach(walk);break;default:const t=Object.getPrototypeOf(e);t!==Object.prototype&&null!==t&&Object.getOwnPropertyNames(t).sort().join("\0")!==ct?"function"!=typeof e.toJSON&&log(`Cannot stringify arbitrary non-POJOs ${e.constructor.name}`):Object.getOwnPropertySymbols(e).length>0?log(`Cannot stringify POJOs with symbolic keys ${Object.getOwnPropertySymbols(e).map((e=>e.toString()))}`):Object.keys(e).forEach((t=>walk(e[t])))}}}else log(`Cannot stringify a function ${e.name}`)}(e);const a=new Map;function stringify(e){if(a.has(e))return a.get(e);if(isPrimitive(e))return stringifyPrimitive(e);const t=getType(e);switch(t){case"Number":case"String":case"Boolean":return`Object(${stringify(e.valueOf())})`;case"RegExp":return e.toString();case"Date":return`new Date(${e.getTime()})`;case"Array":const s=e.map(((t,s)=>s in e?stringify(t):"")),a=0===e.length||e.length-1 in e?"":",";return`[${s.join(",")}${a}]`;case"Set":case"Map":return`new ${t}([${Array.from(e).map(stringify).join(",")}])`;default:if(e.toJSON){let t=e.toJSON();if("String"===getType(t))try{t=JSON.parse(t)}catch(e){}return stringify(t)}return null===Object.getPrototypeOf(e)?0===Object.keys(e).length?"Object.create(null)":`Object.create(null,{${Object.keys(e).map((t=>`${safeKey(t)}:{writable:true,enumerable:true,value:${stringify(e[t])}}`)).join(",")}})`:`{${Object.keys(e).map((t=>`${safeKey(t)}:${stringify(e[t])}`)).join(",")}}`}}Array.from(t).filter((e=>e[1]>1)).sort(((e,t)=>t[1]-e[1])).forEach(((e,t)=>{a.set(e[0],function(e){let t="";do{t=st[e%54]+t,e=~~(e/54)-1}while(e>=0);return it.test(t)?`${t}0`:t}(t))}));const l=stringify(e);if(a.size){const e=[],t=[],s=[];return a.forEach(((a,l)=>{if(e.push(a),isPrimitive(l))return void s.push(stringifyPrimitive(l));switch(getType(l)){case"Number":case"String":case"Boolean":s.push(`Object(${stringify(l.valueOf())})`);break;case"RegExp":s.push(l.toString());break;case"Date":s.push(`new Date(${l.getTime()})`);break;case"Array":s.push(`Array(${l.length})`),l.forEach(((e,s)=>{t.push(`${a}[${s}]=${stringify(e)}`)}));break;case"Set":s.push("new Set"),t.push(`${a}.${Array.from(l).map((e=>`add(${stringify(e)})`)).join(".")}`);break;case"Map":s.push("new Map"),t.push(`${a}.${Array.from(l).map((([e,t])=>`set(${stringify(e)}, ${stringify(t)})`)).join(".")}`);break;default:s.push(null===Object.getPrototypeOf(l)?"Object.create(null)":"{}"),Object.keys(l).forEach((e=>{t.push(`${a}${function(e){return/^[_$a-zA-Z][_$a-zA-Z0-9]*$/.test(e)?`.${e}`:`[${escapeUnsafeChars(JSON.stringify(e))}]`}(e)}=${stringify(l[e])}`)}))}})),t.push(`return ${l}`),`(function(${e.join(",")}){${t.join(";")}}(${s.join(",")}))`}return l}function isPrimitive(e){return Object(e)!==e}function stringifyPrimitive(e){if("string"==typeof e)return function(e){let t='"';for(let s=0;s<e.length;s+=1){const a=e.charAt(s),l=a.charCodeAt(0);if('"'===a)t+='\\"';else if(a in lt)t+=lt[a];else if(l>=55296&&l<=57343){const c=e.charCodeAt(s+1);t+=l<=56319&&c>=56320&&c<=57343?a+e[++s]:`\\u${l.toString(16).toUpperCase()}`}else t+=a}return t+='"',t}(e);if(void 0===e)return"void 0";if(0===e&&1/e<0)return"-0";const t=String(e);return"number"==typeof e?t.replace(/^(-)?0\./,"$1."):t}function getType(e){return Object.prototype.toString.call(e).slice(8,-1)}function escapeUnsafeChar(e){return lt[e]||e}function escapeUnsafeChars(e){return e.replace(at,escapeUnsafeChar)}function safeKey(e){return/^[_$a-zA-Z][_$a-zA-Z0-9]*$/.test(e)?e:escapeUnsafeChars(JSON.stringify(e))}const _yAjt0_tp5nbu9wV2uydJVIPOfYOxPaK1BzdueOINFyo=async t=>{t.hooks.hook("render:html",(async(t,{event:s})=>{const a=getRouteRules(s),l=e.env.NUXT_COMPONENT_ISLANDS&&s.path.startsWith("/__nuxt_island");s.path;if(s.context.nuxt?.noSSR||!1===a.ssr&&!l||!1){const e=Object.fromEntries(Object.entries(useSiteConfig(s)).map((([e,t])=>[e,c(t)])));t.body.push(`<script>window.__NUXT_SITE_CONFIG__=${devalue(e)}<\/script>`)}}))},ut=[_yAjt0_tp5nbu9wV2uydJVIPOfYOxPaK1BzdueOINFyo],dt=defineEventHandler((async e=>{if(e.context.siteConfig)return;const t=useRuntimeConfig(e),s=t["nuxt-site-config"],a=useNitroApp(),l=createSiteConfigStack({debug:s.debug}),c=useAppConfig(e),u=useNitroOrigin(e);var d;e.context.siteConfigNitroOrigin=u,l.push({_context:"nitro:init",_priority:-4,url:u}),l.push({_context:"runtimeEnv",_priority:0,...t.site||{},...t.public.site||{},...(d=globalThis._importMeta_.env,Object.fromEntries(Object.entries(d).filter((([e])=>e.startsWith("NUXT_SITE_")||e.startsWith("NUXT_PUBLIC_SITE_"))).map((([e,t])=>[e.replace(/^NUXT_(PUBLIC_)?SITE_/,"").split("_").map(((e,t)=>0===t?e.toLowerCase():e[0].toUpperCase()+e.slice(1).toLowerCase())).join(""),t]))))});(s.stack||[]).forEach((e=>l.push(e))),c.site&&l.push({_priority:-2,_context:"app:config",...c.site}),e.context._nitro.routeRules.site&&l.push({_context:"route-rules",...e.context._nitro.routeRules.site});const h={siteConfig:l,event:e};await a.hooks.callHook("site-config:init",h),e.context.siteConfig=h.siteConfig})),pt=createDefu(((e,t,s)=>(Array.isArray(e[t])&&Array.isArray(s)&&(e[t]=Array.from(new Set([...e[t],...s]))),e[t])));function mergeOnKey(e,t){const s={};return e.forEach((e=>{const a=e[t];s[a]=pt(e,s[a]||{})})),Object.values(s)}function splitForLocales(e,t){const s=withLeadingSlash(e).split("/")[1];return t.includes(s)?[s,e.replace(`/${s}`,"")]:[null,e]}function resolve(e,t){return void 0===e?e:hasProtocol(e="string"==typeof e?e:e.toString(),{acceptRelative:!0,strict:!1})?t.fixSlashes(e):t.canonicalUrlResolver(e)}function normaliseSitemapUrls(e,t){const s=e.map((e=>"string"==typeof e?{loc:e}:e)).map((e=>((e={...e}).url&&(e.loc=e.url,delete e.url),e.loc=fixSlashes(!1,e.loc),e))).filter(Boolean);return mergeOnKey(s.map((function(e){if(e.lastmod){const t=normaliseDate(e.lastmod);t?e.lastmod=t:delete e.lastmod}return e.lastmod||delete e.lastmod,e.loc=resolve(e.loc,t),e.alternatives&&(e.alternatives=mergeOnKey(e.alternatives.map((e=>{const s={...e};return"string"==typeof s.href?s.href=resolve(s.href,t):"object"==typeof s.href&&s.href&&(s.href=resolve(s.href.href,t)),s})),"hreflang")),e.images&&(e.images=mergeOnKey(e.images.map((e=>((e={...e}).loc=resolve(e.loc,t),e))),"loc")),e.videos&&(e.videos=e.videos.map((e=>((e={...e}).content_loc&&(e.content_loc=resolve(e.content_loc,t)),e)))),e})).map((e=>({...e,_key:`${e._sitemap||""}${e.loc}`}))),"_key")}function normaliseDate(e){if("string"==typeof e){if((e=(e=e.replace("Z","")).replace(/\.\d+$/,"")).match(/^\d{4}-\d{2}-\d{2}T\d{2}:\d{2}:\d{2}$/)||e.match(/^\d{4}-\d{2}-\d{2}$/))return e;if(e=new Date(e),Number.isNaN(e.getTime()))return!1}const z=e=>`0${e}`.slice(-2);return`${e.getUTCFullYear()}-${z(e.getUTCMonth()+1)}-${z(e.getUTCDate())}T${z(e.getUTCHours())}:${z(e.getUTCMinutes())}:${z(e.getUTCSeconds())}+00:00`}function globalSitemapSources(){return import("../virtual/global-sources.mjs").then((e=>e.sources))}async function resolveSitemapSources(e){return(await Promise.all(e.map((e=>"object"==typeof e&&"urls"in e?{timeTakenMs:0,...e,urls:e.urls}:e.fetch?async function(e){const t="string"==typeof e.context?{name:e.context}:e.context||{name:"fetch"};t.tips=t.tips||[];const s="string"==typeof e.fetch?e.fetch:e.fetch[0],a="string"==typeof e.fetch?{}:e.fetch[1],l=Date.now(),c=a.timeout||5e3,u=new AbortController,d=setTimeout((()=>u.abort()),c);let h=!1;try{const a=await globalThis.$fetch(s,{responseType:"json",signal:u.signal,headers:{Accept:"application/json"},onResponse({response:e}){"string"==typeof e._data&&e._data.startsWith("<!DOCTYPE html>")&&(h=!0)}}),c=Date.now()-l;return h?(t.tips.push("This is usually because the URL isn't correct or is throwing an error. Please check the URL"),{...e,context:t,urls:[],timeTakenMs:c,error:"Received HTML response instead of JSON"}):{...e,context:t,timeTakenMs:c,urls:a}}catch(a){const l=a;return l.message.includes("This operation was aborted")?t.tips.push("The request has taken too long. Make sure app sources respond within 5 seconds or adjust the timeout fetch option."):t.tips.push(`Response returned a status of ${l.response?.status||"unknown"}.`),console.error("[nuxt-simple-sitemap] Failed to fetch source.",{url:s,error:l}),{...e,context:t,urls:[],error:l.message}}finally{d&&clearTimeout(d)}}(e):{...e,error:"Invalid source"})))).flat()}function applyI18nEnhancements(e,t){const{autoI18n:s}=t;return e.map((e=>{if(!e._i18nTransform)return e;delete e._i18nTransform;const a=withLeadingSlash(parseURL(e.loc).pathname),l=splitForLocales(a,s.locales.map((e=>e.code)));let c=a;return l[0]&&(c=l[1]||"/",l[0]),s.differentDomains?{_sitemap:t.sitemapName,...e,alternatives:[{...s.locales.find((e=>[e.code,e.iso].includes(s.defaultLocale))),code:"x-default"},...s.locales.filter((e=>!!e.domain))].map((e=>({hreflang:e.iso||e.code,href:joinURL(withHttps(e.domain),c)})))}:s.locales.map((a=>{let l=joinURL(`/${a.code}`,c);return(s.differentDomains||["prefix_and_default","prefix_except_default"].includes(s.strategy)&&a.code===s.defaultLocale)&&(l=c),{_sitemap:t.isI18nMapped?a.iso||a.code:void 0,...e,loc:l,alternatives:[{code:"x-default"},...s.locales].map((e=>{const t="x-default"===e.code?s.defaultLocale:e.code,a="x-default"===e.code||e.code===s.defaultLocale;let l="";"prefix"===s.strategy?l=joinURL("/",t,c):["prefix_and_default","prefix_except_default"].includes(s.strategy)&&(l=a?c:joinURL("/",t,c));return{hreflang:e.iso||e.code,href:l}}))}}))})).flat()}function filterSitemapUrls(e,t){const s=function(e={}){const t=e.include||[],s=e.exclude||[];return 0===t.length&&0===s.length?()=>!0:function(e){for(const a of[{rules:s,result:!1},{rules:t,result:!0}]){const t=a.rules.filter((e=>e instanceof RegExp));if(t.some((t=>t.test(e))))return a.result;const s=a.rules.filter((e=>"string"==typeof e));if(s.length>0){const t={};for(const l of s){if(l===e)return a.result;t[l]=!0}if(toRouteMatcher(createRouter$1({routes:t,strictTrailingSlash:!1})).matchAll(e).length>0)return Boolean(a.result)}}return 0===t.length}}({include:t.include,exclude:t.exclude});return e.filter((e=>{let a=e.loc;try{a=parseURL(e.loc).pathname}catch{return!1}return!!s(a)&&(!(t.isMultiSitemap&&e._sitemap&&t.sitemapName)||e._sitemap===t.sitemapName)}))}function sortSitemapUrls(e){return e.sort(((e,t)=>{const s="string"==typeof e?e:e.loc,a="string"==typeof t?t:t.loc;return s.localeCompare(a,void 0,{numeric:!0})})).sort(((e,t)=>{const s=("string"==typeof e?e:e.loc)||"",a=("string"==typeof t?t:t.loc)||"",l=s.split("/").length,c=a.split("/").length;return l>c?1:l<c?-1:0}))}const ht=/\/(.*?)\/([gimsuy]*)$/;function normalizeRuntimeFilters(e){return(e||[]).map((e=>{if(e instanceof RegExp||"string"==typeof e)return e;const t=e.regex.match(ht);return!!t&&new RegExp(t[1],t[2])})).filter(Boolean)}function useSimpleSitemapRuntimeConfig(){const e=JSON.parse(JSON.stringify(useRuntimeConfig()["nuxt-simple-sitemap"]));for(const t in e.sitemaps){const s=e.sitemaps[t];s.include=normalizeRuntimeFilters(s.include),s.exclude=normalizeRuntimeFilters(s.exclude),e.sitemaps[t]=s}return Object.freeze(e)}function handleObject(e,t){return[`        <${e}:${e}>`,...Object.entries(t).map((([t,s])=>{if("video"===e&&Array.isArray(s))return s.map((s=>{if("string"==typeof s)return["            ",`<${e}:${t}>`,escapeValueForXml(s),`</${e}:${t}>`].join("");const a=Object.entries(s).filter((([e])=>e!==t)).map((([e,t])=>`${e}="${escapeValueForXml(t)}"`)).join(" ");return[`            <${e}:${t} ${a}>`,s[t],`</${e}:${t}>`].join("")})).join("\n");if("object"==typeof s){if("video"===e){const a=Object.entries(s).filter((([e])=>e!==t)).map((([e,t])=>`${e}="${escapeValueForXml(t)}"`)).join(" ");return[`            <${e}:${t} ${a}>`,s[t],`</${e}:${t}>`].join("")}return[`            <${e}:${t}>`,...Object.entries(s).map((([t,s])=>`                <${e}:${t}>${escapeValueForXml(s)}</${e}:${t}>`)),`            </${e}:${t}>`].join("\n")}return`            <${e}:${t}>${escapeValueForXml(s)}</${e}:${t}>`})),`        </${e}:${e}>`].join("\n")}function handleEntry(e,t){return Array.isArray(t[e])?(s=e,0!==(a=t[e]).length&&("alternatives"===(s=function(e){switch(e){case"images":return"image";case"videos":return"video";case"news":return"news";default:return e}}(s))?a.map((e=>[`        <xhtml:link rel="alternate" ${Object.entries(e).map((([e,t])=>`${e}="${escapeValueForXml(t)}"`)).join(" ")} />`].join("\n"))).join("\n"):a.map((e=>handleObject(s,e))).join("\n"))):"object"==typeof t[e]?handleObject(e,t[e]):`        <${e}>${escapeValueForXml(t[e])}</${e}>`;var s,a}function wrapSitemapXml(e,t,s){const a=!!s.xsl&&t.relativeBaseUrlResolver(s.xsl),l=s.credits;return e.unshift('<?xml version="1.0" encoding="UTF-8"?>'+(a?`<?xml-stylesheet type="text/xsl" href="${a}"?>`:"")),l&&e.push(`\x3c!-- XML Sitemap generated by Nuxt Simple Sitemap v${s.version} --\x3e`),e.join("\n")}function escapeValueForXml(e){return!0===e||!1===e?e?"yes":"no":String(e).replace(/&/g,"&amp;").replace(/</g,"&lt;").replace(/>/g,"&gt;").replace(/"/g,"&quot;").replace(/'/g,"&apos;")}async function buildSitemapIndex(e){const{sitemaps:t,autoLastmod:s,defaultSitemapsChunkSize:a,autoI18n:l,isI18nMapped:c,sortEntries:u,version:d,xsl:h,credits:m}=useSimpleSitemapRuntimeConfig();if(!t)throw new Error("Attempting to build a sitemap index without required `sitemaps` configuration.");const f=void 0!==t.chunks,g={};if(f){const s=t.chunks,d=normaliseSitemapUrls((await resolveSitemapSources(await globalSitemapSources())).map((e=>e.urls)).flat(),e);let h=d.map((e=>Y(e,s.defaults)));l?.locales&&(h=applyI18nEnhancements(h,{isI18nMapped:c,autoI18n:l,sitemapName:s.sitemapName}));const m=filterSitemapUrls(h,{...s,isMultiSitemap:!0});(v=m,u?sortSitemapUrls(v):v).forEach(((e,t)=>{const s=Math.floor(t/a);g[s]=g[s]||{urls:[]},g[s].urls.push(e)}))}else for(const e in t)"index"!==e&&(g[e]=g[e]||{urls:[]});var v;const _=[];for(const t in g){const a=g[t],l={sitemap:e.canonicalUrlResolver(`${t}-sitemap.xml`)};let c=a.urls.filter((e=>!!e?.lastmod)).map((e=>"string"==typeof e.lastmod?new Date(e.lastmod):e.lastmod)).sort(((e,t)=>(t?.getTime()||0)-(e?.getTime()||0)))?.[0];!c&&s&&(c=new Date),c&&(l.lastmod=normaliseDate(c)),_.push(l)}t.index&&_.push(...t.index.sitemaps);const x=_.map((e=>["    <sitemap>",`        <loc>${escapeValueForXml(e.sitemap)}</loc>`,!!e.lastmod&&`        <lastmod>${escapeValueForXml(e.lastmod)}</lastmod>`,"    </sitemap>"].filter(Boolean).join("\n"))).join("\n");return wrapSitemapXml(['<sitemapindex xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">',x,"</sitemapindex>"],e,{version:d,xsl:h,credits:m})}const mt=defineEventHandler((async e=>{const t=getQuery(e).canonical,s=void 0!==t&&"false"!==t;let a=await buildSitemapIndex({event:e,canonicalUrlResolver:createSitePathResolver(e,{canonical:s||!0,absolute:!0,withBase:!0}),relativeBaseUrlResolver:createSitePathResolver(e,{absolute:!1,withBase:!0})});const l=useNitroApp(),c={sitemap:a,sitemapName:"sitemap"};return await l.hooks.callHook("sitemap:output",c),a=c.sitemap,he(e,"Content-Type","text/xml; charset=UTF-8"),he(e,"Cache-Control","max-age=600, must-revalidate"),a}));async function buildSitemap(e,t){const{sitemaps:s,autoLastmod:a,autoI18n:l,isI18nMapped:c,isMultiSitemap:u,sortEntries:d,defaultSitemapsChunkSize:h,version:m,xsl:f,credits:g}=useSimpleSitemapRuntimeConfig(),v=void 0!==s.chunks&&!Number.isNaN(Number(e.sitemapName));function maybeSort(e){return d?sortSitemapUrls(e):e}if(l?.differentDomains){const s=l.locales.find((t=>[t.iso,t.code].includes(e.sitemapName)))?.domain;if(s){const e=t.canonicalUrlResolver;t.canonicalUrlResolver=t=>resolveSitePath(t,{absolute:!0,withBase:!1,siteUrl:withHttps(s),trailingSlash:!e("/test/").endsWith("/"),base:"/"})}}const _=e.includeAppSources?await globalSitemapSources():[];var x;_.push(...await(x=e,x?._hasSourceChunk?import("../virtual/child-sources.mjs").then((e=>e.sources[x.sitemapName]||[])):Promise.resolve([])));let R=await resolveSitemapSources(_);l&&(R=function(e,{autoI18n:t,isI18nMapped:s}){return t&&s?e.map((e=>{const s=(e.urls||[]).map((e=>{const t="string"==typeof e?{loc:e}:e;return t.loc=t.loc||t.url,t.loc=withLeadingSlash(t.loc),t}));return e.urls=s.map((e=>{if(e._sitemap||e._i18nTransform)return e;if(e.loc){const a=splitForLocales(e.loc,t.locales.map((e=>e.code))),l=a[0]||t.defaultLocale,c=a[1],u=t.locales.find((e=>e.code===l));if(u){if(!e.alternatives){const a=s.map((e=>{if(e._sitemap||e._i18nTransform)return!1;if(e?.loc){const[s,a]=splitForLocales(e.loc,t.locales.map((e=>e.code)));if(c===a){const a=[];return s===t.defaultLocale&&a.push({href:e.loc,hreflang:"x-default"}),a.push({href:e.loc,hreflang:s||t.defaultLocale}),a}}return!1})).flat().filter(Boolean);a.length&&(e.alternatives=a)}return{_sitemap:u.iso||u.code,...e}}}return e})),e})):e}(R,{autoI18n:l,isI18nMapped:c}));const j=normaliseSitemapUrls(R.map((e=>e.urls)).flat(),t);e.defaults;const k=function(){const{nitro:e,app:t}=useRuntimeConfig(),s=toRouteMatcher(createRouter$1({routes:Object.fromEntries(Object.entries(e?.routeRules||{}).map((([e,t])=>[withoutTrailingSlash(e),t])))}));return e=>Y({},...s.matchAll(withoutBase(withoutTrailingSlash(function(e){return e.split("?")[0]}(e)),t.baseURL)).reverse())}();let C=j.map((t=>Y(t,e.defaults))).map((e=>{const t=parseURL(e.loc).pathname;let s=k(t);if(l?.locales&&"no_prefix"!==l?.strategy){const e=splitForLocales(t,l.locales.map((e=>e.code))),a=e[1];a&&a!==t&&(s=Y(s,k(a)))}if(!1===s.sitemap)return!1;if(void 0!==s.index&&!s.index)return!1;const a=Object.entries(s.headers||{}).some((([e,t])=>"x-robots-tag"===e.toLowerCase()&&"noindex"===t.toLowerCase()));return!s.redirect&&!a&&(s.sitemap?Y(e,s.sitemap):e)})).filter(Boolean);l?.locales&&(C=applyI18nEnhancements(C,{isI18nMapped:c,autoI18n:l,sitemapName:e.sitemapName}));const $=function(t){if(v&&h){const s=Number(e.sitemapName);return t.slice(s*h,(s+1)*h)}return t}(maybeSort(filterSitemapUrls(C,{event:t.event,isMultiSitemap:u,...e}))),E=useNitroApp(),T={urls:$,sitemapName:e.sitemapName};await E.hooks.callHook("sitemap:resolved",T);const O=maybeSort(normaliseSitemapUrls(T.urls,t)).map((e=>["    <url>",Object.keys(e).filter((e=>!e.startsWith("_"))).map((t=>handleEntry(t,e))).filter(Boolean).join("\n"),"    </url>"].join("\n")));return wrapSitemapXml(['<urlset xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:video="http://www.google.com/schemas/sitemap-video/1.1" xmlns:xhtml="http://www.w3.org/1999/xhtml" xmlns:image="http://www.google.com/schemas/sitemap-image/1.1" xmlns:news="http://www.google.com/schemas/sitemap-news/0.9" xsi:schemaLocation="http://www.sitemaps.org/schemas/sitemap/0.9 http://www.sitemaps.org/schemas/sitemap/0.9/sitemap.xsd http://www.google.com/schemas/sitemap-image/1.1 http://www.google.com/schemas/sitemap-image/1.1/sitemap-image.xsd" xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">',O.join("\n"),"</urlset>"],t,{version:m,xsl:f,credits:g})}function useNitroUrlResolvers(e){const t=getQuery(e).canonical,s=void 0!==t&&"false"!==t,a=useSiteConfig(e);return{event:e,fixSlashes:e=>fixSlashes(a.trailingSlash,e),canonicalUrlResolver:createSitePathResolver(e,{canonical:s||!0,absolute:!0,withBase:!0}),relativeBaseUrlResolver:createSitePathResolver(e,{absolute:!1,withBase:!0})}}async function createSitemap(e,t){const{sitemapName:s}=t,a=useNitroApp();let l=await("index"===t.sitemapName?buildSitemapIndex(useNitroUrlResolvers(e)):buildSitemap(t,useNitroUrlResolvers(e)));const c={sitemap:l,sitemapName:s};return await a.hooks.callHook("sitemap:output",c),l=c.sitemap,he(e,"Content-Type","text/xml; charset=UTF-8"),he(e,"Cache-Control","max-age=600, must-revalidate"),e.context._isSitemap=!0,l}const ft=defineEventHandler((async e=>{const t=parseURL(e.path).pathname;if(!t.endsWith("-sitemap.xml"))return;const{sitemaps:s}=useSimpleSitemapRuntimeConfig(),a=t.replace("-sitemap.xml","").replace("/",""),l=void 0!==s.chunks&&!Number.isNaN(Number(a));return a in s||l?createSitemap(e,l?{...s.chunks,sitemapName:a}:s[a]):createError$1({statusCode:404,message:`Sitemap "${a}" not found.`})})),gt=defineEventHandler((async e=>{he(e,"Content-Type","application/xslt+xml"),he(e,"Cache-Control","max-age=600, must-revalidate");const t=createSitePathResolver(e,{absolute:!1,withBase:!0}),{sitemapName:s,version:a,xslColumns:l,xslTips:c}=useSimpleSitemapRuntimeConfig(),{name:u,url:d}=useSiteConfig(e),h=se(e,"Referer")||"/",m=h!==t("/sitemap.xml")&&parseURL(h).pathname.endsWith("-sitemap.xml"),f=parseURL(h).pathname.split("/").pop()?.split("-sitemap")[0]||s,g=`${u}${"sitemap.xml"!==f?` - ${"sitemap_index.xml"===f?"index":f}`:""}`.replace(/&/g,"&amp;"),v=getQuery$1(h).canonical,_=void 0!==v&&"false"!==v,x=['You are looking at a <a href="https://developer.mozilla.org/en-US/docs/Web/XSLT/Transforming_XML_with_XSLT/An_Overview" style="color: #398465" target="_blank">XML stylesheet</a>. Read the <a href="https://nuxtseo.com/sitemap/guides/customising-ui" style="color: #398465" target="_blank">docs</a> to learn how to customize it. View the page source to see the raw XML.',`URLs missing? Check Nuxt Devtools Sitemap tab (or the <a href="${withQuery("/__sitemap__/debug.json",{sitemap:f})}" style="color: #398465" target="_blank">debug endpoint</a>).`];if(_)x.push(`You are viewing the canonical sitemap. You can switch to using the request origin: <a href="${t(h)}" style="color: #398465; white-space: nowrap ">${t(h)}</a>`);else{const e=withQuery(h,{canonical:""});x.push(`Your canonical site URL is <strong>${d}</strong>.`),x.push(`You can preview your canonical sitemap by visiting <a href="${e}" style="color: #398465; white-space: nowrap;">${t(e)}?canonical</a>`)}let R=[...l];return R.length||(R=[{label:"URL",width:"50%"},{label:"Images",width:"25%",select:"count(image:image)"},{label:"Last Updated",width:"25%",select:"concat(substring(sitemap:lastmod,0,11),concat(' ', substring(sitemap:lastmod,12,5)),concat(' ', substring(sitemap:lastmod,20,6)))"}]),`<?xml version="1.0" encoding="UTF-8"?>\n<xsl:stylesheet version="2.0"\n                xmlns:html="http://www.w3.org/TR/REC-html40"\n                xmlns:image="http://www.google.com/schemas/sitemap-image/1.1"\n                xmlns:sitemap="http://www.sitemaps.org/schemas/sitemap/0.9"\n                xmlns:xhtml="http://www.w3.org/1999/xhtml"\n                xmlns:news="http://www.google.com/schemas/sitemap-news/0.9"\n                xmlns:xsl="http://www.w3.org/1999/XSL/Transform">\n  <xsl:output method="html" version="1.0" encoding="UTF-8" indent="yes"/>\n  <xsl:template match="/">\n    <html xmlns="http://www.w3.org/1999/xhtml">\n      <head>\n        <title>XML Sitemap</title>\n        <meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>\n        <style type="text/css">\n          body {\n            font-family: Inter, Helvetica, Arial, sans-serif;\n            font-size: 14px;\n            color: #333;\n          }\n\n          table {\n            border: none;\n            border-collapse: collapse;\n          }\n\n          .bg-yellow-200 {\n            background-color: #fef9c3;\n          }\n\n          .p-5 {\n            padding: 1.25rem;\n          }\n\n          .rounded {\n            border-radius: 4px;\n            }\n\n          .shadow {\n            box-shadow: 0 1px 2px 0 rgba(0, 0, 0, 0.05);\n          }\n\n          #sitemap tr:nth-child(odd) td {\n            background-color: #f8f8f8 !important;\n          }\n\n          #sitemap tbody tr:hover td {\n            background-color: #fff;\n          }\n\n          #sitemap tbody tr:hover td, #sitemap tbody tr:hover td a {\n            color: #000;\n          }\n\n          .expl a {\n            color: #398465\n            font-weight: 600;\n          }\n\n          .expl a:visited {\n            color: #398465\n          }\n\n          a {\n            color: #000;\n            text-decoration: none;\n          }\n\n          a:visited {\n            color: #777;\n          }\n\n          a:hover {\n            text-decoration: underline;\n          }\n\n          td {\n            font-size: 12px;\n          }\n\n          .text-2xl {\n            font-size: 2rem;\n            font-weight: 600;\n            line-height: 1.25;\n          }\n\n          th {\n            text-align: left;\n            padding-right: 30px;\n            font-size: 12px;\n          }\n\n          thead th {\n            border-bottom: 1px solid #000;\n          }\n          .fixed { position: fixed; }\n          .right-2 { right: 2rem; }\n          .top-2 { top: 2rem; }\n          .w-30 { width: 30rem; }\n          p { margin: 0; }\n          li { padding-bottom: 0.5rem; line-height: 1.5; }\n          h1 { margin: 0; }\n          .mb-5 { margin-bottom: 1.25rem; }\n          .mb-3 { margin-bottom: 0.75rem; }\n        </style>\n      </head>\n      <body>\n        <div style="grid-template-columns: 1fr 1fr; display: grid; margin: 3rem;">\n            <div>\n             <div id="content">\n          <h1 class="text-2xl mb-3">XML Sitemap</h1>\n          <h2>${g}</h2>\n          ${m?`<p style="font-size: 12px; margin-bottom: 1rem;"><a href="${t("/sitemap_index.xml")}">${t("/sitemap_index.xml")}</a></p>`:""}\n          <xsl:if test="count(sitemap:sitemapindex/sitemap:sitemap) &gt; 0">\n            <p class="expl" style="margin-bottom: 1rem;">\n              This XML Sitemap Index file contains\n              <xsl:value-of select="count(sitemap:sitemapindex/sitemap:sitemap)"/> sitemaps.\n            </p>\n            <table id="sitemap" cellpadding="3">\n              <thead>\n                <tr>\n                  <th width="75%">Sitemap</th>\n                  <th width="25%">Last Modified</th>\n                </tr>\n              </thead>\n              <tbody>\n                <xsl:for-each select="sitemap:sitemapindex/sitemap:sitemap">\n                  <xsl:variable name="sitemapURL">\n                    <xsl:value-of select="sitemap:loc"/>\n                  </xsl:variable>\n                  <tr>\n                    <td>\n                      <a href="{$sitemapURL}">\n                        <xsl:value-of select="sitemap:loc"/>\n                      </a>\n                    </td>\n                    <td>\n                      <xsl:value-of\n                        select="concat(substring(sitemap:lastmod,0,11),concat(' ', substring(sitemap:lastmod,12,5)),concat(' ', substring(sitemap:lastmod,20,6)))"/>\n                    </td>\n                  </tr>\n                </xsl:for-each>\n              </tbody>\n            </table>\n          </xsl:if>\n          <xsl:if test="count(sitemap:sitemapindex/sitemap:sitemap) &lt; 1">\n            <p class="expl" style="margin-bottom: 1rem;">\n              This XML Sitemap contains\n              <xsl:value-of select="count(sitemap:urlset/sitemap:url)"/> URLs.\n            </p>\n            <table id="sitemap" cellpadding="3">\n              <thead>\n                <tr>\n                  ${R.map((e=>`<th width="${e.width}">${e.label}</th>`)).join("\n")}\n                </tr>\n              </thead>\n              <tbody>\n                <xsl:variable name="lower" select="'abcdefghijklmnopqrstuvwxyz'"/>\n                <xsl:variable name="upper" select="'ABCDEFGHIJKLMNOPQRSTUVWXYZ'"/>\n                <xsl:for-each select="sitemap:urlset/sitemap:url">\n                  <tr>\n                    <td>\n                      <xsl:variable name="itemURL">\n                        <xsl:value-of select="sitemap:loc"/>\n                      </xsl:variable>\n                      <a href="{$itemURL}">\n                        <xsl:value-of select="sitemap:loc"/>\n                      </a>\n                    </td>\n                    ${R.filter((e=>"URL"!==e.label)).map((e=>`<td>\n<xsl:value-of select="${e.select}"/>\n</td>`)).join("\n")}\n                  </tr>\n                </xsl:for-each>\n              </tbody>\n            </table>\n          </xsl:if>\n        </div>\n        </div>\n                    \n        </div>\n      </body>\n    </html>\n  </xsl:template>\n</xsl:stylesheet>\n`})),yt=defineEventHandler((async e=>{const{sitemaps:t}=useSimpleSitemapRuntimeConfig();return"index"in t?sendRedirect(e,withBase("/sitemap_index.xml",useRuntimeConfig().app.baseURL),301):createSitemap(e,Object.values(t)[0])})),wt=/^[A-Za-z]:\//;const bt=/^[/\\](?![/\\])|^[/\\]{2}(?!\.)|^[A-Za-z]:[/\\]/,basename=function(e,t){const s=function(e=""){return e?e.replace(/\\/g,"/").replace(wt,(e=>e.toUpperCase())):e}(e).split("/");let a="";for(let e=s.length-1;e>=0;e--){const t=s[e];if(t){a=t;break}}return t&&a.endsWith(t)?a.slice(0,-t.length):a},vt={carbon:()=>import("./icons.mjs").then((e=>e.default)),ic:()=>import("./icons2.mjs").then((e=>e.default)),logos:()=>import("./icons3.mjs").then((e=>e.default)),"material-symbols":()=>import("./icons4.mjs").then((e=>e.default)),"material-symbols-light":()=>import("./icons5.mjs").then((e=>e.default)),mdi:()=>import("./icons6.mjs").then((e=>e.default)),ri:()=>import("./icons7.mjs").then((e=>e.default)),tabler:()=>import("./icons8.mjs").then((e=>e.default))},_t=defineCachedEventHandler((async e=>{const t=getRequestURL(e);if(!t)return createError$1({status:400,message:"Invalid icon request"});const s=useAppConfig().icon,a=e.context.params?.collection?.replace(/\.json$/,""),l=a?await(vt[a]?.()):null,c=s.iconifyApiEndpoint||"https://api.iconify.design",d=t.searchParams.get("icons")?.split(",");if(l&&d?.length){const e=u(l,d);return h.debug(`[Icon] serving ${(d||[]).map((e=>"`"+a+":"+e+"`")).join(",")} from bundled collection`),e}if(!0===s.fallbackToApi||"server-only"===s.fallbackToApi){const e=new URL("./"+basename(t.pathname)+t.search,c);if(h.debug(`[Icon] fetching ${(d||[]).map((e=>"`"+a+":"+e+"`")).join(",")} from iconify api`),e.host!==new URL(c).host)return createError$1({status:400,message:"Invalid icon request"});try{return await $fetch(e.href)}catch(e){return h.error(e),404===e.status?createError$1({status:404}):createError$1({status:500,message:"Failed to fetch fallback icon"})}}return createError$1({status:404})}),{group:"nuxt",name:"icon",getKey(e){const t=e.context.params?.collection?.replace(/\.json$/,"")||"unknown",s=String(getQuery(e).icons||"");return`${t}_${s.split(",")[0]}_${s.length}_${a=s,digest(serialize$1(a))}`;var a},swr:!0,maxAge:604800}),xt=lazyEventHandler((()=>{const e=useRuntimeConfig().ipx||{},t=e?.fs?.dir?(Array.isArray(e.fs.dir)?e.fs.dir:[e.fs.dir]).map((e=>function(e){return bt.test(e)}(e)?e:m(new URL(e,globalThis._importMeta_.url)))):void 0,s=e.fs?.dir?f({...e.fs,dir:t}):void 0,a=e.http?.domains?g({...e.http}):void 0;if(!s&&!a)throw new Error("IPX storage is not configured!");const l={...e,storage:s||a,httpStorage:a},c=v(l),u=_(c);return d=e.baseURL,h=u,(d=withoutTrailingSlash(d))&&"/"!==d?ge((async e=>{e.node.req.originalUrl=e.node.req.originalUrl||e.node.req.url||"/";const t=e._path||e.node.req.url||"/";e._path=withoutBase(e.path||"/",d),e.node.req.url=e._path;try{return await h(e)}finally{e._path=e.node.req.url=t}})):h;var d,h})),_lazy_Zadvsl=()=>import("../routes/renderer.mjs").then((function(e){return e.r})),St=[{route:"/api/admin/notifications",handler:()=>import("../routes/api/admin/notifications.get.mjs"),lazy:!0,middleware:!1,method:"get"},{route:"/api/admin/notifications/read-all",handler:()=>import("../routes/api/admin/notifications/read-all.put.mjs"),lazy:!0,middleware:!1,method:"put"},{route:"/api/admin/notifications/read",handler:()=>import("../routes/api/admin/notifications/read.put.mjs"),lazy:!0,middleware:!1,method:"put"},{route:"/api/admin/stats",handler:()=>import("../routes/api/admin/stats.get.mjs"),lazy:!0,middleware:!1,method:"get"},{route:"/api/admin/users/:id",handler:()=>import("../routes/api/admin/users/_id_.delete.mjs"),lazy:!0,middleware:!1,method:"delete"},{route:"/api/admin/users/:id",handler:()=>import("../routes/api/admin/users/_id_.get.mjs"),lazy:!0,middleware:!1,method:"get"},{route:"/api/admin/users/:id",handler:()=>import("../routes/api/admin/users/_id_.put.mjs"),lazy:!0,middleware:!1,method:"put"},{route:"/api/admin/users",handler:()=>import("../routes/api/admin/index.get.mjs"),lazy:!0,middleware:!1,method:"get"},{route:"/api/admin/users",handler:()=>import("../routes/api/admin/index.post.mjs"),lazy:!0,middleware:!1,method:"post"},{route:"/api/analytics/content",handler:()=>import("../routes/api/analytics/content.get.mjs"),lazy:!0,middleware:!1,method:"get"},{route:"/api/analytics/dashboard",handler:()=>import("../routes/api/analytics/dashboard.get.mjs"),lazy:!0,middleware:!1,method:"get"},{route:"/api/analytics/reports",handler:()=>import("../routes/api/analytics/reports.get.mjs"),lazy:!0,middleware:!1,method:"get"},{route:"/api/auth/login",handler:()=>import("../routes/api/auth/login.post.mjs"),lazy:!0,middleware:!1,method:"post"},{route:"/api/auth/logout",handler:()=>import("../routes/api/auth/logout.post.mjs"),lazy:!0,middleware:!1,method:"post"},{route:"/api/auth/me",handler:()=>import("../routes/api/auth/me.get.mjs"),lazy:!0,middleware:!1,method:"get"},{route:"/api/bookings",handler:()=>import("../routes/api/bookings.post.mjs"),lazy:!0,middleware:!1,method:"post"},{route:"/api/bookings",handler:()=>import("../routes/api/bookings.mjs"),lazy:!0,middleware:!1,method:void 0},{route:"/api/bookings/:id",handler:()=>import("../routes/api/bookings/_id_.delete.mjs"),lazy:!0,middleware:!1,method:"delete"},{route:"/api/bookings/:id",handler:()=>import("../routes/api/bookings/_id_.put.mjs"),lazy:!0,middleware:!1,method:"put"},{route:"/api/bookings/:id",handler:()=>import("../routes/api/bookings/_id_.mjs"),lazy:!0,middleware:!1,method:void 0},{route:"/api/cms/editor",handler:()=>import("../routes/api/cms/editor.post.mjs"),lazy:!0,middleware:!1,method:"post"},{route:"/api/cms/editor/:id",handler:()=>import("../routes/api/cms/editor/_id_.get.mjs"),lazy:!0,middleware:!1,method:"get"},{route:"/api/cms/editor/:id",handler:()=>import("../routes/api/cms/editor/_id_.put.mjs"),lazy:!0,middleware:!1,method:"put"},{route:"/api/cms/navigation",handler:()=>import("../routes/api/cms/navigation.get.mjs"),lazy:!0,middleware:!1,method:"get"},{route:"/api/cms/pages",handler:()=>import("../routes/api/cms/pages.get.mjs"),lazy:!0,middleware:!1,method:"get"},{route:"/api/cms/pages",handler:()=>import("../routes/api/cms/pages.post.mjs"),lazy:!0,middleware:!1,method:"post"},{route:"/api/cms/pages/:id",handler:()=>import("../routes/api/cms/pages/_id_.get.mjs"),lazy:!0,middleware:!1,method:"get"},{route:"/api/cms/pages/:id",handler:()=>import("../routes/api/cms/pages/_id_.put.mjs"),lazy:!0,middleware:!1,method:"put"},{route:"/api/cms/pages/home",handler:()=>import("../routes/api/cms/pages/home.get.mjs"),lazy:!0,middleware:!1,method:"get"},{route:"/api/cms/sections",handler:()=>import("../routes/api/cms/sections.post.mjs"),lazy:!0,middleware:!1,method:"post"},{route:"/api/cms/sections/:id",handler:()=>import("../routes/api/cms/sections/_id_.delete.mjs"),lazy:!0,middleware:!1,method:"delete"},{route:"/api/cms/sections/:id",handler:()=>import("../routes/api/cms/sections/_id_.put.mjs"),lazy:!0,middleware:!1,method:"put"},{route:"/api/cms/site-settings",handler:()=>import("../routes/api/cms/site-settings.get.mjs"),lazy:!0,middleware:!1,method:"get"},{route:"/api/cms/site-settings",handler:()=>import("../routes/api/cms/site-settings.put.mjs"),lazy:!0,middleware:!1,method:"put"},{route:"/api/contact-messages",handler:()=>import("../routes/api/contact-messages.post.mjs"),lazy:!0,middleware:!1,method:"post"},{route:"/api/contact-messages",handler:()=>import("../routes/api/contact-messages.mjs"),lazy:!0,middleware:!1,method:void 0},{route:"/api/contact-messages/:id",handler:()=>import("../routes/api/contact-messages/_id_.put.mjs"),lazy:!0,middleware:!1,method:"put"},{route:"/api/contact-messages/mark-all-read",handler:()=>import("../routes/api/contact-messages/mark-all-read.put.mjs"),lazy:!0,middleware:!1,method:"put"},{route:"/api/content",handler:()=>import("../routes/api/content.mjs"),lazy:!0,middleware:!1,method:void 0},{route:"/api/content/:id",handler:()=>import("../routes/api/content/_id_.delete.mjs"),lazy:!0,middleware:!1,method:"delete"},{route:"/api/content/:id",handler:()=>import("../routes/api/content/_id_.mjs"),lazy:!0,middleware:!1,method:void 0},{route:"/api/destination-contact-form",handler:()=>import("../routes/api/destination-contact-form.mjs"),lazy:!0,middleware:!1,method:void 0},{route:"/api/destinations",handler:()=>import("../routes/api/destinations.post.mjs"),lazy:!0,middleware:!1,method:"post"},{route:"/api/destinations",handler:()=>import("../routes/api/destinations.mjs"),lazy:!0,middleware:!1,method:void 0},{route:"/api/destinations/:id",handler:()=>import("../routes/api/destinations/_id_.delete.mjs"),lazy:!0,middleware:!1,method:"delete"},{route:"/api/destinations/:id",handler:()=>import("../routes/api/destinations/_id_.put.mjs"),lazy:!0,middleware:!1,method:"put"},{route:"/api/destinations/:id",handler:()=>import("../routes/api/destinations/_id_.mjs"),lazy:!0,middleware:!1,method:void 0},{route:"/api/destinations/import",handler:()=>import("../routes/api/destinations/import.post.mjs"),lazy:!0,middleware:!1,method:"post"},{route:"/api/destinations",handler:()=>import("../routes/api/index.get.mjs"),lazy:!0,middleware:!1,method:"get"},{route:"/api/health",handler:()=>import("../routes/api/health.get.mjs"),lazy:!0,middleware:!1,method:"get"},{route:"/api/images/delete",handler:()=>import("../routes/api/images/delete.post.mjs"),lazy:!0,middleware:!1,method:"post"},{route:"/api/images/list",handler:()=>import("../routes/api/images/list.get.mjs"),lazy:!0,middleware:!1,method:"get"},{route:"/api/images/test",handler:()=>import("../routes/api/images/test.get.mjs"),lazy:!0,middleware:!1,method:"get"},{route:"/api/images/upload-destination",handler:()=>import("../routes/api/images/upload-destination.post.mjs"),lazy:!0,middleware:!1,method:"post"},{route:"/api/images/upload-package",handler:()=>import("../routes/api/images/upload-package.post.mjs"),lazy:!0,middleware:!1,method:"post"},{route:"/api/images/upload",handler:()=>import("../routes/api/images/upload.post.mjs"),lazy:!0,middleware:!1,method:"post"},{route:"/api/package-contact-form",handler:()=>import("../routes/api/package-contact-form.mjs"),lazy:!0,middleware:!1,method:void 0},{route:"/api/packages",handler:()=>import("../routes/api/packages.post.mjs"),lazy:!0,middleware:!1,method:"post"},{route:"/api/packages",handler:()=>import("../routes/api/packages.mjs"),lazy:!0,middleware:!1,method:void 0},{route:"/api/packages/:id",handler:()=>import("../routes/api/packages/_id_.delete.mjs"),lazy:!0,middleware:!1,method:"delete"},{route:"/api/packages/:id",handler:()=>import("../routes/api/packages/_id_.get.mjs"),lazy:!0,middleware:!1,method:"get"},{route:"/api/packages/:id",handler:()=>import("../routes/api/packages/_id_.put.mjs"),lazy:!0,middleware:!1,method:"put"},{route:"/api/packages/:id",handler:()=>import("../routes/api/packages/_id_.mjs"),lazy:!0,middleware:!1,method:void 0},{route:"/api/packages",handler:()=>import("../routes/api/index.get2.mjs"),lazy:!0,middleware:!1,method:"get"},{route:"/api/public/navigation",handler:()=>import("../routes/api/public/navigation.get.mjs"),lazy:!0,middleware:!1,method:"get"},{route:"/api/public/pages/:id",handler:()=>import("../routes/api/public/pages/_id_.get.mjs"),lazy:!0,middleware:!1,method:"get"},{route:"/api/public/pages/:slug",handler:()=>import("../routes/api/public/pages/_slug_.get.mjs"),lazy:!0,middleware:!1,method:"get"},{route:"/api/public/pages/home",handler:()=>import("../routes/api/public/pages/home.get.mjs"),lazy:!0,middleware:!1,method:"get"},{route:"/api/public/site-settings",handler:()=>import("../routes/api/public/site-settings.get.mjs"),lazy:!0,middleware:!1,method:"get"},{route:"/api/seo",handler:()=>import("../routes/api/index.get3.mjs"),lazy:!0,middleware:!1,method:"get"},{route:"/api/seo",handler:()=>import("../routes/api/index.put.mjs"),lazy:!0,middleware:!1,method:"put"},{route:"/api/seo/pages/:id",handler:()=>import("../routes/api/seo/pages/_id_.delete.mjs"),lazy:!0,middleware:!1,method:"delete"},{route:"/api/seo/pages/:id",handler:()=>import("../routes/api/seo/pages/_id_.put.mjs"),lazy:!0,middleware:!1,method:"put"},{route:"/api/seo/pages",handler:()=>import("../routes/api/seo/index.get.mjs"),lazy:!0,middleware:!1,method:"get"},{route:"/api/seo/pages",handler:()=>import("../routes/api/seo/index.post.mjs"),lazy:!0,middleware:!1,method:"post"},{route:"/api/seo/sitemap/generate",handler:()=>import("../routes/api/seo/sitemap/generate.post.mjs"),lazy:!0,middleware:!1,method:"post"},{route:"/api/settings",handler:()=>import("../routes/api/settings.mjs"),lazy:!0,middleware:!1,method:void 0},{route:"/api/sitemap.xml",handler:()=>import("../routes/api/sitemap.xml.get.mjs"),lazy:!0,middleware:!1,method:"get"},{route:"/api/test",handler:()=>import("../routes/api/test.get.mjs"),lazy:!0,middleware:!1,method:"get"},{route:"/api/users",handler:()=>import("../routes/api/users.post.mjs"),lazy:!0,middleware:!1,method:"post"},{route:"/api/users",handler:()=>import("../routes/api/users.mjs"),lazy:!0,middleware:!1,method:void 0},{route:"/api/users/:id",handler:()=>import("../routes/api/users/_id_.delete.mjs"),lazy:!0,middleware:!1,method:"delete"},{route:"/api/users/:id",handler:()=>import("../routes/api/users/_id_.put.mjs"),lazy:!0,middleware:!1,method:"put"},{route:"/api/users/:id",handler:()=>import("../routes/api/users/_id_.mjs"),lazy:!0,middleware:!1,method:void 0},{route:"/__nuxt_error",handler:_lazy_Zadvsl,lazy:!0,middleware:!1,method:void 0},{route:"",handler:dt,lazy:!1,middleware:!0,method:void 0},{route:"/sitemap_index.xml",handler:mt,lazy:!1,middleware:!1,method:void 0},{route:"/en-US-sitemap.xml",handler:ft,lazy:!1,middleware:!1,method:void 0},{route:"/ar-SA-sitemap.xml",handler:ft,lazy:!1,middleware:!1,method:void 0},{route:"/__sitemap__/style.xsl",handler:gt,lazy:!1,middleware:!1,method:void 0},{route:"/sitemap.xml",handler:yt,lazy:!1,middleware:!1,method:void 0},{route:"/api/_nuxt_icon/:collection",handler:_t,lazy:!1,middleware:!1,method:void 0},{route:"/_ipx/**",handler:xt,lazy:!1,middleware:!1,method:void 0},{route:"/index-sitemap.xml",handler:_lazy_Zadvsl,lazy:!0,middleware:!1,method:void 0},{route:"/**",handler:_lazy_Zadvsl,lazy:!0,middleware:!1,method:void 0}];const Rt=function(){const e=useRuntimeConfig(),t=createHooks(),captureError=(e,s={})=>{const a=t.callHookParallel("error",e,s).catch((e=>{console.error("Error while capturing another error",e)}));if(s.event&&isEvent(s.event)){const t=s.event.context.nitro?.errors;t&&t.push({error:e,context:s}),s.event.waitUntil&&s.event.waitUntil(a)}},s=createApp({debug:destr(!1),onError:(e,t)=>(captureError(e,{event:t,tags:["request"]}),async function(e,t){for(const s of nt)try{if(await s(e,t,{defaultHandler:defaultHandler}),t.handled)return}catch(e){console.error(e)}}(e,t)),onRequest:async e=>{e.context.nitro=e.context.nitro||{errors:[]};const t=e.node.req?.__unenv__;t?._platform&&(e.context={...t._platform,...e.context}),!e.context.waitUntil&&t?.waitUntil&&(e.context.waitUntil=t.waitUntil),e.fetch=(t,s)=>fetchWithEvent(e,t,s,{fetch:localFetch}),e.$fetch=(t,s)=>fetchWithEvent(e,t,s,{fetch:c}),e.waitUntil=t=>{e.context.nitro._waitUntilPromises||(e.context.nitro._waitUntilPromises=[]),e.context.nitro._waitUntilPromises.push(t),e.context.waitUntil&&e.context.waitUntil(t)},e.captureError=(t,s)=>{captureError(t,{event:e,...s})},await Rt.hooks.callHook("request",e).catch((t=>{captureError(t,{event:e,tags:["request"]})}))},onBeforeResponse:async(e,t)=>{await Rt.hooks.callHook("beforeResponse",e,t).catch((t=>{captureError(t,{event:e,tags:["request","response"]})}))},onAfterResponse:async(e,t)=>{await Rt.hooks.callHook("afterResponse",e,t).catch((t=>{captureError(t,{event:e,tags:["request","response"]})}))}}),a=function(e={}){const t=createRouter$1({}),s={};let a;const l={},addRoute=(e,a,c)=>{let u=s[e];if(u||(s[e]=u={path:e,handlers:{}},t.insert(e,u)),Array.isArray(c))for(const t of c)addRoute(e,a,t);else u.handlers[c]=toEventHandler(a,0,e);return l};l.use=l.add=(e,t,s)=>addRoute(e,t,s||"all");for(const e of ye)l[e]=(t,s)=>l.add(t,s,e);const matchHandler=(e="/",s="get")=>{const l=e.indexOf("?");-1!==l&&(e=e.slice(0,Math.max(0,l)));const c=t.lookup(e);if(!c||!c.handlers)return{error:createError$1({statusCode:404,name:"Not Found",statusMessage:`Cannot find any route matching ${e||"/"}.`})};let u=c.handlers[s]||c.handlers.all;if(!u){a||(a=toRouteMatcher(t));const l=a.matchAll(e).reverse();for(const e of l){if(e.handlers[s]){u=e.handlers[s],c.handlers[s]=c.handlers[s]||u;break}if(e.handlers.all){u=e.handlers.all,c.handlers.all=c.handlers.all||u;break}}}return u?{matched:c,handler:u}:{error:createError$1({statusCode:405,name:"Method Not Allowed",statusMessage:`Method ${s} is not allowed on this route.`})}},c=e.preemptive||e.preemtive;return l.handler=ge((e=>{const t=matchHandler(e.path,e.method.toLowerCase());if("error"in t){if(c)throw t.error;return}e.context.matchedRoute=t.matched;const s=t.matched.params||{};return e.context.params=s,Promise.resolve(t.handler(e)).then((e=>void 0===e&&c?null:e))})),l.handler.__resolve__=async e=>{e=withLeadingSlash(e);const t=matchHandler(e);if("error"in t)return;let s={route:t.matched.path,handler:t.handler};if(t.handler.__resolve__){const a=await t.handler.__resolve__(e);if(!a)return;s={...s,...a}}return s},l}({preemptive:!0}),l=toNodeListener(s),localFetch=(e,t)=>e.toString().startsWith("/")?async function(e,t,s={}){try{const a=await b(e,{url:t,...s});return new Response(a.body,{status:a.status,statusText:a.statusText,headers:S(a.headers)})}catch(e){return new Response(e.toString(),{status:Number.parseInt(e.statusCode||e.code)||500,statusText:e.statusText})}}(l,e,t).then((e=>function(e){return e.headers.has("set-cookie")?new Response(e.body,{status:e.status,statusText:e.statusText,headers:normalizeCookieHeaders(e.headers)}):e}(e))):globalThis.fetch(e,t),c=createFetch({fetch:localFetch,Headers:Ae,defaults:{baseURL:e.app.baseURL}});var u;globalThis.$fetch=c,s.use((u={localFetch:localFetch},ge((e=>{const t=getRouteRules(e);if(t.headers&&pe(e,t.headers),t.redirect){let s=t.redirect.to;if(s.endsWith("/**")){let a=e.path;const l=t.redirect._redirectStripBase;l&&(a=withoutBase(a,l)),s=joinURL(s.slice(0,-3),a)}else e.path.includes("?")&&(s=withQuery(s,getQuery$1(e.path)));return sendRedirect(e,s,t.redirect.statusCode)}if(t.proxy){let s=t.proxy.to;if(s.endsWith("/**")){let a=e.path;const l=t.proxy._proxyStripBase;l&&(a=withoutBase(a,l)),s=joinURL(s.slice(0,-3),a)}else e.path.includes("?")&&(s=withQuery(s,getQuery$1(e.path)));return proxyRequest(e,s,{fetch:u.localFetch,...t.proxy})}}))));for(const t of St){let l=t.lazy?lazyEventHandler(t.handler):t.handler;if(t.middleware||!t.route){const a=(e.app.baseURL+(t.route||"/")).replace(/\/+/g,"/");s.use(a,l)}else{const e=getRouteRulesForPath(t.route.replace(/:\w+|\*\*/g,"_"));e.cache&&(l=Fe(l,{group:"nitro/routes",...e.cache})),a.use(t.route,l,t.method)}}return s.use(e.app.baseURL,a.handler),{hooks:t,h3App:s,router:a,localCall:e=>b(l,e),localFetch:localFetch,captureError:captureError}}();function useNitroApp(){return Rt}!function(e){for(const t of ut)try{t(e)}catch(t){throw e.captureError(t,{tags:["plugin"]}),t}}(Rt);export{executeAsync as A,getRequestHeaders as B,G as C,klona as D,destr as E,getRequestHeader as F,isEqual as G,deleteCookie as H,camelCase as I,getQuery as a,getCookie as b,createError$1 as c,defineEventHandler as d,useRuntimeConfig as e,getMethod as f,getRouterParam as g,readMultipartFormData as h,he as i,buildAssetsURL as j,getResponseStatusText as k,getResponseStatus as l,defineRenderHandler as m,publicAssetsURL as n,getRouteRules as o,parseQuery as p,createHooks as q,readBody as r,setCookie as s,toNodeListener as t,useNitroApp as u,getContext as v,toRouteMatcher as w,createRouter$1 as x,Y as y,sanitizeStatusCode as z};
+import http from 'node:http';
+import https from 'node:https';
+import { EventEmitter } from 'node:events';
+import { Buffer as Buffer$1 } from 'node:buffer';
+import { promises, existsSync } from 'node:fs';
+import { resolve, dirname, join } from 'node:path';
+import { createHash } from 'node:crypto';
+
+const suspectProtoRx = /"(?:_|\\u0{2}5[Ff]){2}(?:p|\\u0{2}70)(?:r|\\u0{2}72)(?:o|\\u0{2}6[Ff])(?:t|\\u0{2}74)(?:o|\\u0{2}6[Ff])(?:_|\\u0{2}5[Ff]){2}"\s*:/;
+const suspectConstructorRx = /"(?:c|\\u0063)(?:o|\\u006[Ff])(?:n|\\u006[Ee])(?:s|\\u0073)(?:t|\\u0074)(?:r|\\u0072)(?:u|\\u0075)(?:c|\\u0063)(?:t|\\u0074)(?:o|\\u006[Ff])(?:r|\\u0072)"\s*:/;
+const JsonSigRx = /^\s*["[{]|^\s*-?\d{1,16}(\.\d{1,17})?([Ee][+-]?\d+)?\s*$/;
+function jsonParseTransform(key, value) {
+  if (key === "__proto__" || key === "constructor" && value && typeof value === "object" && "prototype" in value) {
+    warnKeyDropped(key);
+    return;
+  }
+  return value;
+}
+function warnKeyDropped(key) {
+  console.warn(`[destr] Dropping "${key}" key to prevent prototype pollution.`);
+}
+function destr(value, options = {}) {
+  if (typeof value !== "string") {
+    return value;
+  }
+  if (value[0] === '"' && value[value.length - 1] === '"' && value.indexOf("\\") === -1) {
+    return value.slice(1, -1);
+  }
+  const _value = value.trim();
+  if (_value.length <= 9) {
+    switch (_value.toLowerCase()) {
+      case "true": {
+        return true;
+      }
+      case "false": {
+        return false;
+      }
+      case "undefined": {
+        return void 0;
+      }
+      case "null": {
+        return null;
+      }
+      case "nan": {
+        return Number.NaN;
+      }
+      case "infinity": {
+        return Number.POSITIVE_INFINITY;
+      }
+      case "-infinity": {
+        return Number.NEGATIVE_INFINITY;
+      }
+    }
+  }
+  if (!JsonSigRx.test(value)) {
+    if (options.strict) {
+      throw new SyntaxError("[destr] Invalid JSON");
+    }
+    return value;
+  }
+  try {
+    if (suspectProtoRx.test(value) || suspectConstructorRx.test(value)) {
+      if (options.strict) {
+        throw new Error("[destr] Possible prototype pollution");
+      }
+      return JSON.parse(value, jsonParseTransform);
+    }
+    return JSON.parse(value);
+  } catch (error) {
+    if (options.strict) {
+      throw error;
+    }
+    return value;
+  }
+}
+
+const HASH_RE = /#/g;
+const AMPERSAND_RE = /&/g;
+const SLASH_RE = /\//g;
+const EQUAL_RE = /=/g;
+const PLUS_RE = /\+/g;
+const ENC_CARET_RE = /%5e/gi;
+const ENC_BACKTICK_RE = /%60/gi;
+const ENC_PIPE_RE = /%7c/gi;
+const ENC_SPACE_RE = /%20/gi;
+function encode(text) {
+  return encodeURI("" + text).replace(ENC_PIPE_RE, "|");
+}
+function encodeQueryValue(input) {
+  return encode(typeof input === "string" ? input : JSON.stringify(input)).replace(PLUS_RE, "%2B").replace(ENC_SPACE_RE, "+").replace(HASH_RE, "%23").replace(AMPERSAND_RE, "%26").replace(ENC_BACKTICK_RE, "`").replace(ENC_CARET_RE, "^").replace(SLASH_RE, "%2F");
+}
+function encodeQueryKey(text) {
+  return encodeQueryValue(text).replace(EQUAL_RE, "%3D");
+}
+function decode(text = "") {
+  try {
+    return decodeURIComponent("" + text);
+  } catch {
+    return "" + text;
+  }
+}
+function decodeQueryKey(text) {
+  return decode(text.replace(PLUS_RE, " "));
+}
+function decodeQueryValue(text) {
+  return decode(text.replace(PLUS_RE, " "));
+}
+
+function parseQuery(parametersString = "") {
+  const object = /* @__PURE__ */ Object.create(null);
+  if (parametersString[0] === "?") {
+    parametersString = parametersString.slice(1);
+  }
+  for (const parameter of parametersString.split("&")) {
+    const s = parameter.match(/([^=]+)=?(.*)/) || [];
+    if (s.length < 2) {
+      continue;
+    }
+    const key = decodeQueryKey(s[1]);
+    if (key === "__proto__" || key === "constructor") {
+      continue;
+    }
+    const value = decodeQueryValue(s[2] || "");
+    if (object[key] === void 0) {
+      object[key] = value;
+    } else if (Array.isArray(object[key])) {
+      object[key].push(value);
+    } else {
+      object[key] = [object[key], value];
+    }
+  }
+  return object;
+}
+function encodeQueryItem(key, value) {
+  if (typeof value === "number" || typeof value === "boolean") {
+    value = String(value);
+  }
+  if (!value) {
+    return encodeQueryKey(key);
+  }
+  if (Array.isArray(value)) {
+    return value.map(
+      (_value) => `${encodeQueryKey(key)}=${encodeQueryValue(_value)}`
+    ).join("&");
+  }
+  return `${encodeQueryKey(key)}=${encodeQueryValue(value)}`;
+}
+function stringifyQuery(query) {
+  return Object.keys(query).filter((k) => query[k] !== void 0).map((k) => encodeQueryItem(k, query[k])).filter(Boolean).join("&");
+}
+
+const PROTOCOL_STRICT_REGEX = /^[\s\w\0+.-]{2,}:([/\\]{1,2})/;
+const PROTOCOL_REGEX = /^[\s\w\0+.-]{2,}:([/\\]{2})?/;
+const PROTOCOL_RELATIVE_REGEX = /^([/\\]\s*){2,}[^/\\]/;
+const JOIN_LEADING_SLASH_RE = /^\.?\//;
+function hasProtocol(inputString, opts = {}) {
+  if (typeof opts === "boolean") {
+    opts = { acceptRelative: opts };
+  }
+  if (opts.strict) {
+    return PROTOCOL_STRICT_REGEX.test(inputString);
+  }
+  return PROTOCOL_REGEX.test(inputString) || (opts.acceptRelative ? PROTOCOL_RELATIVE_REGEX.test(inputString) : false);
+}
+function hasTrailingSlash(input = "", respectQueryAndFragment) {
+  {
+    return input.endsWith("/");
+  }
+}
+function withoutTrailingSlash(input = "", respectQueryAndFragment) {
+  {
+    return (hasTrailingSlash(input) ? input.slice(0, -1) : input) || "/";
+  }
+}
+function withTrailingSlash(input = "", respectQueryAndFragment) {
+  {
+    return input.endsWith("/") ? input : input + "/";
+  }
+}
+function hasLeadingSlash(input = "") {
+  return input.startsWith("/");
+}
+function withLeadingSlash(input = "") {
+  return hasLeadingSlash(input) ? input : "/" + input;
+}
+function withBase(input, base) {
+  if (isEmptyURL(base) || hasProtocol(input)) {
+    return input;
+  }
+  const _base = withoutTrailingSlash(base);
+  if (input.startsWith(_base)) {
+    return input;
+  }
+  return joinURL(_base, input);
+}
+function withoutBase(input, base) {
+  if (isEmptyURL(base)) {
+    return input;
+  }
+  const _base = withoutTrailingSlash(base);
+  if (!input.startsWith(_base)) {
+    return input;
+  }
+  const trimmed = input.slice(_base.length);
+  return trimmed[0] === "/" ? trimmed : "/" + trimmed;
+}
+function withQuery(input, query) {
+  const parsed = parseURL(input);
+  const mergedQuery = { ...parseQuery(parsed.search), ...query };
+  parsed.search = stringifyQuery(mergedQuery);
+  return stringifyParsedURL(parsed);
+}
+function getQuery$1(input) {
+  return parseQuery(parseURL(input).search);
+}
+function isEmptyURL(url) {
+  return !url || url === "/";
+}
+function isNonEmptyURL(url) {
+  return url && url !== "/";
+}
+function joinURL(base, ...input) {
+  let url = base || "";
+  for (const segment of input.filter((url2) => isNonEmptyURL(url2))) {
+    if (url) {
+      const _segment = segment.replace(JOIN_LEADING_SLASH_RE, "");
+      url = withTrailingSlash(url) + _segment;
+    } else {
+      url = segment;
+    }
+  }
+  return url;
+}
+function joinRelativeURL(..._input) {
+  const JOIN_SEGMENT_SPLIT_RE = /\/(?!\/)/;
+  const input = _input.filter(Boolean);
+  const segments = [];
+  let segmentsDepth = 0;
+  for (const i of input) {
+    if (!i || i === "/") {
+      continue;
+    }
+    for (const [sindex, s] of i.split(JOIN_SEGMENT_SPLIT_RE).entries()) {
+      if (!s || s === ".") {
+        continue;
+      }
+      if (s === "..") {
+        if (segments.length === 1 && hasProtocol(segments[0])) {
+          continue;
+        }
+        segments.pop();
+        segmentsDepth--;
+        continue;
+      }
+      if (sindex === 1 && segments[segments.length - 1]?.endsWith(":/")) {
+        segments[segments.length - 1] += "/" + s;
+        continue;
+      }
+      segments.push(s);
+      segmentsDepth++;
+    }
+  }
+  let url = segments.join("/");
+  if (segmentsDepth >= 0) {
+    if (input[0]?.startsWith("/") && !url.startsWith("/")) {
+      url = "/" + url;
+    } else if (input[0]?.startsWith("./") && !url.startsWith("./")) {
+      url = "./" + url;
+    }
+  } else {
+    url = "../".repeat(-1 * segmentsDepth) + url;
+  }
+  if (input[input.length - 1]?.endsWith("/") && !url.endsWith("/")) {
+    url += "/";
+  }
+  return url;
+}
+
+const protocolRelative = Symbol.for("ufo:protocolRelative");
+function parseURL(input = "", defaultProto) {
+  const _specialProtoMatch = input.match(
+    /^[\s\0]*(blob:|data:|javascript:|vbscript:)(.*)/i
+  );
+  if (_specialProtoMatch) {
+    const [, _proto, _pathname = ""] = _specialProtoMatch;
+    return {
+      protocol: _proto.toLowerCase(),
+      pathname: _pathname,
+      href: _proto + _pathname,
+      auth: "",
+      host: "",
+      search: "",
+      hash: ""
+    };
+  }
+  if (!hasProtocol(input, { acceptRelative: true })) {
+    return parsePath(input);
+  }
+  const [, protocol = "", auth, hostAndPath = ""] = input.replace(/\\/g, "/").match(/^[\s\0]*([\w+.-]{2,}:)?\/\/([^/@]+@)?(.*)/) || [];
+  let [, host = "", path = ""] = hostAndPath.match(/([^#/?]*)(.*)?/) || [];
+  if (protocol === "file:") {
+    path = path.replace(/\/(?=[A-Za-z]:)/, "");
+  }
+  const { pathname, search, hash } = parsePath(path);
+  return {
+    protocol: protocol.toLowerCase(),
+    auth: auth ? auth.slice(0, Math.max(0, auth.length - 1)) : "",
+    host,
+    pathname,
+    search,
+    hash,
+    [protocolRelative]: !protocol
+  };
+}
+function parsePath(input = "") {
+  const [pathname = "", search = "", hash = ""] = (input.match(/([^#?]*)(\?[^#]*)?(#.*)?/) || []).splice(1);
+  return {
+    pathname,
+    search,
+    hash
+  };
+}
+function stringifyParsedURL(parsed) {
+  const pathname = parsed.pathname || "";
+  const search = parsed.search ? (parsed.search.startsWith("?") ? "" : "?") + parsed.search : "";
+  const hash = parsed.hash || "";
+  const auth = parsed.auth ? parsed.auth + "@" : "";
+  const host = parsed.host || "";
+  const proto = parsed.protocol || parsed[protocolRelative] ? (parsed.protocol || "") + "//" : "";
+  return proto + auth + host + pathname + search + hash;
+}
+
+const NODE_TYPES = {
+  NORMAL: 0,
+  WILDCARD: 1,
+  PLACEHOLDER: 2
+};
+
+function createRouter$1(options = {}) {
+  const ctx = {
+    options,
+    rootNode: createRadixNode(),
+    staticRoutesMap: {}
+  };
+  const normalizeTrailingSlash = (p) => options.strictTrailingSlash ? p : p.replace(/\/$/, "") || "/";
+  if (options.routes) {
+    for (const path in options.routes) {
+      insert(ctx, normalizeTrailingSlash(path), options.routes[path]);
+    }
+  }
+  return {
+    ctx,
+    lookup: (path) => lookup(ctx, normalizeTrailingSlash(path)),
+    insert: (path, data) => insert(ctx, normalizeTrailingSlash(path), data),
+    remove: (path) => remove(ctx, normalizeTrailingSlash(path))
+  };
+}
+function lookup(ctx, path) {
+  const staticPathNode = ctx.staticRoutesMap[path];
+  if (staticPathNode) {
+    return staticPathNode.data;
+  }
+  const sections = path.split("/");
+  const params = {};
+  let paramsFound = false;
+  let wildcardNode = null;
+  let node = ctx.rootNode;
+  let wildCardParam = null;
+  for (let i = 0; i < sections.length; i++) {
+    const section = sections[i];
+    if (node.wildcardChildNode !== null) {
+      wildcardNode = node.wildcardChildNode;
+      wildCardParam = sections.slice(i).join("/");
+    }
+    const nextNode = node.children.get(section);
+    if (nextNode === void 0) {
+      if (node && node.placeholderChildren.length > 1) {
+        const remaining = sections.length - i;
+        node = node.placeholderChildren.find((c) => c.maxDepth === remaining) || null;
+      } else {
+        node = node.placeholderChildren[0] || null;
+      }
+      if (!node) {
+        break;
+      }
+      if (node.paramName) {
+        params[node.paramName] = section;
+      }
+      paramsFound = true;
+    } else {
+      node = nextNode;
+    }
+  }
+  if ((node === null || node.data === null) && wildcardNode !== null) {
+    node = wildcardNode;
+    params[node.paramName || "_"] = wildCardParam;
+    paramsFound = true;
+  }
+  if (!node) {
+    return null;
+  }
+  if (paramsFound) {
+    return {
+      ...node.data,
+      params: paramsFound ? params : void 0
+    };
+  }
+  return node.data;
+}
+function insert(ctx, path, data) {
+  let isStaticRoute = true;
+  const sections = path.split("/");
+  let node = ctx.rootNode;
+  let _unnamedPlaceholderCtr = 0;
+  const matchedNodes = [node];
+  for (const section of sections) {
+    let childNode;
+    if (childNode = node.children.get(section)) {
+      node = childNode;
+    } else {
+      const type = getNodeType(section);
+      childNode = createRadixNode({ type, parent: node });
+      node.children.set(section, childNode);
+      if (type === NODE_TYPES.PLACEHOLDER) {
+        childNode.paramName = section === "*" ? `_${_unnamedPlaceholderCtr++}` : section.slice(1);
+        node.placeholderChildren.push(childNode);
+        isStaticRoute = false;
+      } else if (type === NODE_TYPES.WILDCARD) {
+        node.wildcardChildNode = childNode;
+        childNode.paramName = section.slice(
+          3
+          /* "**:" */
+        ) || "_";
+        isStaticRoute = false;
+      }
+      matchedNodes.push(childNode);
+      node = childNode;
+    }
+  }
+  for (const [depth, node2] of matchedNodes.entries()) {
+    node2.maxDepth = Math.max(matchedNodes.length - depth, node2.maxDepth || 0);
+  }
+  node.data = data;
+  if (isStaticRoute === true) {
+    ctx.staticRoutesMap[path] = node;
+  }
+  return node;
+}
+function remove(ctx, path) {
+  let success = false;
+  const sections = path.split("/");
+  let node = ctx.rootNode;
+  for (const section of sections) {
+    node = node.children.get(section);
+    if (!node) {
+      return success;
+    }
+  }
+  if (node.data) {
+    const lastSection = sections.at(-1) || "";
+    node.data = null;
+    if (Object.keys(node.children).length === 0 && node.parent) {
+      node.parent.children.delete(lastSection);
+      node.parent.wildcardChildNode = null;
+      node.parent.placeholderChildren = [];
+    }
+    success = true;
+  }
+  return success;
+}
+function createRadixNode(options = {}) {
+  return {
+    type: options.type || NODE_TYPES.NORMAL,
+    maxDepth: 0,
+    parent: options.parent || null,
+    children: /* @__PURE__ */ new Map(),
+    data: options.data || null,
+    paramName: options.paramName || null,
+    wildcardChildNode: null,
+    placeholderChildren: []
+  };
+}
+function getNodeType(str) {
+  if (str.startsWith("**")) {
+    return NODE_TYPES.WILDCARD;
+  }
+  if (str[0] === ":" || str === "*") {
+    return NODE_TYPES.PLACEHOLDER;
+  }
+  return NODE_TYPES.NORMAL;
+}
+
+function toRouteMatcher(router) {
+  const table = _routerNodeToTable("", router.ctx.rootNode);
+  return _createMatcher(table, router.ctx.options.strictTrailingSlash);
+}
+function _createMatcher(table, strictTrailingSlash) {
+  return {
+    ctx: { table },
+    matchAll: (path) => _matchRoutes(path, table, strictTrailingSlash)
+  };
+}
+function _createRouteTable() {
+  return {
+    static: /* @__PURE__ */ new Map(),
+    wildcard: /* @__PURE__ */ new Map(),
+    dynamic: /* @__PURE__ */ new Map()
+  };
+}
+function _matchRoutes(path, table, strictTrailingSlash) {
+  if (strictTrailingSlash !== true && path.endsWith("/")) {
+    path = path.slice(0, -1) || "/";
+  }
+  const matches = [];
+  for (const [key, value] of _sortRoutesMap(table.wildcard)) {
+    if (path === key || path.startsWith(key + "/")) {
+      matches.push(value);
+    }
+  }
+  for (const [key, value] of _sortRoutesMap(table.dynamic)) {
+    if (path.startsWith(key + "/")) {
+      const subPath = "/" + path.slice(key.length).split("/").splice(2).join("/");
+      matches.push(..._matchRoutes(subPath, value));
+    }
+  }
+  const staticMatch = table.static.get(path);
+  if (staticMatch) {
+    matches.push(staticMatch);
+  }
+  return matches.filter(Boolean);
+}
+function _sortRoutesMap(m) {
+  return [...m.entries()].sort((a, b) => a[0].length - b[0].length);
+}
+function _routerNodeToTable(initialPath, initialNode) {
+  const table = _createRouteTable();
+  function _addNode(path, node) {
+    if (path) {
+      if (node.type === NODE_TYPES.NORMAL && !(path.includes("*") || path.includes(":"))) {
+        if (node.data) {
+          table.static.set(path, node.data);
+        }
+      } else if (node.type === NODE_TYPES.WILDCARD) {
+        table.wildcard.set(path.replace("/**", ""), node.data);
+      } else if (node.type === NODE_TYPES.PLACEHOLDER) {
+        const subTable = _routerNodeToTable("", node);
+        if (node.data) {
+          subTable.static.set("/", node.data);
+        }
+        table.dynamic.set(path.replace(/\/\*|\/:\w+/, ""), subTable);
+        return;
+      }
+    }
+    for (const [childPath, child] of node.children.entries()) {
+      _addNode(`${path}/${childPath}`.replace("//", "/"), child);
+    }
+  }
+  _addNode(initialPath, initialNode);
+  return table;
+}
+
+function isPlainObject(value) {
+  if (value === null || typeof value !== "object") {
+    return false;
+  }
+  const prototype = Object.getPrototypeOf(value);
+  if (prototype !== null && prototype !== Object.prototype && Object.getPrototypeOf(prototype) !== null) {
+    return false;
+  }
+  if (Symbol.iterator in value) {
+    return false;
+  }
+  if (Symbol.toStringTag in value) {
+    return Object.prototype.toString.call(value) === "[object Module]";
+  }
+  return true;
+}
+
+function _defu(baseObject, defaults, namespace = ".", merger) {
+  if (!isPlainObject(defaults)) {
+    return _defu(baseObject, {}, namespace, merger);
+  }
+  const object = Object.assign({}, defaults);
+  for (const key in baseObject) {
+    if (key === "__proto__" || key === "constructor") {
+      continue;
+    }
+    const value = baseObject[key];
+    if (value === null || value === void 0) {
+      continue;
+    }
+    if (merger && merger(object, key, value, namespace)) {
+      continue;
+    }
+    if (Array.isArray(value) && Array.isArray(object[key])) {
+      object[key] = [...value, ...object[key]];
+    } else if (isPlainObject(value) && isPlainObject(object[key])) {
+      object[key] = _defu(
+        value,
+        object[key],
+        (namespace ? `${namespace}.` : "") + key.toString(),
+        merger
+      );
+    } else {
+      object[key] = value;
+    }
+  }
+  return object;
+}
+function createDefu(merger) {
+  return (...arguments_) => (
+    // eslint-disable-next-line unicorn/no-array-reduce
+    arguments_.reduce((p, c) => _defu(p, c, "", merger), {})
+  );
+}
+const defu = createDefu();
+const defuFn = createDefu((object, key, currentValue) => {
+  if (object[key] !== void 0 && typeof currentValue === "function") {
+    object[key] = currentValue(object[key]);
+    return true;
+  }
+});
+
+function o(n){throw new Error(`${n} is not implemented yet!`)}let i$1 = class i extends EventEmitter{__unenv__={};readableEncoding=null;readableEnded=true;readableFlowing=false;readableHighWaterMark=0;readableLength=0;readableObjectMode=false;readableAborted=false;readableDidRead=false;closed=false;errored=null;readable=false;destroyed=false;static from(e,t){return new i(t)}constructor(e){super();}_read(e){}read(e){}setEncoding(e){return this}pause(){return this}resume(){return this}isPaused(){return  true}unpipe(e){return this}unshift(e,t){}wrap(e){return this}push(e,t){return  false}_destroy(e,t){this.removeAllListeners();}destroy(e){return this.destroyed=true,this._destroy(e),this}pipe(e,t){return {}}compose(e,t){throw new Error("Method not implemented.")}[Symbol.asyncDispose](){return this.destroy(),Promise.resolve()}async*[Symbol.asyncIterator](){throw o("Readable.asyncIterator")}iterator(e){throw o("Readable.iterator")}map(e,t){throw o("Readable.map")}filter(e,t){throw o("Readable.filter")}forEach(e,t){throw o("Readable.forEach")}reduce(e,t,r){throw o("Readable.reduce")}find(e,t){throw o("Readable.find")}findIndex(e,t){throw o("Readable.findIndex")}some(e,t){throw o("Readable.some")}toArray(e){throw o("Readable.toArray")}every(e,t){throw o("Readable.every")}flatMap(e,t){throw o("Readable.flatMap")}drop(e,t){throw o("Readable.drop")}take(e,t){throw o("Readable.take")}asIndexedPairs(e){throw o("Readable.asIndexedPairs")}};let l$1 = class l extends EventEmitter{__unenv__={};writable=true;writableEnded=false;writableFinished=false;writableHighWaterMark=0;writableLength=0;writableObjectMode=false;writableCorked=0;closed=false;errored=null;writableNeedDrain=false;destroyed=false;_data;_encoding="utf8";constructor(e){super();}pipe(e,t){return {}}_write(e,t,r){if(this.writableEnded){r&&r();return}if(this._data===void 0)this._data=e;else {const s=typeof this._data=="string"?Buffer$1.from(this._data,this._encoding||t||"utf8"):this._data,a=typeof e=="string"?Buffer$1.from(e,t||this._encoding||"utf8"):e;this._data=Buffer$1.concat([s,a]);}this._encoding=t,r&&r();}_writev(e,t){}_destroy(e,t){}_final(e){}write(e,t,r){const s=typeof t=="string"?this._encoding:"utf8",a=typeof t=="function"?t:typeof r=="function"?r:void 0;return this._write(e,s,a),true}setDefaultEncoding(e){return this}end(e,t,r){const s=typeof e=="function"?e:typeof t=="function"?t:typeof r=="function"?r:void 0;if(this.writableEnded)return s&&s(),this;const a=e===s?void 0:e;if(a){const u=t===s?void 0:t;this.write(a,u,s);}return this.writableEnded=true,this.writableFinished=true,this.emit("close"),this.emit("finish"),this}cork(){}uncork(){}destroy(e){return this.destroyed=true,delete this._data,this.removeAllListeners(),this}compose(e,t){throw new Error("Method not implemented.")}};const c=class{allowHalfOpen=true;_destroy;constructor(e=new i$1,t=new l$1){Object.assign(this,e),Object.assign(this,t),this._destroy=g(e._destroy,t._destroy);}};function _(){return Object.assign(c.prototype,i$1.prototype),Object.assign(c.prototype,l$1.prototype),c}function g(...n){return function(...e){for(const t of n)t(...e);}}const m=_();class A extends m{__unenv__={};bufferSize=0;bytesRead=0;bytesWritten=0;connecting=false;destroyed=false;pending=false;localAddress="";localPort=0;remoteAddress="";remoteFamily="";remotePort=0;autoSelectFamilyAttemptedAddresses=[];readyState="readOnly";constructor(e){super();}write(e,t,r){return  false}connect(e,t,r){return this}end(e,t,r){return this}setEncoding(e){return this}pause(){return this}resume(){return this}setTimeout(e,t){return this}setNoDelay(e){return this}setKeepAlive(e,t){return this}address(){return {}}unref(){return this}ref(){return this}destroySoon(){this.destroy();}resetAndDestroy(){const e=new Error("ERR_SOCKET_CLOSED");return e.code="ERR_SOCKET_CLOSED",this.destroy(e),this}}class y extends i$1{aborted=false;httpVersion="1.1";httpVersionMajor=1;httpVersionMinor=1;complete=true;connection;socket;headers={};trailers={};method="GET";url="/";statusCode=200;statusMessage="";closed=false;errored=null;readable=false;constructor(e){super(),this.socket=this.connection=e||new A;}get rawHeaders(){const e=this.headers,t=[];for(const r in e)if(Array.isArray(e[r]))for(const s of e[r])t.push(r,s);else t.push(r,e[r]);return t}get rawTrailers(){return []}setTimeout(e,t){return this}get headersDistinct(){return p(this.headers)}get trailersDistinct(){return p(this.trailers)}}function p(n){const e={};for(const[t,r]of Object.entries(n))t&&(e[t]=(Array.isArray(r)?r:[r]).filter(Boolean));return e}class w extends l$1{statusCode=200;statusMessage="";upgrading=false;chunkedEncoding=false;shouldKeepAlive=false;useChunkedEncodingByDefault=false;sendDate=false;finished=false;headersSent=false;strictContentLength=false;connection=null;socket=null;req;_headers={};constructor(e){super(),this.req=e;}assignSocket(e){e._httpMessage=this,this.socket=e,this.connection=e,this.emit("socket",e),this._flush();}_flush(){this.flushHeaders();}detachSocket(e){}writeContinue(e){}writeHead(e,t,r){e&&(this.statusCode=e),typeof t=="string"&&(this.statusMessage=t,t=void 0);const s=r||t;if(s&&!Array.isArray(s))for(const a in s)this.setHeader(a,s[a]);return this.headersSent=true,this}writeProcessing(){}setTimeout(e,t){return this}appendHeader(e,t){e=e.toLowerCase();const r=this._headers[e],s=[...Array.isArray(r)?r:[r],...Array.isArray(t)?t:[t]].filter(Boolean);return this._headers[e]=s.length>1?s:s[0],this}setHeader(e,t){return this._headers[e.toLowerCase()]=t,this}setHeaders(e){for(const[t,r]of Object.entries(e))this.setHeader(t,r);return this}getHeader(e){return this._headers[e.toLowerCase()]}getHeaders(){return this._headers}getHeaderNames(){return Object.keys(this._headers)}hasHeader(e){return e.toLowerCase()in this._headers}removeHeader(e){delete this._headers[e.toLowerCase()];}addTrailers(e){}flushHeaders(){}writeEarlyHints(e,t){typeof t=="function"&&t();}}const E=(()=>{const n=function(){};return n.prototype=Object.create(null),n})();function R(n={}){const e=new E,t=Array.isArray(n)||H(n)?n:Object.entries(n);for(const[r,s]of t)if(s){if(e[r]===void 0){e[r]=s;continue}e[r]=[...Array.isArray(e[r])?e[r]:[e[r]],...Array.isArray(s)?s:[s]];}return e}function H(n){return typeof n?.entries=="function"}function S(n={}){if(n instanceof Headers)return n;const e=new Headers;for(const[t,r]of Object.entries(n))if(r!==void 0){if(Array.isArray(r)){for(const s of r)e.append(t,String(s));continue}e.set(t,String(r));}return e}const C=new Set([101,204,205,304]);async function b(n,e){const t=new y,r=new w(t);t.url=e.url?.toString()||"/";let s;if(!t.url.startsWith("/")){const d=new URL(t.url);s=d.host,t.url=d.pathname+d.search+d.hash;}t.method=e.method||"GET",t.headers=R(e.headers||{}),t.headers.host||(t.headers.host=e.host||s||"localhost"),t.connection.encrypted=t.connection.encrypted||e.protocol==="https",t.body=e.body||null,t.__unenv__=e.context,await n(t,r);let a=r._data;(C.has(r.statusCode)||t.method.toUpperCase()==="HEAD")&&(a=null,delete r._headers["content-length"]);const u={status:r.statusCode,statusText:r.statusMessage,headers:r._headers,body:a};return t.destroy(),r.destroy(),u}async function O(n,e,t={}){try{const r=await b(n,{url:e,...t});return new Response(r.body,{status:r.status,statusText:r.statusText,headers:S(r.headers)})}catch(r){return new Response(r.toString(),{status:Number.parseInt(r.statusCode||r.code)||500,statusText:r.statusText})}}
+
+function hasProp(obj, prop) {
+  try {
+    return prop in obj;
+  } catch {
+    return false;
+  }
+}
+
+class H3Error extends Error {
+  static __h3_error__ = true;
+  statusCode = 500;
+  fatal = false;
+  unhandled = false;
+  statusMessage;
+  data;
+  cause;
+  constructor(message, opts = {}) {
+    super(message, opts);
+    if (opts.cause && !this.cause) {
+      this.cause = opts.cause;
+    }
+  }
+  toJSON() {
+    const obj = {
+      message: this.message,
+      statusCode: sanitizeStatusCode(this.statusCode, 500)
+    };
+    if (this.statusMessage) {
+      obj.statusMessage = sanitizeStatusMessage(this.statusMessage);
+    }
+    if (this.data !== undefined) {
+      obj.data = this.data;
+    }
+    return obj;
+  }
+}
+function createError$1(input) {
+  if (typeof input === "string") {
+    return new H3Error(input);
+  }
+  if (isError(input)) {
+    return input;
+  }
+  const err = new H3Error(input.message ?? input.statusMessage ?? "", {
+    cause: input.cause || input
+  });
+  if (hasProp(input, "stack")) {
+    try {
+      Object.defineProperty(err, "stack", {
+        get() {
+          return input.stack;
+        }
+      });
+    } catch {
+      try {
+        err.stack = input.stack;
+      } catch {
+      }
+    }
+  }
+  if (input.data) {
+    err.data = input.data;
+  }
+  if (input.statusCode) {
+    err.statusCode = sanitizeStatusCode(input.statusCode, err.statusCode);
+  } else if (input.status) {
+    err.statusCode = sanitizeStatusCode(input.status, err.statusCode);
+  }
+  if (input.statusMessage) {
+    err.statusMessage = input.statusMessage;
+  } else if (input.statusText) {
+    err.statusMessage = input.statusText;
+  }
+  if (err.statusMessage) {
+    const originalMessage = err.statusMessage;
+    const sanitizedMessage = sanitizeStatusMessage(err.statusMessage);
+    if (sanitizedMessage !== originalMessage) {
+      console.warn(
+        "[h3] Please prefer using `message` for longer error messages instead of `statusMessage`. In the future, `statusMessage` will be sanitized by default."
+      );
+    }
+  }
+  if (input.fatal !== undefined) {
+    err.fatal = input.fatal;
+  }
+  if (input.unhandled !== undefined) {
+    err.unhandled = input.unhandled;
+  }
+  return err;
+}
+function sendError(event, error, debug) {
+  if (event.handled) {
+    return;
+  }
+  const h3Error = isError(error) ? error : createError$1(error);
+  const responseBody = {
+    statusCode: h3Error.statusCode,
+    statusMessage: h3Error.statusMessage,
+    stack: [],
+    data: h3Error.data
+  };
+  if (debug) {
+    responseBody.stack = (h3Error.stack || "").split("\n").map((l) => l.trim());
+  }
+  if (event.handled) {
+    return;
+  }
+  const _code = Number.parseInt(h3Error.statusCode);
+  setResponseStatus(event, _code, h3Error.statusMessage);
+  event.node.res.setHeader("content-type", MIMES.json);
+  event.node.res.end(JSON.stringify(responseBody, undefined, 2));
+}
+function isError(input) {
+  return input?.constructor?.__h3_error__ === true;
+}
+
+function getQuery(event) {
+  return getQuery$1(event.path || "");
+}
+function isMethod(event, expected, allowHead) {
+  if (typeof expected === "string") {
+    if (event.method === expected) {
+      return true;
+    }
+  } else if (expected.includes(event.method)) {
+    return true;
+  }
+  return false;
+}
+function assertMethod(event, expected, allowHead) {
+  if (!isMethod(event, expected)) {
+    throw createError$1({
+      statusCode: 405,
+      statusMessage: "HTTP method is not allowed."
+    });
+  }
+}
+function getRequestHeaders(event) {
+  const _headers = {};
+  for (const key in event.node.req.headers) {
+    const val = event.node.req.headers[key];
+    _headers[key] = Array.isArray(val) ? val.filter(Boolean).join(", ") : val;
+  }
+  return _headers;
+}
+function getRequestHeader(event, name) {
+  const headers = getRequestHeaders(event);
+  const value = headers[name.toLowerCase()];
+  return value;
+}
+function getRequestHost(event, opts = {}) {
+  if (opts.xForwardedHost) {
+    const xForwardedHost = event.node.req.headers["x-forwarded-host"];
+    if (xForwardedHost) {
+      return xForwardedHost;
+    }
+  }
+  return event.node.req.headers.host || "localhost";
+}
+function getRequestProtocol(event, opts = {}) {
+  if (opts.xForwardedProto !== false && event.node.req.headers["x-forwarded-proto"] === "https") {
+    return "https";
+  }
+  return event.node.req.connection?.encrypted ? "https" : "http";
+}
+function getRequestURL(event, opts = {}) {
+  const host = getRequestHost(event, opts);
+  const protocol = getRequestProtocol(event, opts);
+  const path = (event.node.req.originalUrl || event.path).replace(
+    /^[/\\]+/g,
+    "/"
+  );
+  return new URL(path, `${protocol}://${host}`);
+}
+
+const RawBodySymbol = Symbol.for("h3RawBody");
+const PayloadMethods$1 = ["PATCH", "POST", "PUT", "DELETE"];
+function readRawBody(event, encoding = "utf8") {
+  assertMethod(event, PayloadMethods$1);
+  const _rawBody = event._requestBody || event.web?.request?.body || event.node.req[RawBodySymbol] || event.node.req.rawBody || event.node.req.body;
+  if (_rawBody) {
+    const promise2 = Promise.resolve(_rawBody).then((_resolved) => {
+      if (Buffer.isBuffer(_resolved)) {
+        return _resolved;
+      }
+      if (typeof _resolved.pipeTo === "function") {
+        return new Promise((resolve, reject) => {
+          const chunks = [];
+          _resolved.pipeTo(
+            new WritableStream({
+              write(chunk) {
+                chunks.push(chunk);
+              },
+              close() {
+                resolve(Buffer.concat(chunks));
+              },
+              abort(reason) {
+                reject(reason);
+              }
+            })
+          ).catch(reject);
+        });
+      } else if (typeof _resolved.pipe === "function") {
+        return new Promise((resolve, reject) => {
+          const chunks = [];
+          _resolved.on("data", (chunk) => {
+            chunks.push(chunk);
+          }).on("end", () => {
+            resolve(Buffer.concat(chunks));
+          }).on("error", reject);
+        });
+      }
+      if (_resolved.constructor === Object) {
+        return Buffer.from(JSON.stringify(_resolved));
+      }
+      if (_resolved instanceof URLSearchParams) {
+        return Buffer.from(_resolved.toString());
+      }
+      return Buffer.from(_resolved);
+    });
+    return encoding ? promise2.then((buff) => buff.toString(encoding)) : promise2;
+  }
+  if (!Number.parseInt(event.node.req.headers["content-length"] || "") && !String(event.node.req.headers["transfer-encoding"] ?? "").split(",").map((e) => e.trim()).filter(Boolean).includes("chunked")) {
+    return Promise.resolve(undefined);
+  }
+  const promise = event.node.req[RawBodySymbol] = new Promise(
+    (resolve, reject) => {
+      const bodyData = [];
+      event.node.req.on("error", (err) => {
+        reject(err);
+      }).on("data", (chunk) => {
+        bodyData.push(chunk);
+      }).on("end", () => {
+        resolve(Buffer.concat(bodyData));
+      });
+    }
+  );
+  const result = encoding ? promise.then((buff) => buff.toString(encoding)) : promise;
+  return result;
+}
+function getRequestWebStream(event) {
+  if (!PayloadMethods$1.includes(event.method)) {
+    return;
+  }
+  const bodyStream = event.web?.request?.body || event._requestBody;
+  if (bodyStream) {
+    return bodyStream;
+  }
+  const _hasRawBody = RawBodySymbol in event.node.req || "rawBody" in event.node.req || "body" in event.node.req || "__unenv__" in event.node.req;
+  if (_hasRawBody) {
+    return new ReadableStream({
+      async start(controller) {
+        const _rawBody = await readRawBody(event, false);
+        if (_rawBody) {
+          controller.enqueue(_rawBody);
+        }
+        controller.close();
+      }
+    });
+  }
+  return new ReadableStream({
+    start: (controller) => {
+      event.node.req.on("data", (chunk) => {
+        controller.enqueue(chunk);
+      });
+      event.node.req.on("end", () => {
+        controller.close();
+      });
+      event.node.req.on("error", (err) => {
+        controller.error(err);
+      });
+    }
+  });
+}
+
+function handleCacheHeaders(event, opts) {
+  const cacheControls = ["public", ...opts.cacheControls || []];
+  let cacheMatched = false;
+  if (opts.maxAge !== undefined) {
+    cacheControls.push(`max-age=${+opts.maxAge}`, `s-maxage=${+opts.maxAge}`);
+  }
+  if (opts.modifiedTime) {
+    const modifiedTime = new Date(opts.modifiedTime);
+    const ifModifiedSince = event.node.req.headers["if-modified-since"];
+    event.node.res.setHeader("last-modified", modifiedTime.toUTCString());
+    if (ifModifiedSince && new Date(ifModifiedSince) >= opts.modifiedTime) {
+      cacheMatched = true;
+    }
+  }
+  if (opts.etag) {
+    event.node.res.setHeader("etag", opts.etag);
+    const ifNonMatch = event.node.req.headers["if-none-match"];
+    if (ifNonMatch === opts.etag) {
+      cacheMatched = true;
+    }
+  }
+  event.node.res.setHeader("cache-control", cacheControls.join(", "));
+  if (cacheMatched) {
+    event.node.res.statusCode = 304;
+    if (!event.handled) {
+      event.node.res.end();
+    }
+    return true;
+  }
+  return false;
+}
+
+const MIMES = {
+  html: "text/html",
+  json: "application/json"
+};
+
+const DISALLOWED_STATUS_CHARS = /[^\u0009\u0020-\u007E]/g;
+function sanitizeStatusMessage(statusMessage = "") {
+  return statusMessage.replace(DISALLOWED_STATUS_CHARS, "");
+}
+function sanitizeStatusCode(statusCode, defaultStatusCode = 200) {
+  if (!statusCode) {
+    return defaultStatusCode;
+  }
+  if (typeof statusCode === "string") {
+    statusCode = Number.parseInt(statusCode, 10);
+  }
+  if (statusCode < 100 || statusCode > 999) {
+    return defaultStatusCode;
+  }
+  return statusCode;
+}
+function splitCookiesString(cookiesString) {
+  if (Array.isArray(cookiesString)) {
+    return cookiesString.flatMap((c) => splitCookiesString(c));
+  }
+  if (typeof cookiesString !== "string") {
+    return [];
+  }
+  const cookiesStrings = [];
+  let pos = 0;
+  let start;
+  let ch;
+  let lastComma;
+  let nextStart;
+  let cookiesSeparatorFound;
+  const skipWhitespace = () => {
+    while (pos < cookiesString.length && /\s/.test(cookiesString.charAt(pos))) {
+      pos += 1;
+    }
+    return pos < cookiesString.length;
+  };
+  const notSpecialChar = () => {
+    ch = cookiesString.charAt(pos);
+    return ch !== "=" && ch !== ";" && ch !== ",";
+  };
+  while (pos < cookiesString.length) {
+    start = pos;
+    cookiesSeparatorFound = false;
+    while (skipWhitespace()) {
+      ch = cookiesString.charAt(pos);
+      if (ch === ",") {
+        lastComma = pos;
+        pos += 1;
+        skipWhitespace();
+        nextStart = pos;
+        while (pos < cookiesString.length && notSpecialChar()) {
+          pos += 1;
+        }
+        if (pos < cookiesString.length && cookiesString.charAt(pos) === "=") {
+          cookiesSeparatorFound = true;
+          pos = nextStart;
+          cookiesStrings.push(cookiesString.slice(start, lastComma));
+          start = pos;
+        } else {
+          pos = lastComma + 1;
+        }
+      } else {
+        pos += 1;
+      }
+    }
+    if (!cookiesSeparatorFound || pos >= cookiesString.length) {
+      cookiesStrings.push(cookiesString.slice(start));
+    }
+  }
+  return cookiesStrings;
+}
+
+const defer = typeof setImmediate === "undefined" ? (fn) => fn() : setImmediate;
+function send(event, data, type) {
+  if (type) {
+    defaultContentType(event, type);
+  }
+  return new Promise((resolve) => {
+    defer(() => {
+      if (!event.handled) {
+        event.node.res.end(data);
+      }
+      resolve();
+    });
+  });
+}
+function sendNoContent(event, code) {
+  if (event.handled) {
+    return;
+  }
+  if (!code && event.node.res.statusCode !== 200) {
+    code = event.node.res.statusCode;
+  }
+  const _code = sanitizeStatusCode(code, 204);
+  if (_code === 204) {
+    event.node.res.removeHeader("content-length");
+  }
+  event.node.res.writeHead(_code);
+  event.node.res.end();
+}
+function setResponseStatus(event, code, text) {
+  if (code) {
+    event.node.res.statusCode = sanitizeStatusCode(
+      code,
+      event.node.res.statusCode
+    );
+  }
+  if (text) {
+    event.node.res.statusMessage = sanitizeStatusMessage(text);
+  }
+}
+function getResponseStatus(event) {
+  return event.node.res.statusCode;
+}
+function getResponseStatusText(event) {
+  return event.node.res.statusMessage;
+}
+function defaultContentType(event, type) {
+  if (type && event.node.res.statusCode !== 304 && !event.node.res.getHeader("content-type")) {
+    event.node.res.setHeader("content-type", type);
+  }
+}
+function sendRedirect(event, location, code = 302) {
+  event.node.res.statusCode = sanitizeStatusCode(
+    code,
+    event.node.res.statusCode
+  );
+  event.node.res.setHeader("location", location);
+  const encodedLoc = location.replace(/"/g, "%22");
+  const html = `<!DOCTYPE html><html><head><meta http-equiv="refresh" content="0; url=${encodedLoc}"></head></html>`;
+  return send(event, html, MIMES.html);
+}
+function getResponseHeader(event, name) {
+  return event.node.res.getHeader(name);
+}
+function setResponseHeaders(event, headers) {
+  for (const [name, value] of Object.entries(headers)) {
+    event.node.res.setHeader(
+      name,
+      value
+    );
+  }
+}
+const setHeaders = setResponseHeaders;
+function setResponseHeader(event, name, value) {
+  event.node.res.setHeader(name, value);
+}
+function isStream(data) {
+  if (!data || typeof data !== "object") {
+    return false;
+  }
+  if (typeof data.pipe === "function") {
+    if (typeof data._read === "function") {
+      return true;
+    }
+    if (typeof data.abort === "function") {
+      return true;
+    }
+  }
+  if (typeof data.pipeTo === "function") {
+    return true;
+  }
+  return false;
+}
+function isWebResponse(data) {
+  return typeof Response !== "undefined" && data instanceof Response;
+}
+function sendStream(event, stream) {
+  if (!stream || typeof stream !== "object") {
+    throw new Error("[h3] Invalid stream provided.");
+  }
+  event.node.res._data = stream;
+  if (!event.node.res.socket) {
+    event._handled = true;
+    return Promise.resolve();
+  }
+  if (hasProp(stream, "pipeTo") && typeof stream.pipeTo === "function") {
+    return stream.pipeTo(
+      new WritableStream({
+        write(chunk) {
+          event.node.res.write(chunk);
+        }
+      })
+    ).then(() => {
+      event.node.res.end();
+    });
+  }
+  if (hasProp(stream, "pipe") && typeof stream.pipe === "function") {
+    return new Promise((resolve, reject) => {
+      stream.pipe(event.node.res);
+      if (stream.on) {
+        stream.on("end", () => {
+          event.node.res.end();
+          resolve();
+        });
+        stream.on("error", (error) => {
+          reject(error);
+        });
+      }
+      event.node.res.on("close", () => {
+        if (stream.abort) {
+          stream.abort();
+        }
+      });
+    });
+  }
+  throw new Error("[h3] Invalid or incompatible stream provided.");
+}
+function sendWebResponse(event, response) {
+  for (const [key, value] of response.headers) {
+    if (key === "set-cookie") {
+      event.node.res.appendHeader(key, splitCookiesString(value));
+    } else {
+      event.node.res.setHeader(key, value);
+    }
+  }
+  if (response.status) {
+    event.node.res.statusCode = sanitizeStatusCode(
+      response.status,
+      event.node.res.statusCode
+    );
+  }
+  if (response.statusText) {
+    event.node.res.statusMessage = sanitizeStatusMessage(response.statusText);
+  }
+  if (response.redirected) {
+    event.node.res.setHeader("location", response.url);
+  }
+  if (!response.body) {
+    event.node.res.end();
+    return;
+  }
+  return sendStream(event, response.body);
+}
+
+const PayloadMethods = /* @__PURE__ */ new Set(["PATCH", "POST", "PUT", "DELETE"]);
+const ignoredHeaders = /* @__PURE__ */ new Set([
+  "transfer-encoding",
+  "accept-encoding",
+  "connection",
+  "keep-alive",
+  "upgrade",
+  "expect",
+  "host",
+  "accept"
+]);
+async function proxyRequest(event, target, opts = {}) {
+  let body;
+  let duplex;
+  if (PayloadMethods.has(event.method)) {
+    if (opts.streamRequest) {
+      body = getRequestWebStream(event);
+      duplex = "half";
+    } else {
+      body = await readRawBody(event, false).catch(() => undefined);
+    }
+  }
+  const method = opts.fetchOptions?.method || event.method;
+  const fetchHeaders = mergeHeaders$1(
+    getProxyRequestHeaders(event, { host: target.startsWith("/") }),
+    opts.fetchOptions?.headers,
+    opts.headers
+  );
+  return sendProxy(event, target, {
+    ...opts,
+    fetchOptions: {
+      method,
+      body,
+      duplex,
+      ...opts.fetchOptions,
+      headers: fetchHeaders
+    }
+  });
+}
+async function sendProxy(event, target, opts = {}) {
+  let response;
+  try {
+    response = await _getFetch(opts.fetch)(target, {
+      headers: opts.headers,
+      ignoreResponseError: true,
+      // make $ofetch.raw transparent
+      ...opts.fetchOptions
+    });
+  } catch (error) {
+    throw createError$1({
+      status: 502,
+      statusMessage: "Bad Gateway",
+      cause: error
+    });
+  }
+  event.node.res.statusCode = sanitizeStatusCode(
+    response.status,
+    event.node.res.statusCode
+  );
+  event.node.res.statusMessage = sanitizeStatusMessage(response.statusText);
+  const cookies = [];
+  for (const [key, value] of response.headers.entries()) {
+    if (key === "content-encoding") {
+      continue;
+    }
+    if (key === "content-length") {
+      continue;
+    }
+    if (key === "set-cookie") {
+      cookies.push(...splitCookiesString(value));
+      continue;
+    }
+    event.node.res.setHeader(key, value);
+  }
+  if (cookies.length > 0) {
+    event.node.res.setHeader(
+      "set-cookie",
+      cookies.map((cookie) => {
+        if (opts.cookieDomainRewrite) {
+          cookie = rewriteCookieProperty(
+            cookie,
+            opts.cookieDomainRewrite,
+            "domain"
+          );
+        }
+        if (opts.cookiePathRewrite) {
+          cookie = rewriteCookieProperty(
+            cookie,
+            opts.cookiePathRewrite,
+            "path"
+          );
+        }
+        return cookie;
+      })
+    );
+  }
+  if (opts.onResponse) {
+    await opts.onResponse(event, response);
+  }
+  if (response._data !== undefined) {
+    return response._data;
+  }
+  if (event.handled) {
+    return;
+  }
+  if (opts.sendStream === false) {
+    const data = new Uint8Array(await response.arrayBuffer());
+    return event.node.res.end(data);
+  }
+  if (response.body) {
+    for await (const chunk of response.body) {
+      event.node.res.write(chunk);
+    }
+  }
+  return event.node.res.end();
+}
+function getProxyRequestHeaders(event, opts) {
+  const headers = /* @__PURE__ */ Object.create(null);
+  const reqHeaders = getRequestHeaders(event);
+  for (const name in reqHeaders) {
+    if (!ignoredHeaders.has(name) || name === "host" && opts?.host) {
+      headers[name] = reqHeaders[name];
+    }
+  }
+  return headers;
+}
+function fetchWithEvent(event, req, init, options) {
+  return _getFetch(options?.fetch)(req, {
+    ...init,
+    context: init?.context || event.context,
+    headers: {
+      ...getProxyRequestHeaders(event, {
+        host: typeof req === "string" && req.startsWith("/")
+      }),
+      ...init?.headers
+    }
+  });
+}
+function _getFetch(_fetch) {
+  if (_fetch) {
+    return _fetch;
+  }
+  if (globalThis.fetch) {
+    return globalThis.fetch;
+  }
+  throw new Error(
+    "fetch is not available. Try importing `node-fetch-native/polyfill` for Node.js."
+  );
+}
+function rewriteCookieProperty(header, map, property) {
+  const _map = typeof map === "string" ? { "*": map } : map;
+  return header.replace(
+    new RegExp(`(;\\s*${property}=)([^;]+)`, "gi"),
+    (match, prefix, previousValue) => {
+      let newValue;
+      if (previousValue in _map) {
+        newValue = _map[previousValue];
+      } else if ("*" in _map) {
+        newValue = _map["*"];
+      } else {
+        return match;
+      }
+      return newValue ? prefix + newValue : "";
+    }
+  );
+}
+function mergeHeaders$1(defaults, ...inputs) {
+  const _inputs = inputs.filter(Boolean);
+  if (_inputs.length === 0) {
+    return defaults;
+  }
+  const merged = new Headers(defaults);
+  for (const input of _inputs) {
+    for (const [key, value] of Object.entries(input)) {
+      if (value !== undefined) {
+        merged.set(key, value);
+      }
+    }
+  }
+  return merged;
+}
+
+class H3Event {
+  "__is_event__" = true;
+  // Context
+  node;
+  // Node
+  web;
+  // Web
+  context = {};
+  // Shared
+  // Request
+  _method;
+  _path;
+  _headers;
+  _requestBody;
+  // Response
+  _handled = false;
+  // Hooks
+  _onBeforeResponseCalled;
+  _onAfterResponseCalled;
+  constructor(req, res) {
+    this.node = { req, res };
+  }
+  // --- Request ---
+  get method() {
+    if (!this._method) {
+      this._method = (this.node.req.method || "GET").toUpperCase();
+    }
+    return this._method;
+  }
+  get path() {
+    return this._path || this.node.req.url || "/";
+  }
+  get headers() {
+    if (!this._headers) {
+      this._headers = _normalizeNodeHeaders(this.node.req.headers);
+    }
+    return this._headers;
+  }
+  // --- Respoonse ---
+  get handled() {
+    return this._handled || this.node.res.writableEnded || this.node.res.headersSent;
+  }
+  respondWith(response) {
+    return Promise.resolve(response).then(
+      (_response) => sendWebResponse(this, _response)
+    );
+  }
+  // --- Utils ---
+  toString() {
+    return `[${this.method}] ${this.path}`;
+  }
+  toJSON() {
+    return this.toString();
+  }
+  // --- Deprecated ---
+  /** @deprecated Please use `event.node.req` instead. */
+  get req() {
+    return this.node.req;
+  }
+  /** @deprecated Please use `event.node.res` instead. */
+  get res() {
+    return this.node.res;
+  }
+}
+function isEvent(input) {
+  return hasProp(input, "__is_event__");
+}
+function createEvent(req, res) {
+  return new H3Event(req, res);
+}
+function _normalizeNodeHeaders(nodeHeaders) {
+  const headers = new Headers();
+  for (const [name, value] of Object.entries(nodeHeaders)) {
+    if (Array.isArray(value)) {
+      for (const item of value) {
+        headers.append(name, item);
+      }
+    } else if (value) {
+      headers.set(name, value);
+    }
+  }
+  return headers;
+}
+
+function defineEventHandler(handler) {
+  if (typeof handler === "function") {
+    handler.__is_handler__ = true;
+    return handler;
+  }
+  const _hooks = {
+    onRequest: _normalizeArray(handler.onRequest),
+    onBeforeResponse: _normalizeArray(handler.onBeforeResponse)
+  };
+  const _handler = (event) => {
+    return _callHandler(event, handler.handler, _hooks);
+  };
+  _handler.__is_handler__ = true;
+  _handler.__resolve__ = handler.handler.__resolve__;
+  _handler.__websocket__ = handler.websocket;
+  return _handler;
+}
+function _normalizeArray(input) {
+  return input ? Array.isArray(input) ? input : [input] : undefined;
+}
+async function _callHandler(event, handler, hooks) {
+  if (hooks.onRequest) {
+    for (const hook of hooks.onRequest) {
+      await hook(event);
+      if (event.handled) {
+        return;
+      }
+    }
+  }
+  const body = await handler(event);
+  const response = { body };
+  if (hooks.onBeforeResponse) {
+    for (const hook of hooks.onBeforeResponse) {
+      await hook(event, response);
+    }
+  }
+  return response.body;
+}
+const eventHandler = defineEventHandler;
+function isEventHandler(input) {
+  return hasProp(input, "__is_handler__");
+}
+function toEventHandler(input, _, _route) {
+  if (!isEventHandler(input)) {
+    console.warn(
+      "[h3] Implicit event handler conversion is deprecated. Use `eventHandler()` or `fromNodeMiddleware()` to define event handlers.",
+      _route && _route !== "/" ? `
+     Route: ${_route}` : "",
+      `
+     Handler: ${input}`
+    );
+  }
+  return input;
+}
+function defineLazyEventHandler(factory) {
+  let _promise;
+  let _resolved;
+  const resolveHandler = () => {
+    if (_resolved) {
+      return Promise.resolve(_resolved);
+    }
+    if (!_promise) {
+      _promise = Promise.resolve(factory()).then((r) => {
+        const handler2 = r.default || r;
+        if (typeof handler2 !== "function") {
+          throw new TypeError(
+            "Invalid lazy handler result. It should be a function:",
+            handler2
+          );
+        }
+        _resolved = { handler: toEventHandler(r.default || r) };
+        return _resolved;
+      });
+    }
+    return _promise;
+  };
+  const handler = eventHandler((event) => {
+    if (_resolved) {
+      return _resolved.handler(event);
+    }
+    return resolveHandler().then((r) => r.handler(event));
+  });
+  handler.__resolve__ = resolveHandler;
+  return handler;
+}
+const lazyEventHandler = defineLazyEventHandler;
+
+function createApp(options = {}) {
+  const stack = [];
+  const handler = createAppEventHandler(stack, options);
+  const resolve = createResolver(stack);
+  handler.__resolve__ = resolve;
+  const getWebsocket = cachedFn(() => websocketOptions(resolve, options));
+  const app = {
+    // @ts-expect-error
+    use: (arg1, arg2, arg3) => use(app, arg1, arg2, arg3),
+    resolve,
+    handler,
+    stack,
+    options,
+    get websocket() {
+      return getWebsocket();
+    }
+  };
+  return app;
+}
+function use(app, arg1, arg2, arg3) {
+  if (Array.isArray(arg1)) {
+    for (const i of arg1) {
+      use(app, i, arg2, arg3);
+    }
+  } else if (Array.isArray(arg2)) {
+    for (const i of arg2) {
+      use(app, arg1, i, arg3);
+    }
+  } else if (typeof arg1 === "string") {
+    app.stack.push(
+      normalizeLayer({ ...arg3, route: arg1, handler: arg2 })
+    );
+  } else if (typeof arg1 === "function") {
+    app.stack.push(normalizeLayer({ ...arg2, handler: arg1 }));
+  } else {
+    app.stack.push(normalizeLayer({ ...arg1 }));
+  }
+  return app;
+}
+function createAppEventHandler(stack, options) {
+  const spacing = options.debug ? 2 : undefined;
+  return eventHandler(async (event) => {
+    event.node.req.originalUrl = event.node.req.originalUrl || event.node.req.url || "/";
+    const _reqPath = event._path || event.node.req.url || "/";
+    let _layerPath;
+    if (options.onRequest) {
+      await options.onRequest(event);
+    }
+    for (const layer of stack) {
+      if (layer.route.length > 1) {
+        if (!_reqPath.startsWith(layer.route)) {
+          continue;
+        }
+        _layerPath = _reqPath.slice(layer.route.length) || "/";
+      } else {
+        _layerPath = _reqPath;
+      }
+      if (layer.match && !layer.match(_layerPath, event)) {
+        continue;
+      }
+      event._path = _layerPath;
+      event.node.req.url = _layerPath;
+      const val = await layer.handler(event);
+      const _body = val === undefined ? undefined : await val;
+      if (_body !== undefined) {
+        const _response = { body: _body };
+        if (options.onBeforeResponse) {
+          event._onBeforeResponseCalled = true;
+          await options.onBeforeResponse(event, _response);
+        }
+        await handleHandlerResponse(event, _response.body, spacing);
+        if (options.onAfterResponse) {
+          event._onAfterResponseCalled = true;
+          await options.onAfterResponse(event, _response);
+        }
+        return;
+      }
+      if (event.handled) {
+        if (options.onAfterResponse) {
+          event._onAfterResponseCalled = true;
+          await options.onAfterResponse(event, undefined);
+        }
+        return;
+      }
+    }
+    if (!event.handled) {
+      throw createError$1({
+        statusCode: 404,
+        statusMessage: `Cannot find any path matching ${event.path || "/"}.`
+      });
+    }
+    if (options.onAfterResponse) {
+      event._onAfterResponseCalled = true;
+      await options.onAfterResponse(event, undefined);
+    }
+  });
+}
+function createResolver(stack) {
+  return async (path) => {
+    let _layerPath;
+    for (const layer of stack) {
+      if (layer.route === "/" && !layer.handler.__resolve__) {
+        continue;
+      }
+      if (!path.startsWith(layer.route)) {
+        continue;
+      }
+      _layerPath = path.slice(layer.route.length) || "/";
+      if (layer.match && !layer.match(_layerPath, undefined)) {
+        continue;
+      }
+      let res = { route: layer.route, handler: layer.handler };
+      if (res.handler.__resolve__) {
+        const _res = await res.handler.__resolve__(_layerPath);
+        if (!_res) {
+          continue;
+        }
+        res = {
+          ...res,
+          ..._res,
+          route: joinURL(res.route || "/", _res.route || "/")
+        };
+      }
+      return res;
+    }
+  };
+}
+function normalizeLayer(input) {
+  let handler = input.handler;
+  if (handler.handler) {
+    handler = handler.handler;
+  }
+  if (input.lazy) {
+    handler = lazyEventHandler(handler);
+  } else if (!isEventHandler(handler)) {
+    handler = toEventHandler(handler, undefined, input.route);
+  }
+  return {
+    route: withoutTrailingSlash(input.route),
+    match: input.match,
+    handler
+  };
+}
+function handleHandlerResponse(event, val, jsonSpace) {
+  if (val === null) {
+    return sendNoContent(event);
+  }
+  if (val) {
+    if (isWebResponse(val)) {
+      return sendWebResponse(event, val);
+    }
+    if (isStream(val)) {
+      return sendStream(event, val);
+    }
+    if (val.buffer) {
+      return send(event, val);
+    }
+    if (val.arrayBuffer && typeof val.arrayBuffer === "function") {
+      return val.arrayBuffer().then((arrayBuffer) => {
+        return send(event, Buffer.from(arrayBuffer), val.type);
+      });
+    }
+    if (val instanceof Error) {
+      throw createError$1(val);
+    }
+    if (typeof val.end === "function") {
+      return true;
+    }
+  }
+  const valType = typeof val;
+  if (valType === "string") {
+    return send(event, val, MIMES.html);
+  }
+  if (valType === "object" || valType === "boolean" || valType === "number") {
+    return send(event, JSON.stringify(val, undefined, jsonSpace), MIMES.json);
+  }
+  if (valType === "bigint") {
+    return send(event, val.toString(), MIMES.json);
+  }
+  throw createError$1({
+    statusCode: 500,
+    statusMessage: `[h3] Cannot send ${valType} as response.`
+  });
+}
+function cachedFn(fn) {
+  let cache;
+  return () => {
+    if (!cache) {
+      cache = fn();
+    }
+    return cache;
+  };
+}
+function websocketOptions(evResolver, appOptions) {
+  return {
+    ...appOptions.websocket,
+    async resolve(info) {
+      const url = info.request?.url || info.url || "/";
+      const { pathname } = typeof url === "string" ? parseURL(url) : url;
+      const resolved = await evResolver(pathname);
+      return resolved?.handler?.__websocket__ || {};
+    }
+  };
+}
+
+const RouterMethods = [
+  "connect",
+  "delete",
+  "get",
+  "head",
+  "options",
+  "post",
+  "put",
+  "trace",
+  "patch"
+];
+function createRouter(opts = {}) {
+  const _router = createRouter$1({});
+  const routes = {};
+  let _matcher;
+  const router = {};
+  const addRoute = (path, handler, method) => {
+    let route = routes[path];
+    if (!route) {
+      routes[path] = route = { path, handlers: {} };
+      _router.insert(path, route);
+    }
+    if (Array.isArray(method)) {
+      for (const m of method) {
+        addRoute(path, handler, m);
+      }
+    } else {
+      route.handlers[method] = toEventHandler(handler, undefined, path);
+    }
+    return router;
+  };
+  router.use = router.add = (path, handler, method) => addRoute(path, handler, method || "all");
+  for (const method of RouterMethods) {
+    router[method] = (path, handle) => router.add(path, handle, method);
+  }
+  const matchHandler = (path = "/", method = "get") => {
+    const qIndex = path.indexOf("?");
+    if (qIndex !== -1) {
+      path = path.slice(0, Math.max(0, qIndex));
+    }
+    const matched = _router.lookup(path);
+    if (!matched || !matched.handlers) {
+      return {
+        error: createError$1({
+          statusCode: 404,
+          name: "Not Found",
+          statusMessage: `Cannot find any route matching ${path || "/"}.`
+        })
+      };
+    }
+    let handler = matched.handlers[method] || matched.handlers.all;
+    if (!handler) {
+      if (!_matcher) {
+        _matcher = toRouteMatcher(_router);
+      }
+      const _matches = _matcher.matchAll(path).reverse();
+      for (const _match of _matches) {
+        if (_match.handlers[method]) {
+          handler = _match.handlers[method];
+          matched.handlers[method] = matched.handlers[method] || handler;
+          break;
+        }
+        if (_match.handlers.all) {
+          handler = _match.handlers.all;
+          matched.handlers.all = matched.handlers.all || handler;
+          break;
+        }
+      }
+    }
+    if (!handler) {
+      return {
+        error: createError$1({
+          statusCode: 405,
+          name: "Method Not Allowed",
+          statusMessage: `Method ${method} is not allowed on this route.`
+        })
+      };
+    }
+    return { matched, handler };
+  };
+  const isPreemptive = opts.preemptive || opts.preemtive;
+  router.handler = eventHandler((event) => {
+    const match = matchHandler(
+      event.path,
+      event.method.toLowerCase()
+    );
+    if ("error" in match) {
+      if (isPreemptive) {
+        throw match.error;
+      } else {
+        return;
+      }
+    }
+    event.context.matchedRoute = match.matched;
+    const params = match.matched.params || {};
+    event.context.params = params;
+    return Promise.resolve(match.handler(event)).then((res) => {
+      if (res === undefined && isPreemptive) {
+        return null;
+      }
+      return res;
+    });
+  });
+  router.handler.__resolve__ = async (path) => {
+    path = withLeadingSlash(path);
+    const match = matchHandler(path);
+    if ("error" in match) {
+      return;
+    }
+    let res = {
+      route: match.matched.path,
+      handler: match.handler
+    };
+    if (match.handler.__resolve__) {
+      const _res = await match.handler.__resolve__(path);
+      if (!_res) {
+        return;
+      }
+      res = { ...res, ..._res };
+    }
+    return res;
+  };
+  return router;
+}
+function toNodeListener(app) {
+  const toNodeHandle = async function(req, res) {
+    const event = createEvent(req, res);
+    try {
+      await app.handler(event);
+    } catch (_error) {
+      const error = createError$1(_error);
+      if (!isError(_error)) {
+        error.unhandled = true;
+      }
+      setResponseStatus(event, error.statusCode, error.statusMessage);
+      if (app.options.onError) {
+        await app.options.onError(error, event);
+      }
+      if (event.handled) {
+        return;
+      }
+      if (error.unhandled || error.fatal) {
+        console.error("[h3]", error.fatal ? "[fatal]" : "[unhandled]", error);
+      }
+      if (app.options.onBeforeResponse && !event._onBeforeResponseCalled) {
+        await app.options.onBeforeResponse(event, { body: error });
+      }
+      await sendError(event, error, !!app.options.debug);
+      if (app.options.onAfterResponse && !event._onAfterResponseCalled) {
+        await app.options.onAfterResponse(event, { body: error });
+      }
+    }
+  };
+  return toNodeHandle;
+}
+
+function flatHooks(configHooks, hooks = {}, parentName) {
+  for (const key in configHooks) {
+    const subHook = configHooks[key];
+    const name = parentName ? `${parentName}:${key}` : key;
+    if (typeof subHook === "object" && subHook !== null) {
+      flatHooks(subHook, hooks, name);
+    } else if (typeof subHook === "function") {
+      hooks[name] = subHook;
+    }
+  }
+  return hooks;
+}
+const defaultTask = { run: (function_) => function_() };
+const _createTask = () => defaultTask;
+const createTask = typeof console.createTask !== "undefined" ? console.createTask : _createTask;
+function serialTaskCaller(hooks, args) {
+  const name = args.shift();
+  const task = createTask(name);
+  return hooks.reduce(
+    (promise, hookFunction) => promise.then(() => task.run(() => hookFunction(...args))),
+    Promise.resolve()
+  );
+}
+function parallelTaskCaller(hooks, args) {
+  const name = args.shift();
+  const task = createTask(name);
+  return Promise.all(hooks.map((hook) => task.run(() => hook(...args))));
+}
+function callEachWith(callbacks, arg0) {
+  for (const callback of [...callbacks]) {
+    callback(arg0);
+  }
+}
+
+class Hookable {
+  constructor() {
+    this._hooks = {};
+    this._before = void 0;
+    this._after = void 0;
+    this._deprecatedMessages = void 0;
+    this._deprecatedHooks = {};
+    this.hook = this.hook.bind(this);
+    this.callHook = this.callHook.bind(this);
+    this.callHookWith = this.callHookWith.bind(this);
+  }
+  hook(name, function_, options = {}) {
+    if (!name || typeof function_ !== "function") {
+      return () => {
+      };
+    }
+    const originalName = name;
+    let dep;
+    while (this._deprecatedHooks[name]) {
+      dep = this._deprecatedHooks[name];
+      name = dep.to;
+    }
+    if (dep && !options.allowDeprecated) {
+      let message = dep.message;
+      if (!message) {
+        message = `${originalName} hook has been deprecated` + (dep.to ? `, please use ${dep.to}` : "");
+      }
+      if (!this._deprecatedMessages) {
+        this._deprecatedMessages = /* @__PURE__ */ new Set();
+      }
+      if (!this._deprecatedMessages.has(message)) {
+        console.warn(message);
+        this._deprecatedMessages.add(message);
+      }
+    }
+    if (!function_.name) {
+      try {
+        Object.defineProperty(function_, "name", {
+          get: () => "_" + name.replace(/\W+/g, "_") + "_hook_cb",
+          configurable: true
+        });
+      } catch {
+      }
+    }
+    this._hooks[name] = this._hooks[name] || [];
+    this._hooks[name].push(function_);
+    return () => {
+      if (function_) {
+        this.removeHook(name, function_);
+        function_ = void 0;
+      }
+    };
+  }
+  hookOnce(name, function_) {
+    let _unreg;
+    let _function = (...arguments_) => {
+      if (typeof _unreg === "function") {
+        _unreg();
+      }
+      _unreg = void 0;
+      _function = void 0;
+      return function_(...arguments_);
+    };
+    _unreg = this.hook(name, _function);
+    return _unreg;
+  }
+  removeHook(name, function_) {
+    if (this._hooks[name]) {
+      const index = this._hooks[name].indexOf(function_);
+      if (index !== -1) {
+        this._hooks[name].splice(index, 1);
+      }
+      if (this._hooks[name].length === 0) {
+        delete this._hooks[name];
+      }
+    }
+  }
+  deprecateHook(name, deprecated) {
+    this._deprecatedHooks[name] = typeof deprecated === "string" ? { to: deprecated } : deprecated;
+    const _hooks = this._hooks[name] || [];
+    delete this._hooks[name];
+    for (const hook of _hooks) {
+      this.hook(name, hook);
+    }
+  }
+  deprecateHooks(deprecatedHooks) {
+    Object.assign(this._deprecatedHooks, deprecatedHooks);
+    for (const name in deprecatedHooks) {
+      this.deprecateHook(name, deprecatedHooks[name]);
+    }
+  }
+  addHooks(configHooks) {
+    const hooks = flatHooks(configHooks);
+    const removeFns = Object.keys(hooks).map(
+      (key) => this.hook(key, hooks[key])
+    );
+    return () => {
+      for (const unreg of removeFns.splice(0, removeFns.length)) {
+        unreg();
+      }
+    };
+  }
+  removeHooks(configHooks) {
+    const hooks = flatHooks(configHooks);
+    for (const key in hooks) {
+      this.removeHook(key, hooks[key]);
+    }
+  }
+  removeAllHooks() {
+    for (const key in this._hooks) {
+      delete this._hooks[key];
+    }
+  }
+  callHook(name, ...arguments_) {
+    arguments_.unshift(name);
+    return this.callHookWith(serialTaskCaller, name, ...arguments_);
+  }
+  callHookParallel(name, ...arguments_) {
+    arguments_.unshift(name);
+    return this.callHookWith(parallelTaskCaller, name, ...arguments_);
+  }
+  callHookWith(caller, name, ...arguments_) {
+    const event = this._before || this._after ? { name, args: arguments_, context: {} } : void 0;
+    if (this._before) {
+      callEachWith(this._before, event);
+    }
+    const result = caller(
+      name in this._hooks ? [...this._hooks[name]] : [],
+      arguments_
+    );
+    if (result instanceof Promise) {
+      return result.finally(() => {
+        if (this._after && event) {
+          callEachWith(this._after, event);
+        }
+      });
+    }
+    if (this._after && event) {
+      callEachWith(this._after, event);
+    }
+    return result;
+  }
+  beforeEach(function_) {
+    this._before = this._before || [];
+    this._before.push(function_);
+    return () => {
+      if (this._before !== void 0) {
+        const index = this._before.indexOf(function_);
+        if (index !== -1) {
+          this._before.splice(index, 1);
+        }
+      }
+    };
+  }
+  afterEach(function_) {
+    this._after = this._after || [];
+    this._after.push(function_);
+    return () => {
+      if (this._after !== void 0) {
+        const index = this._after.indexOf(function_);
+        if (index !== -1) {
+          this._after.splice(index, 1);
+        }
+      }
+    };
+  }
+}
+function createHooks() {
+  return new Hookable();
+}
+
+const s$1=globalThis.Headers,i=globalThis.AbortController,l=globalThis.fetch||(()=>{throw new Error("[node-fetch-native] Failed to fetch: `globalThis.fetch` is not available!")});
+
+class FetchError extends Error {
+  constructor(message, opts) {
+    super(message, opts);
+    this.name = "FetchError";
+    if (opts?.cause && !this.cause) {
+      this.cause = opts.cause;
+    }
+  }
+}
+function createFetchError(ctx) {
+  const errorMessage = ctx.error?.message || ctx.error?.toString() || "";
+  const method = ctx.request?.method || ctx.options?.method || "GET";
+  const url = ctx.request?.url || String(ctx.request) || "/";
+  const requestStr = `[${method}] ${JSON.stringify(url)}`;
+  const statusStr = ctx.response ? `${ctx.response.status} ${ctx.response.statusText}` : "<no response>";
+  const message = `${requestStr}: ${statusStr}${errorMessage ? ` ${errorMessage}` : ""}`;
+  const fetchError = new FetchError(
+    message,
+    ctx.error ? { cause: ctx.error } : void 0
+  );
+  for (const key of ["request", "options", "response"]) {
+    Object.defineProperty(fetchError, key, {
+      get() {
+        return ctx[key];
+      }
+    });
+  }
+  for (const [key, refKey] of [
+    ["data", "_data"],
+    ["status", "status"],
+    ["statusCode", "status"],
+    ["statusText", "statusText"],
+    ["statusMessage", "statusText"]
+  ]) {
+    Object.defineProperty(fetchError, key, {
+      get() {
+        return ctx.response && ctx.response[refKey];
+      }
+    });
+  }
+  return fetchError;
+}
+
+const payloadMethods = new Set(
+  Object.freeze(["PATCH", "POST", "PUT", "DELETE"])
+);
+function isPayloadMethod(method = "GET") {
+  return payloadMethods.has(method.toUpperCase());
+}
+function isJSONSerializable(value) {
+  if (value === void 0) {
+    return false;
+  }
+  const t = typeof value;
+  if (t === "string" || t === "number" || t === "boolean" || t === null) {
+    return true;
+  }
+  if (t !== "object") {
+    return false;
+  }
+  if (Array.isArray(value)) {
+    return true;
+  }
+  if (value.buffer) {
+    return false;
+  }
+  return value.constructor && value.constructor.name === "Object" || typeof value.toJSON === "function";
+}
+const textTypes = /* @__PURE__ */ new Set([
+  "image/svg",
+  "application/xml",
+  "application/xhtml",
+  "application/html"
+]);
+const JSON_RE = /^application\/(?:[\w!#$%&*.^`~-]*\+)?json(;.+)?$/i;
+function detectResponseType(_contentType = "") {
+  if (!_contentType) {
+    return "json";
+  }
+  const contentType = _contentType.split(";").shift() || "";
+  if (JSON_RE.test(contentType)) {
+    return "json";
+  }
+  if (textTypes.has(contentType) || contentType.startsWith("text/")) {
+    return "text";
+  }
+  return "blob";
+}
+function resolveFetchOptions(request, input, defaults, Headers) {
+  const headers = mergeHeaders(
+    input?.headers ?? request?.headers,
+    defaults?.headers,
+    Headers
+  );
+  let query;
+  if (defaults?.query || defaults?.params || input?.params || input?.query) {
+    query = {
+      ...defaults?.params,
+      ...defaults?.query,
+      ...input?.params,
+      ...input?.query
+    };
+  }
+  return {
+    ...defaults,
+    ...input,
+    query,
+    params: query,
+    headers
+  };
+}
+function mergeHeaders(input, defaults, Headers) {
+  if (!defaults) {
+    return new Headers(input);
+  }
+  const headers = new Headers(defaults);
+  if (input) {
+    for (const [key, value] of Symbol.iterator in input || Array.isArray(input) ? input : new Headers(input)) {
+      headers.set(key, value);
+    }
+  }
+  return headers;
+}
+async function callHooks(context, hooks) {
+  if (hooks) {
+    if (Array.isArray(hooks)) {
+      for (const hook of hooks) {
+        await hook(context);
+      }
+    } else {
+      await hooks(context);
+    }
+  }
+}
+
+const retryStatusCodes = /* @__PURE__ */ new Set([
+  408,
+  // Request Timeout
+  409,
+  // Conflict
+  425,
+  // Too Early (Experimental)
+  429,
+  // Too Many Requests
+  500,
+  // Internal Server Error
+  502,
+  // Bad Gateway
+  503,
+  // Service Unavailable
+  504
+  // Gateway Timeout
+]);
+const nullBodyResponses = /* @__PURE__ */ new Set([101, 204, 205, 304]);
+function createFetch(globalOptions = {}) {
+  const {
+    fetch = globalThis.fetch,
+    Headers = globalThis.Headers,
+    AbortController = globalThis.AbortController
+  } = globalOptions;
+  async function onError(context) {
+    const isAbort = context.error && context.error.name === "AbortError" && !context.options.timeout || false;
+    if (context.options.retry !== false && !isAbort) {
+      let retries;
+      if (typeof context.options.retry === "number") {
+        retries = context.options.retry;
+      } else {
+        retries = isPayloadMethod(context.options.method) ? 0 : 1;
+      }
+      const responseCode = context.response && context.response.status || 500;
+      if (retries > 0 && (Array.isArray(context.options.retryStatusCodes) ? context.options.retryStatusCodes.includes(responseCode) : retryStatusCodes.has(responseCode))) {
+        const retryDelay = typeof context.options.retryDelay === "function" ? context.options.retryDelay(context) : context.options.retryDelay || 0;
+        if (retryDelay > 0) {
+          await new Promise((resolve) => setTimeout(resolve, retryDelay));
+        }
+        return $fetchRaw(context.request, {
+          ...context.options,
+          retry: retries - 1
+        });
+      }
+    }
+    const error = createFetchError(context);
+    if (Error.captureStackTrace) {
+      Error.captureStackTrace(error, $fetchRaw);
+    }
+    throw error;
+  }
+  const $fetchRaw = async function $fetchRaw2(_request, _options = {}) {
+    const context = {
+      request: _request,
+      options: resolveFetchOptions(
+        _request,
+        _options,
+        globalOptions.defaults,
+        Headers
+      ),
+      response: void 0,
+      error: void 0
+    };
+    if (context.options.method) {
+      context.options.method = context.options.method.toUpperCase();
+    }
+    if (context.options.onRequest) {
+      await callHooks(context, context.options.onRequest);
+    }
+    if (typeof context.request === "string") {
+      if (context.options.baseURL) {
+        context.request = withBase(context.request, context.options.baseURL);
+      }
+      if (context.options.query) {
+        context.request = withQuery(context.request, context.options.query);
+        delete context.options.query;
+      }
+      if ("query" in context.options) {
+        delete context.options.query;
+      }
+      if ("params" in context.options) {
+        delete context.options.params;
+      }
+    }
+    if (context.options.body && isPayloadMethod(context.options.method)) {
+      if (isJSONSerializable(context.options.body)) {
+        context.options.body = typeof context.options.body === "string" ? context.options.body : JSON.stringify(context.options.body);
+        context.options.headers = new Headers(context.options.headers || {});
+        if (!context.options.headers.has("content-type")) {
+          context.options.headers.set("content-type", "application/json");
+        }
+        if (!context.options.headers.has("accept")) {
+          context.options.headers.set("accept", "application/json");
+        }
+      } else if (
+        // ReadableStream Body
+        "pipeTo" in context.options.body && typeof context.options.body.pipeTo === "function" || // Node.js Stream Body
+        typeof context.options.body.pipe === "function"
+      ) {
+        if (!("duplex" in context.options)) {
+          context.options.duplex = "half";
+        }
+      }
+    }
+    let abortTimeout;
+    if (!context.options.signal && context.options.timeout) {
+      const controller = new AbortController();
+      abortTimeout = setTimeout(() => {
+        const error = new Error(
+          "[TimeoutError]: The operation was aborted due to timeout"
+        );
+        error.name = "TimeoutError";
+        error.code = 23;
+        controller.abort(error);
+      }, context.options.timeout);
+      context.options.signal = controller.signal;
+    }
+    try {
+      context.response = await fetch(
+        context.request,
+        context.options
+      );
+    } catch (error) {
+      context.error = error;
+      if (context.options.onRequestError) {
+        await callHooks(
+          context,
+          context.options.onRequestError
+        );
+      }
+      return await onError(context);
+    } finally {
+      if (abortTimeout) {
+        clearTimeout(abortTimeout);
+      }
+    }
+    const hasBody = (context.response.body || // https://github.com/unjs/ofetch/issues/324
+    // https://github.com/unjs/ofetch/issues/294
+    // https://github.com/JakeChampion/fetch/issues/1454
+    context.response._bodyInit) && !nullBodyResponses.has(context.response.status) && context.options.method !== "HEAD";
+    if (hasBody) {
+      const responseType = (context.options.parseResponse ? "json" : context.options.responseType) || detectResponseType(context.response.headers.get("content-type") || "");
+      switch (responseType) {
+        case "json": {
+          const data = await context.response.text();
+          const parseFunction = context.options.parseResponse || destr;
+          context.response._data = parseFunction(data);
+          break;
+        }
+        case "stream": {
+          context.response._data = context.response.body || context.response._bodyInit;
+          break;
+        }
+        default: {
+          context.response._data = await context.response[responseType]();
+        }
+      }
+    }
+    if (context.options.onResponse) {
+      await callHooks(
+        context,
+        context.options.onResponse
+      );
+    }
+    if (!context.options.ignoreResponseError && context.response.status >= 400 && context.response.status < 600) {
+      if (context.options.onResponseError) {
+        await callHooks(
+          context,
+          context.options.onResponseError
+        );
+      }
+      return await onError(context);
+    }
+    return context.response;
+  };
+  const $fetch = async function $fetch2(request, options) {
+    const r = await $fetchRaw(request, options);
+    return r._data;
+  };
+  $fetch.raw = $fetchRaw;
+  $fetch.native = (...args) => fetch(...args);
+  $fetch.create = (defaultOptions = {}, customGlobalOptions = {}) => createFetch({
+    ...globalOptions,
+    ...customGlobalOptions,
+    defaults: {
+      ...globalOptions.defaults,
+      ...customGlobalOptions.defaults,
+      ...defaultOptions
+    }
+  });
+  return $fetch;
+}
+
+function createNodeFetch() {
+  const useKeepAlive = JSON.parse(process.env.FETCH_KEEP_ALIVE || "false");
+  if (!useKeepAlive) {
+    return l;
+  }
+  const agentOptions = { keepAlive: true };
+  const httpAgent = new http.Agent(agentOptions);
+  const httpsAgent = new https.Agent(agentOptions);
+  const nodeFetchOptions = {
+    agent(parsedURL) {
+      return parsedURL.protocol === "http:" ? httpAgent : httpsAgent;
+    }
+  };
+  return function nodeFetchWithKeepAlive(input, init) {
+    return l(input, { ...nodeFetchOptions, ...init });
+  };
+}
+const fetch = globalThis.fetch ? (...args) => globalThis.fetch(...args) : createNodeFetch();
+const Headers$1 = globalThis.Headers || s$1;
+const AbortController = globalThis.AbortController || i;
+createFetch({ fetch, Headers: Headers$1, AbortController });
+
+function wrapToPromise(value) {
+  if (!value || typeof value.then !== "function") {
+    return Promise.resolve(value);
+  }
+  return value;
+}
+function asyncCall(function_, ...arguments_) {
+  try {
+    return wrapToPromise(function_(...arguments_));
+  } catch (error) {
+    return Promise.reject(error);
+  }
+}
+function isPrimitive(value) {
+  const type = typeof value;
+  return value === null || type !== "object" && type !== "function";
+}
+function isPureObject(value) {
+  const proto = Object.getPrototypeOf(value);
+  return !proto || proto.isPrototypeOf(Object);
+}
+function stringify(value) {
+  if (isPrimitive(value)) {
+    return String(value);
+  }
+  if (isPureObject(value) || Array.isArray(value)) {
+    return JSON.stringify(value);
+  }
+  if (typeof value.toJSON === "function") {
+    return stringify(value.toJSON());
+  }
+  throw new Error("[unstorage] Cannot stringify value!");
+}
+const BASE64_PREFIX = "base64:";
+function serializeRaw(value) {
+  if (typeof value === "string") {
+    return value;
+  }
+  return BASE64_PREFIX + base64Encode(value);
+}
+function deserializeRaw(value) {
+  if (typeof value !== "string") {
+    return value;
+  }
+  if (!value.startsWith(BASE64_PREFIX)) {
+    return value;
+  }
+  return base64Decode(value.slice(BASE64_PREFIX.length));
+}
+function base64Decode(input) {
+  if (globalThis.Buffer) {
+    return Buffer.from(input, "base64");
+  }
+  return Uint8Array.from(
+    globalThis.atob(input),
+    (c) => c.codePointAt(0)
+  );
+}
+function base64Encode(input) {
+  if (globalThis.Buffer) {
+    return Buffer.from(input).toString("base64");
+  }
+  return globalThis.btoa(String.fromCodePoint(...input));
+}
+
+const storageKeyProperties = [
+  "has",
+  "hasItem",
+  "get",
+  "getItem",
+  "getItemRaw",
+  "set",
+  "setItem",
+  "setItemRaw",
+  "del",
+  "remove",
+  "removeItem",
+  "getMeta",
+  "setMeta",
+  "removeMeta",
+  "getKeys",
+  "clear",
+  "mount",
+  "unmount"
+];
+function prefixStorage(storage, base) {
+  base = normalizeBaseKey(base);
+  if (!base) {
+    return storage;
+  }
+  const nsStorage = { ...storage };
+  for (const property of storageKeyProperties) {
+    nsStorage[property] = (key = "", ...args) => (
+      // @ts-ignore
+      storage[property](base + key, ...args)
+    );
+  }
+  nsStorage.getKeys = (key = "", ...arguments_) => storage.getKeys(base + key, ...arguments_).then((keys) => keys.map((key2) => key2.slice(base.length)));
+  return nsStorage;
+}
+function normalizeKey$1(key) {
+  if (!key) {
+    return "";
+  }
+  return key.split("?")[0]?.replace(/[/\\]/g, ":").replace(/:+/g, ":").replace(/^:|:$/g, "") || "";
+}
+function joinKeys(...keys) {
+  return normalizeKey$1(keys.join(":"));
+}
+function normalizeBaseKey(base) {
+  base = normalizeKey$1(base);
+  return base ? base + ":" : "";
+}
+function filterKeyByDepth(key, depth) {
+  if (depth === void 0) {
+    return true;
+  }
+  let substrCount = 0;
+  let index = key.indexOf(":");
+  while (index > -1) {
+    substrCount++;
+    index = key.indexOf(":", index + 1);
+  }
+  return substrCount <= depth;
+}
+function filterKeyByBase(key, base) {
+  if (base) {
+    return key.startsWith(base) && key[key.length - 1] !== "$";
+  }
+  return key[key.length - 1] !== "$";
+}
+
+function defineDriver$1(factory) {
+  return factory;
+}
+
+const DRIVER_NAME$1 = "memory";
+const memory = defineDriver$1(() => {
+  const data = /* @__PURE__ */ new Map();
+  return {
+    name: DRIVER_NAME$1,
+    getInstance: () => data,
+    hasItem(key) {
+      return data.has(key);
+    },
+    getItem(key) {
+      return data.get(key) ?? null;
+    },
+    getItemRaw(key) {
+      return data.get(key) ?? null;
+    },
+    setItem(key, value) {
+      data.set(key, value);
+    },
+    setItemRaw(key, value) {
+      data.set(key, value);
+    },
+    removeItem(key) {
+      data.delete(key);
+    },
+    getKeys() {
+      return [...data.keys()];
+    },
+    clear() {
+      data.clear();
+    },
+    dispose() {
+      data.clear();
+    }
+  };
+});
+
+function createStorage(options = {}) {
+  const context = {
+    mounts: { "": options.driver || memory() },
+    mountpoints: [""],
+    watching: false,
+    watchListeners: [],
+    unwatch: {}
+  };
+  const getMount = (key) => {
+    for (const base of context.mountpoints) {
+      if (key.startsWith(base)) {
+        return {
+          base,
+          relativeKey: key.slice(base.length),
+          driver: context.mounts[base]
+        };
+      }
+    }
+    return {
+      base: "",
+      relativeKey: key,
+      driver: context.mounts[""]
+    };
+  };
+  const getMounts = (base, includeParent) => {
+    return context.mountpoints.filter(
+      (mountpoint) => mountpoint.startsWith(base) || includeParent && base.startsWith(mountpoint)
+    ).map((mountpoint) => ({
+      relativeBase: base.length > mountpoint.length ? base.slice(mountpoint.length) : void 0,
+      mountpoint,
+      driver: context.mounts[mountpoint]
+    }));
+  };
+  const onChange = (event, key) => {
+    if (!context.watching) {
+      return;
+    }
+    key = normalizeKey$1(key);
+    for (const listener of context.watchListeners) {
+      listener(event, key);
+    }
+  };
+  const startWatch = async () => {
+    if (context.watching) {
+      return;
+    }
+    context.watching = true;
+    for (const mountpoint in context.mounts) {
+      context.unwatch[mountpoint] = await watch(
+        context.mounts[mountpoint],
+        onChange,
+        mountpoint
+      );
+    }
+  };
+  const stopWatch = async () => {
+    if (!context.watching) {
+      return;
+    }
+    for (const mountpoint in context.unwatch) {
+      await context.unwatch[mountpoint]();
+    }
+    context.unwatch = {};
+    context.watching = false;
+  };
+  const runBatch = (items, commonOptions, cb) => {
+    const batches = /* @__PURE__ */ new Map();
+    const getBatch = (mount) => {
+      let batch = batches.get(mount.base);
+      if (!batch) {
+        batch = {
+          driver: mount.driver,
+          base: mount.base,
+          items: []
+        };
+        batches.set(mount.base, batch);
+      }
+      return batch;
+    };
+    for (const item of items) {
+      const isStringItem = typeof item === "string";
+      const key = normalizeKey$1(isStringItem ? item : item.key);
+      const value = isStringItem ? void 0 : item.value;
+      const options2 = isStringItem || !item.options ? commonOptions : { ...commonOptions, ...item.options };
+      const mount = getMount(key);
+      getBatch(mount).items.push({
+        key,
+        value,
+        relativeKey: mount.relativeKey,
+        options: options2
+      });
+    }
+    return Promise.all([...batches.values()].map((batch) => cb(batch))).then(
+      (r) => r.flat()
+    );
+  };
+  const storage = {
+    // Item
+    hasItem(key, opts = {}) {
+      key = normalizeKey$1(key);
+      const { relativeKey, driver } = getMount(key);
+      return asyncCall(driver.hasItem, relativeKey, opts);
+    },
+    getItem(key, opts = {}) {
+      key = normalizeKey$1(key);
+      const { relativeKey, driver } = getMount(key);
+      return asyncCall(driver.getItem, relativeKey, opts).then(
+        (value) => destr(value)
+      );
+    },
+    getItems(items, commonOptions = {}) {
+      return runBatch(items, commonOptions, (batch) => {
+        if (batch.driver.getItems) {
+          return asyncCall(
+            batch.driver.getItems,
+            batch.items.map((item) => ({
+              key: item.relativeKey,
+              options: item.options
+            })),
+            commonOptions
+          ).then(
+            (r) => r.map((item) => ({
+              key: joinKeys(batch.base, item.key),
+              value: destr(item.value)
+            }))
+          );
+        }
+        return Promise.all(
+          batch.items.map((item) => {
+            return asyncCall(
+              batch.driver.getItem,
+              item.relativeKey,
+              item.options
+            ).then((value) => ({
+              key: item.key,
+              value: destr(value)
+            }));
+          })
+        );
+      });
+    },
+    getItemRaw(key, opts = {}) {
+      key = normalizeKey$1(key);
+      const { relativeKey, driver } = getMount(key);
+      if (driver.getItemRaw) {
+        return asyncCall(driver.getItemRaw, relativeKey, opts);
+      }
+      return asyncCall(driver.getItem, relativeKey, opts).then(
+        (value) => deserializeRaw(value)
+      );
+    },
+    async setItem(key, value, opts = {}) {
+      if (value === void 0) {
+        return storage.removeItem(key);
+      }
+      key = normalizeKey$1(key);
+      const { relativeKey, driver } = getMount(key);
+      if (!driver.setItem) {
+        return;
+      }
+      await asyncCall(driver.setItem, relativeKey, stringify(value), opts);
+      if (!driver.watch) {
+        onChange("update", key);
+      }
+    },
+    async setItems(items, commonOptions) {
+      await runBatch(items, commonOptions, async (batch) => {
+        if (batch.driver.setItems) {
+          return asyncCall(
+            batch.driver.setItems,
+            batch.items.map((item) => ({
+              key: item.relativeKey,
+              value: stringify(item.value),
+              options: item.options
+            })),
+            commonOptions
+          );
+        }
+        if (!batch.driver.setItem) {
+          return;
+        }
+        await Promise.all(
+          batch.items.map((item) => {
+            return asyncCall(
+              batch.driver.setItem,
+              item.relativeKey,
+              stringify(item.value),
+              item.options
+            );
+          })
+        );
+      });
+    },
+    async setItemRaw(key, value, opts = {}) {
+      if (value === void 0) {
+        return storage.removeItem(key, opts);
+      }
+      key = normalizeKey$1(key);
+      const { relativeKey, driver } = getMount(key);
+      if (driver.setItemRaw) {
+        await asyncCall(driver.setItemRaw, relativeKey, value, opts);
+      } else if (driver.setItem) {
+        await asyncCall(driver.setItem, relativeKey, serializeRaw(value), opts);
+      } else {
+        return;
+      }
+      if (!driver.watch) {
+        onChange("update", key);
+      }
+    },
+    async removeItem(key, opts = {}) {
+      if (typeof opts === "boolean") {
+        opts = { removeMeta: opts };
+      }
+      key = normalizeKey$1(key);
+      const { relativeKey, driver } = getMount(key);
+      if (!driver.removeItem) {
+        return;
+      }
+      await asyncCall(driver.removeItem, relativeKey, opts);
+      if (opts.removeMeta || opts.removeMata) {
+        await asyncCall(driver.removeItem, relativeKey + "$", opts);
+      }
+      if (!driver.watch) {
+        onChange("remove", key);
+      }
+    },
+    // Meta
+    async getMeta(key, opts = {}) {
+      if (typeof opts === "boolean") {
+        opts = { nativeOnly: opts };
+      }
+      key = normalizeKey$1(key);
+      const { relativeKey, driver } = getMount(key);
+      const meta = /* @__PURE__ */ Object.create(null);
+      if (driver.getMeta) {
+        Object.assign(meta, await asyncCall(driver.getMeta, relativeKey, opts));
+      }
+      if (!opts.nativeOnly) {
+        const value = await asyncCall(
+          driver.getItem,
+          relativeKey + "$",
+          opts
+        ).then((value_) => destr(value_));
+        if (value && typeof value === "object") {
+          if (typeof value.atime === "string") {
+            value.atime = new Date(value.atime);
+          }
+          if (typeof value.mtime === "string") {
+            value.mtime = new Date(value.mtime);
+          }
+          Object.assign(meta, value);
+        }
+      }
+      return meta;
+    },
+    setMeta(key, value, opts = {}) {
+      return this.setItem(key + "$", value, opts);
+    },
+    removeMeta(key, opts = {}) {
+      return this.removeItem(key + "$", opts);
+    },
+    // Keys
+    async getKeys(base, opts = {}) {
+      base = normalizeBaseKey(base);
+      const mounts = getMounts(base, true);
+      let maskedMounts = [];
+      const allKeys = [];
+      let allMountsSupportMaxDepth = true;
+      for (const mount of mounts) {
+        if (!mount.driver.flags?.maxDepth) {
+          allMountsSupportMaxDepth = false;
+        }
+        const rawKeys = await asyncCall(
+          mount.driver.getKeys,
+          mount.relativeBase,
+          opts
+        );
+        for (const key of rawKeys) {
+          const fullKey = mount.mountpoint + normalizeKey$1(key);
+          if (!maskedMounts.some((p) => fullKey.startsWith(p))) {
+            allKeys.push(fullKey);
+          }
+        }
+        maskedMounts = [
+          mount.mountpoint,
+          ...maskedMounts.filter((p) => !p.startsWith(mount.mountpoint))
+        ];
+      }
+      const shouldFilterByDepth = opts.maxDepth !== void 0 && !allMountsSupportMaxDepth;
+      return allKeys.filter(
+        (key) => (!shouldFilterByDepth || filterKeyByDepth(key, opts.maxDepth)) && filterKeyByBase(key, base)
+      );
+    },
+    // Utils
+    async clear(base, opts = {}) {
+      base = normalizeBaseKey(base);
+      await Promise.all(
+        getMounts(base, false).map(async (m) => {
+          if (m.driver.clear) {
+            return asyncCall(m.driver.clear, m.relativeBase, opts);
+          }
+          if (m.driver.removeItem) {
+            const keys = await m.driver.getKeys(m.relativeBase || "", opts);
+            return Promise.all(
+              keys.map((key) => m.driver.removeItem(key, opts))
+            );
+          }
+        })
+      );
+    },
+    async dispose() {
+      await Promise.all(
+        Object.values(context.mounts).map((driver) => dispose(driver))
+      );
+    },
+    async watch(callback) {
+      await startWatch();
+      context.watchListeners.push(callback);
+      return async () => {
+        context.watchListeners = context.watchListeners.filter(
+          (listener) => listener !== callback
+        );
+        if (context.watchListeners.length === 0) {
+          await stopWatch();
+        }
+      };
+    },
+    async unwatch() {
+      context.watchListeners = [];
+      await stopWatch();
+    },
+    // Mount
+    mount(base, driver) {
+      base = normalizeBaseKey(base);
+      if (base && context.mounts[base]) {
+        throw new Error(`already mounted at ${base}`);
+      }
+      if (base) {
+        context.mountpoints.push(base);
+        context.mountpoints.sort((a, b) => b.length - a.length);
+      }
+      context.mounts[base] = driver;
+      if (context.watching) {
+        Promise.resolve(watch(driver, onChange, base)).then((unwatcher) => {
+          context.unwatch[base] = unwatcher;
+        }).catch(console.error);
+      }
+      return storage;
+    },
+    async unmount(base, _dispose = true) {
+      base = normalizeBaseKey(base);
+      if (!base || !context.mounts[base]) {
+        return;
+      }
+      if (context.watching && base in context.unwatch) {
+        context.unwatch[base]?.();
+        delete context.unwatch[base];
+      }
+      if (_dispose) {
+        await dispose(context.mounts[base]);
+      }
+      context.mountpoints = context.mountpoints.filter((key) => key !== base);
+      delete context.mounts[base];
+    },
+    getMount(key = "") {
+      key = normalizeKey$1(key) + ":";
+      const m = getMount(key);
+      return {
+        driver: m.driver,
+        base: m.base
+      };
+    },
+    getMounts(base = "", opts = {}) {
+      base = normalizeKey$1(base);
+      const mounts = getMounts(base, opts.parents);
+      return mounts.map((m) => ({
+        driver: m.driver,
+        base: m.mountpoint
+      }));
+    },
+    // Aliases
+    keys: (base, opts = {}) => storage.getKeys(base, opts),
+    get: (key, opts = {}) => storage.getItem(key, opts),
+    set: (key, value, opts = {}) => storage.setItem(key, value, opts),
+    has: (key, opts = {}) => storage.hasItem(key, opts),
+    del: (key, opts = {}) => storage.removeItem(key, opts),
+    remove: (key, opts = {}) => storage.removeItem(key, opts)
+  };
+  return storage;
+}
+function watch(driver, onChange, base) {
+  return driver.watch ? driver.watch((event, key) => onChange(event, base + key)) : () => {
+  };
+}
+async function dispose(driver) {
+  if (typeof driver.dispose === "function") {
+    await asyncCall(driver.dispose);
+  }
+}
+
+const _assets = {
+
+};
+
+const normalizeKey = function normalizeKey(key) {
+  if (!key) {
+    return "";
+  }
+  return key.split("?")[0]?.replace(/[/\\]/g, ":").replace(/:+/g, ":").replace(/^:|:$/g, "") || "";
+};
+
+const assets = {
+  getKeys() {
+    return Promise.resolve(Object.keys(_assets))
+  },
+  hasItem (id) {
+    id = normalizeKey(id);
+    return Promise.resolve(id in _assets)
+  },
+  getItem (id) {
+    id = normalizeKey(id);
+    return Promise.resolve(_assets[id] ? _assets[id].import() : null)
+  },
+  getMeta (id) {
+    id = normalizeKey(id);
+    return Promise.resolve(_assets[id] ? _assets[id].meta : {})
+  }
+};
+
+function defineDriver(factory) {
+  return factory;
+}
+function createError(driver, message, opts) {
+  const err = new Error(`[unstorage] [${driver}] ${message}`, opts);
+  if (Error.captureStackTrace) {
+    Error.captureStackTrace(err, createError);
+  }
+  return err;
+}
+function createRequiredError(driver, name) {
+  if (Array.isArray(name)) {
+    return createError(
+      driver,
+      `Missing some of the required options ${name.map((n) => "`" + n + "`").join(", ")}`
+    );
+  }
+  return createError(driver, `Missing required option \`${name}\`.`);
+}
+
+function ignoreNotfound(err) {
+  return err.code === "ENOENT" || err.code === "EISDIR" ? null : err;
+}
+function ignoreExists(err) {
+  return err.code === "EEXIST" ? null : err;
+}
+async function writeFile(path, data, encoding) {
+  await ensuredir(dirname(path));
+  return promises.writeFile(path, data, encoding);
+}
+function readFile(path, encoding) {
+  return promises.readFile(path, encoding).catch(ignoreNotfound);
+}
+function unlink(path) {
+  return promises.unlink(path).catch(ignoreNotfound);
+}
+function readdir(dir) {
+  return promises.readdir(dir, { withFileTypes: true }).catch(ignoreNotfound).then((r) => r || []);
+}
+async function ensuredir(dir) {
+  if (existsSync(dir)) {
+    return;
+  }
+  await ensuredir(dirname(dir)).catch(ignoreExists);
+  await promises.mkdir(dir).catch(ignoreExists);
+}
+async function readdirRecursive(dir, ignore, maxDepth) {
+  if (ignore && ignore(dir)) {
+    return [];
+  }
+  const entries = await readdir(dir);
+  const files = [];
+  await Promise.all(
+    entries.map(async (entry) => {
+      const entryPath = resolve(dir, entry.name);
+      if (entry.isDirectory()) {
+        if (maxDepth === void 0 || maxDepth > 0) {
+          const dirFiles = await readdirRecursive(
+            entryPath,
+            ignore,
+            maxDepth === void 0 ? void 0 : maxDepth - 1
+          );
+          files.push(...dirFiles.map((f) => entry.name + "/" + f));
+        }
+      } else {
+        if (!(ignore && ignore(entry.name))) {
+          files.push(entry.name);
+        }
+      }
+    })
+  );
+  return files;
+}
+async function rmRecursive(dir) {
+  const entries = await readdir(dir);
+  await Promise.all(
+    entries.map((entry) => {
+      const entryPath = resolve(dir, entry.name);
+      if (entry.isDirectory()) {
+        return rmRecursive(entryPath).then(() => promises.rmdir(entryPath));
+      } else {
+        return promises.unlink(entryPath);
+      }
+    })
+  );
+}
+
+const PATH_TRAVERSE_RE = /\.\.:|\.\.$/;
+const DRIVER_NAME = "fs-lite";
+const unstorage_47drivers_47fs_45lite = defineDriver((opts = {}) => {
+  if (!opts.base) {
+    throw createRequiredError(DRIVER_NAME, "base");
+  }
+  opts.base = resolve(opts.base);
+  const r = (key) => {
+    if (PATH_TRAVERSE_RE.test(key)) {
+      throw createError(
+        DRIVER_NAME,
+        `Invalid key: ${JSON.stringify(key)}. It should not contain .. segments`
+      );
+    }
+    const resolved = join(opts.base, key.replace(/:/g, "/"));
+    return resolved;
+  };
+  return {
+    name: DRIVER_NAME,
+    options: opts,
+    flags: {
+      maxDepth: true
+    },
+    hasItem(key) {
+      return existsSync(r(key));
+    },
+    getItem(key) {
+      return readFile(r(key), "utf8");
+    },
+    getItemRaw(key) {
+      return readFile(r(key));
+    },
+    async getMeta(key) {
+      const { atime, mtime, size, birthtime, ctime } = await promises.stat(r(key)).catch(() => ({}));
+      return { atime, mtime, size, birthtime, ctime };
+    },
+    setItem(key, value) {
+      if (opts.readOnly) {
+        return;
+      }
+      return writeFile(r(key), value, "utf8");
+    },
+    setItemRaw(key, value) {
+      if (opts.readOnly) {
+        return;
+      }
+      return writeFile(r(key), value);
+    },
+    removeItem(key) {
+      if (opts.readOnly) {
+        return;
+      }
+      return unlink(r(key));
+    },
+    getKeys(_base, topts) {
+      return readdirRecursive(r("."), opts.ignore, topts?.maxDepth);
+    },
+    async clear() {
+      if (opts.readOnly || opts.noClear) {
+        return;
+      }
+      await rmRecursive(r("."));
+    }
+  };
+});
+
+const storage = createStorage({});
+
+storage.mount('/assets', assets);
+
+storage.mount('data', unstorage_47drivers_47fs_45lite({"driver":"fsLite","base":"./.data/kv"}));
+
+function useStorage(base = "") {
+  return base ? prefixStorage(storage, base) : storage;
+}
+
+const e=globalThis.process?.getBuiltinModule?.("crypto")?.hash,r="sha256",s="base64url";function digest(t){if(e)return e(r,t,s);const o=createHash(r).update(t);return globalThis.process?.versions?.webcontainer?o.digest().toString(s):o.digest(s)}
+
+const Hasher = /* @__PURE__ */ (() => {
+  class Hasher2 {
+    buff = "";
+    #context = /* @__PURE__ */ new Map();
+    write(str) {
+      this.buff += str;
+    }
+    dispatch(value) {
+      const type = value === null ? "null" : typeof value;
+      return this[type](value);
+    }
+    object(object) {
+      if (object && typeof object.toJSON === "function") {
+        return this.object(object.toJSON());
+      }
+      const objString = Object.prototype.toString.call(object);
+      let objType = "";
+      const objectLength = objString.length;
+      objType = objectLength < 10 ? "unknown:[" + objString + "]" : objString.slice(8, objectLength - 1);
+      objType = objType.toLowerCase();
+      let objectNumber = null;
+      if ((objectNumber = this.#context.get(object)) === void 0) {
+        this.#context.set(object, this.#context.size);
+      } else {
+        return this.dispatch("[CIRCULAR:" + objectNumber + "]");
+      }
+      if (typeof Buffer !== "undefined" && Buffer.isBuffer && Buffer.isBuffer(object)) {
+        this.write("buffer:");
+        return this.write(object.toString("utf8"));
+      }
+      if (objType !== "object" && objType !== "function" && objType !== "asyncfunction") {
+        if (this[objType]) {
+          this[objType](object);
+        } else {
+          this.unknown(object, objType);
+        }
+      } else {
+        const keys = Object.keys(object).sort();
+        const extraKeys = [];
+        this.write("object:" + (keys.length + extraKeys.length) + ":");
+        const dispatchForKey = (key) => {
+          this.dispatch(key);
+          this.write(":");
+          this.dispatch(object[key]);
+          this.write(",");
+        };
+        for (const key of keys) {
+          dispatchForKey(key);
+        }
+        for (const key of extraKeys) {
+          dispatchForKey(key);
+        }
+      }
+    }
+    array(arr, unordered) {
+      unordered = unordered === void 0 ? false : unordered;
+      this.write("array:" + arr.length + ":");
+      if (!unordered || arr.length <= 1) {
+        for (const entry of arr) {
+          this.dispatch(entry);
+        }
+        return;
+      }
+      const contextAdditions = /* @__PURE__ */ new Map();
+      const entries = arr.map((entry) => {
+        const hasher = new Hasher2();
+        hasher.dispatch(entry);
+        for (const [key, value] of hasher.#context) {
+          contextAdditions.set(key, value);
+        }
+        return hasher.toString();
+      });
+      this.#context = contextAdditions;
+      entries.sort();
+      return this.array(entries, false);
+    }
+    date(date) {
+      return this.write("date:" + date.toJSON());
+    }
+    symbol(sym) {
+      return this.write("symbol:" + sym.toString());
+    }
+    unknown(value, type) {
+      this.write(type);
+      if (!value) {
+        return;
+      }
+      this.write(":");
+      if (value && typeof value.entries === "function") {
+        return this.array(
+          [...value.entries()],
+          true
+          /* ordered */
+        );
+      }
+    }
+    error(err) {
+      return this.write("error:" + err.toString());
+    }
+    boolean(bool) {
+      return this.write("bool:" + bool);
+    }
+    string(string) {
+      this.write("string:" + string.length + ":");
+      this.write(string);
+    }
+    function(fn) {
+      this.write("fn:");
+      if (isNativeFunction(fn)) {
+        this.dispatch("[native]");
+      } else {
+        this.dispatch(fn.toString());
+      }
+    }
+    number(number) {
+      return this.write("number:" + number);
+    }
+    null() {
+      return this.write("Null");
+    }
+    undefined() {
+      return this.write("Undefined");
+    }
+    regexp(regex) {
+      return this.write("regex:" + regex.toString());
+    }
+    arraybuffer(arr) {
+      this.write("arraybuffer:");
+      return this.dispatch(new Uint8Array(arr));
+    }
+    url(url) {
+      return this.write("url:" + url.toString());
+    }
+    map(map) {
+      this.write("map:");
+      const arr = [...map];
+      return this.array(arr, false);
+    }
+    set(set) {
+      this.write("set:");
+      const arr = [...set];
+      return this.array(arr, false);
+    }
+    bigint(number) {
+      return this.write("bigint:" + number.toString());
+    }
+  }
+  for (const type of [
+    "uint8array",
+    "uint8clampedarray",
+    "unt8array",
+    "uint16array",
+    "unt16array",
+    "uint32array",
+    "unt32array",
+    "float32array",
+    "float64array"
+  ]) {
+    Hasher2.prototype[type] = function(arr) {
+      this.write(type + ":");
+      return this.array([...arr], false);
+    };
+  }
+  function isNativeFunction(f) {
+    if (typeof f !== "function") {
+      return false;
+    }
+    return Function.prototype.toString.call(f).slice(
+      -15
+      /* "[native code] }".length */
+    ) === "[native code] }";
+  }
+  return Hasher2;
+})();
+function serialize(object) {
+  const hasher = new Hasher();
+  hasher.dispatch(object);
+  return hasher.buff;
+}
+function hash(value) {
+  return digest(typeof value === "string" ? value : serialize(value)).replace(/[-_]/g, "").slice(0, 10);
+}
+
+function defaultCacheOptions() {
+  return {
+    name: "_",
+    base: "/cache",
+    swr: true,
+    maxAge: 1
+  };
+}
+function defineCachedFunction(fn, opts = {}) {
+  opts = { ...defaultCacheOptions(), ...opts };
+  const pending = {};
+  const group = opts.group || "nitro/functions";
+  const name = opts.name || fn.name || "_";
+  const integrity = opts.integrity || hash([fn, opts]);
+  const validate = opts.validate || ((entry) => entry.value !== void 0);
+  async function get(key, resolver, shouldInvalidateCache, event) {
+    const cacheKey = [opts.base, group, name, key + ".json"].filter(Boolean).join(":").replace(/:\/$/, ":index");
+    let entry = await useStorage().getItem(cacheKey).catch((error) => {
+      console.error(`[cache] Cache read error.`, error);
+      useNitroApp().captureError(error, { event, tags: ["cache"] });
+    }) || {};
+    if (typeof entry !== "object") {
+      entry = {};
+      const error = new Error("Malformed data read from cache.");
+      console.error("[cache]", error);
+      useNitroApp().captureError(error, { event, tags: ["cache"] });
+    }
+    const ttl = (opts.maxAge ?? 0) * 1e3;
+    if (ttl) {
+      entry.expires = Date.now() + ttl;
+    }
+    const expired = shouldInvalidateCache || entry.integrity !== integrity || ttl && Date.now() - (entry.mtime || 0) > ttl || validate(entry) === false;
+    const _resolve = async () => {
+      const isPending = pending[key];
+      if (!isPending) {
+        if (entry.value !== void 0 && (opts.staleMaxAge || 0) >= 0 && opts.swr === false) {
+          entry.value = void 0;
+          entry.integrity = void 0;
+          entry.mtime = void 0;
+          entry.expires = void 0;
+        }
+        pending[key] = Promise.resolve(resolver());
+      }
+      try {
+        entry.value = await pending[key];
+      } catch (error) {
+        if (!isPending) {
+          delete pending[key];
+        }
+        throw error;
+      }
+      if (!isPending) {
+        entry.mtime = Date.now();
+        entry.integrity = integrity;
+        delete pending[key];
+        if (validate(entry) !== false) {
+          let setOpts;
+          if (opts.maxAge && !opts.swr) {
+            setOpts = { ttl: opts.maxAge };
+          }
+          const promise = useStorage().setItem(cacheKey, entry, setOpts).catch((error) => {
+            console.error(`[cache] Cache write error.`, error);
+            useNitroApp().captureError(error, { event, tags: ["cache"] });
+          });
+          if (event?.waitUntil) {
+            event.waitUntil(promise);
+          }
+        }
+      }
+    };
+    const _resolvePromise = expired ? _resolve() : Promise.resolve();
+    if (entry.value === void 0) {
+      await _resolvePromise;
+    } else if (expired && event && event.waitUntil) {
+      event.waitUntil(_resolvePromise);
+    }
+    if (opts.swr && validate(entry) !== false) {
+      _resolvePromise.catch((error) => {
+        console.error(`[cache] SWR handler error.`, error);
+        useNitroApp().captureError(error, { event, tags: ["cache"] });
+      });
+      return entry;
+    }
+    return _resolvePromise.then(() => entry);
+  }
+  return async (...args) => {
+    const shouldBypassCache = await opts.shouldBypassCache?.(...args);
+    if (shouldBypassCache) {
+      return fn(...args);
+    }
+    const key = await (opts.getKey || getKey)(...args);
+    const shouldInvalidateCache = await opts.shouldInvalidateCache?.(...args);
+    const entry = await get(
+      key,
+      () => fn(...args),
+      shouldInvalidateCache,
+      args[0] && isEvent(args[0]) ? args[0] : void 0
+    );
+    let value = entry.value;
+    if (opts.transform) {
+      value = await opts.transform(entry, ...args) || value;
+    }
+    return value;
+  };
+}
+function cachedFunction(fn, opts = {}) {
+  return defineCachedFunction(fn, opts);
+}
+function getKey(...args) {
+  return args.length > 0 ? hash(args) : "";
+}
+function escapeKey(key) {
+  return String(key).replace(/\W/g, "");
+}
+function defineCachedEventHandler(handler, opts = defaultCacheOptions()) {
+  const variableHeaderNames = (opts.varies || []).filter(Boolean).map((h) => h.toLowerCase()).sort();
+  const _opts = {
+    ...opts,
+    getKey: async (event) => {
+      const customKey = await opts.getKey?.(event);
+      if (customKey) {
+        return escapeKey(customKey);
+      }
+      const _path = event.node.req.originalUrl || event.node.req.url || event.path;
+      let _pathname;
+      try {
+        _pathname = escapeKey(decodeURI(parseURL(_path).pathname)).slice(0, 16) || "index";
+      } catch {
+        _pathname = "-";
+      }
+      const _hashedPath = `${_pathname}.${hash(_path)}`;
+      const _headers = variableHeaderNames.map((header) => [header, event.node.req.headers[header]]).map(([name, value]) => `${escapeKey(name)}.${hash(value)}`);
+      return [_hashedPath, ..._headers].join(":");
+    },
+    validate: (entry) => {
+      if (!entry.value) {
+        return false;
+      }
+      if (entry.value.code >= 400) {
+        return false;
+      }
+      if (entry.value.body === void 0) {
+        return false;
+      }
+      if (entry.value.headers.etag === "undefined" || entry.value.headers["last-modified"] === "undefined") {
+        return false;
+      }
+      return true;
+    },
+    group: opts.group || "nitro/handlers",
+    integrity: opts.integrity || hash([handler, opts])
+  };
+  const _cachedHandler = cachedFunction(
+    async (incomingEvent) => {
+      const variableHeaders = {};
+      for (const header of variableHeaderNames) {
+        const value = incomingEvent.node.req.headers[header];
+        if (value !== void 0) {
+          variableHeaders[header] = value;
+        }
+      }
+      const reqProxy = cloneWithProxy(incomingEvent.node.req, {
+        headers: variableHeaders
+      });
+      const resHeaders = {};
+      let _resSendBody;
+      const resProxy = cloneWithProxy(incomingEvent.node.res, {
+        statusCode: 200,
+        writableEnded: false,
+        writableFinished: false,
+        headersSent: false,
+        closed: false,
+        getHeader(name) {
+          return resHeaders[name];
+        },
+        setHeader(name, value) {
+          resHeaders[name] = value;
+          return this;
+        },
+        getHeaderNames() {
+          return Object.keys(resHeaders);
+        },
+        hasHeader(name) {
+          return name in resHeaders;
+        },
+        removeHeader(name) {
+          delete resHeaders[name];
+        },
+        getHeaders() {
+          return resHeaders;
+        },
+        end(chunk, arg2, arg3) {
+          if (typeof chunk === "string") {
+            _resSendBody = chunk;
+          }
+          if (typeof arg2 === "function") {
+            arg2();
+          }
+          if (typeof arg3 === "function") {
+            arg3();
+          }
+          return this;
+        },
+        write(chunk, arg2, arg3) {
+          if (typeof chunk === "string") {
+            _resSendBody = chunk;
+          }
+          if (typeof arg2 === "function") {
+            arg2(void 0);
+          }
+          if (typeof arg3 === "function") {
+            arg3();
+          }
+          return true;
+        },
+        writeHead(statusCode, headers2) {
+          this.statusCode = statusCode;
+          if (headers2) {
+            if (Array.isArray(headers2) || typeof headers2 === "string") {
+              throw new TypeError("Raw headers  is not supported.");
+            }
+            for (const header in headers2) {
+              const value = headers2[header];
+              if (value !== void 0) {
+                this.setHeader(
+                  header,
+                  value
+                );
+              }
+            }
+          }
+          return this;
+        }
+      });
+      const event = createEvent(reqProxy, resProxy);
+      event.fetch = (url, fetchOptions) => fetchWithEvent(event, url, fetchOptions, {
+        fetch: useNitroApp().localFetch
+      });
+      event.$fetch = (url, fetchOptions) => fetchWithEvent(event, url, fetchOptions, {
+        fetch: globalThis.$fetch
+      });
+      event.waitUntil = incomingEvent.waitUntil;
+      event.context = incomingEvent.context;
+      event.context.cache = {
+        options: _opts
+      };
+      const body = await handler(event) || _resSendBody;
+      const headers = event.node.res.getHeaders();
+      headers.etag = String(
+        headers.Etag || headers.etag || `W/"${hash(body)}"`
+      );
+      headers["last-modified"] = String(
+        headers["Last-Modified"] || headers["last-modified"] || (/* @__PURE__ */ new Date()).toUTCString()
+      );
+      const cacheControl = [];
+      if (opts.swr) {
+        if (opts.maxAge) {
+          cacheControl.push(`s-maxage=${opts.maxAge}`);
+        }
+        if (opts.staleMaxAge) {
+          cacheControl.push(`stale-while-revalidate=${opts.staleMaxAge}`);
+        } else {
+          cacheControl.push("stale-while-revalidate");
+        }
+      } else if (opts.maxAge) {
+        cacheControl.push(`max-age=${opts.maxAge}`);
+      }
+      if (cacheControl.length > 0) {
+        headers["cache-control"] = cacheControl.join(", ");
+      }
+      const cacheEntry = {
+        code: event.node.res.statusCode,
+        headers,
+        body
+      };
+      return cacheEntry;
+    },
+    _opts
+  );
+  return defineEventHandler(async (event) => {
+    if (opts.headersOnly) {
+      if (handleCacheHeaders(event, { maxAge: opts.maxAge })) {
+        return;
+      }
+      return handler(event);
+    }
+    const response = await _cachedHandler(
+      event
+    );
+    if (event.node.res.headersSent || event.node.res.writableEnded) {
+      return response.body;
+    }
+    if (handleCacheHeaders(event, {
+      modifiedTime: new Date(response.headers["last-modified"]),
+      etag: response.headers.etag,
+      maxAge: opts.maxAge
+    })) {
+      return;
+    }
+    event.node.res.statusCode = response.code;
+    for (const name in response.headers) {
+      const value = response.headers[name];
+      if (name === "set-cookie") {
+        event.node.res.appendHeader(
+          name,
+          splitCookiesString(value)
+        );
+      } else {
+        if (value !== void 0) {
+          event.node.res.setHeader(name, value);
+        }
+      }
+    }
+    return response.body;
+  });
+}
+function cloneWithProxy(obj, overrides) {
+  return new Proxy(obj, {
+    get(target, property, receiver) {
+      if (property in overrides) {
+        return overrides[property];
+      }
+      return Reflect.get(target, property, receiver);
+    },
+    set(target, property, value, receiver) {
+      if (property in overrides) {
+        overrides[property] = value;
+        return true;
+      }
+      return Reflect.set(target, property, value, receiver);
+    }
+  });
+}
+const cachedEventHandler = defineCachedEventHandler;
+
+function klona(x) {
+	if (typeof x !== 'object') return x;
+
+	var k, tmp, str=Object.prototype.toString.call(x);
+
+	if (str === '[object Object]') {
+		if (x.constructor !== Object && typeof x.constructor === 'function') {
+			tmp = new x.constructor();
+			for (k in x) {
+				if (x.hasOwnProperty(k) && tmp[k] !== x[k]) {
+					tmp[k] = klona(x[k]);
+				}
+			}
+		} else {
+			tmp = {}; // null
+			for (k in x) {
+				if (k === '__proto__') {
+					Object.defineProperty(tmp, k, {
+						value: klona(x[k]),
+						configurable: true,
+						enumerable: true,
+						writable: true,
+					});
+				} else {
+					tmp[k] = klona(x[k]);
+				}
+			}
+		}
+		return tmp;
+	}
+
+	if (str === '[object Array]') {
+		k = x.length;
+		for (tmp=Array(k); k--;) {
+			tmp[k] = klona(x[k]);
+		}
+		return tmp;
+	}
+
+	if (str === '[object Set]') {
+		tmp = new Set;
+		x.forEach(function (val) {
+			tmp.add(klona(val));
+		});
+		return tmp;
+	}
+
+	if (str === '[object Map]') {
+		tmp = new Map;
+		x.forEach(function (val, key) {
+			tmp.set(klona(key), klona(val));
+		});
+		return tmp;
+	}
+
+	if (str === '[object Date]') {
+		return new Date(+x);
+	}
+
+	if (str === '[object RegExp]') {
+		tmp = new RegExp(x.source, x.flags);
+		tmp.lastIndex = x.lastIndex;
+		return tmp;
+	}
+
+	if (str === '[object DataView]') {
+		return new x.constructor( klona(x.buffer) );
+	}
+
+	if (str === '[object ArrayBuffer]') {
+		return x.slice(0);
+	}
+
+	// ArrayBuffer.isView(x)
+	// ~> `new` bcuz `Buffer.slice` => ref
+	if (str.slice(-6) === 'Array]') {
+		return new x.constructor(x);
+	}
+
+	return x;
+}
+
+const inlineAppConfig = {
+  "nuxt": {}
+};
+
+
+
+const appConfig = defuFn(inlineAppConfig);
+
+const NUMBER_CHAR_RE = /\d/;
+const STR_SPLITTERS = ["-", "_", "/", "."];
+function isUppercase(char = "") {
+  if (NUMBER_CHAR_RE.test(char)) {
+    return void 0;
+  }
+  return char !== char.toLowerCase();
+}
+function splitByCase(str, separators) {
+  const splitters = STR_SPLITTERS;
+  const parts = [];
+  if (!str || typeof str !== "string") {
+    return parts;
+  }
+  let buff = "";
+  let previousUpper;
+  let previousSplitter;
+  for (const char of str) {
+    const isSplitter = splitters.includes(char);
+    if (isSplitter === true) {
+      parts.push(buff);
+      buff = "";
+      previousUpper = void 0;
+      continue;
+    }
+    const isUpper = isUppercase(char);
+    if (previousSplitter === false) {
+      if (previousUpper === false && isUpper === true) {
+        parts.push(buff);
+        buff = char;
+        previousUpper = isUpper;
+        continue;
+      }
+      if (previousUpper === true && isUpper === false && buff.length > 1) {
+        const lastChar = buff.at(-1);
+        parts.push(buff.slice(0, Math.max(0, buff.length - 1)));
+        buff = lastChar + char;
+        previousUpper = isUpper;
+        continue;
+      }
+    }
+    buff += char;
+    previousUpper = isUpper;
+    previousSplitter = isSplitter;
+  }
+  parts.push(buff);
+  return parts;
+}
+function kebabCase(str, joiner) {
+  return str ? (Array.isArray(str) ? str : splitByCase(str)).map((p) => p.toLowerCase()).join(joiner) : "";
+}
+function snakeCase(str) {
+  return kebabCase(str || "", "_");
+}
+
+function getEnv(key, opts) {
+  const envKey = snakeCase(key).toUpperCase();
+  return destr(
+    process.env[opts.prefix + envKey] ?? process.env[opts.altPrefix + envKey]
+  );
+}
+function _isObject(input) {
+  return typeof input === "object" && !Array.isArray(input);
+}
+function applyEnv(obj, opts, parentKey = "") {
+  for (const key in obj) {
+    const subKey = parentKey ? `${parentKey}_${key}` : key;
+    const envValue = getEnv(subKey, opts);
+    if (_isObject(obj[key])) {
+      if (_isObject(envValue)) {
+        obj[key] = { ...obj[key], ...envValue };
+        applyEnv(obj[key], opts, subKey);
+      } else if (envValue === void 0) {
+        applyEnv(obj[key], opts, subKey);
+      } else {
+        obj[key] = envValue ?? obj[key];
+      }
+    } else {
+      obj[key] = envValue ?? obj[key];
+    }
+    if (opts.envExpansion && typeof obj[key] === "string") {
+      obj[key] = _expandFromEnv(obj[key]);
+    }
+  }
+  return obj;
+}
+const envExpandRx = /\{\{([^{}]*)\}\}/g;
+function _expandFromEnv(value) {
+  return value.replace(envExpandRx, (match, key) => {
+    return process.env[key] || match;
+  });
+}
+
+const _inlineRuntimeConfig = {
+  "app": {
+    "baseURL": "/",
+    "buildId": "30e99b57-7716-461f-828c-2431c48dce39",
+    "buildAssetsDir": "/_nuxt/",
+    "cdnURL": ""
+  },
+  "nitro": {
+    "envPrefix": "NUXT_",
+    "routeRules": {
+      "/__nuxt_error": {
+        "cache": false,
+        "isr": false
+      },
+      "/_nuxt/builds/meta/**": {
+        "headers": {
+          "cache-control": "public, max-age=31536000, immutable"
+        }
+      },
+      "/_nuxt/builds/**": {
+        "headers": {
+          "cache-control": "public, max-age=1, immutable"
+        }
+      },
+      "/_nuxt/**": {
+        "headers": {
+          "cache-control": "public, max-age=31536000, immutable"
+        }
+      }
+    }
+  },
+  "public": {}
+};
+const envOptions = {
+  prefix: "NITRO_",
+  altPrefix: _inlineRuntimeConfig.nitro.envPrefix ?? process.env.NITRO_ENV_PREFIX ?? "_",
+  envExpansion: _inlineRuntimeConfig.nitro.envExpansion ?? process.env.NITRO_ENV_EXPANSION ?? false
+};
+const _sharedRuntimeConfig = _deepFreeze(
+  applyEnv(klona(_inlineRuntimeConfig), envOptions)
+);
+function useRuntimeConfig(event) {
+  if (!event) {
+    return _sharedRuntimeConfig;
+  }
+  if (event.context.nitro.runtimeConfig) {
+    return event.context.nitro.runtimeConfig;
+  }
+  const runtimeConfig = klona(_inlineRuntimeConfig);
+  applyEnv(runtimeConfig, envOptions);
+  event.context.nitro.runtimeConfig = runtimeConfig;
+  return runtimeConfig;
+}
+_deepFreeze(klona(appConfig));
+function _deepFreeze(object) {
+  const propNames = Object.getOwnPropertyNames(object);
+  for (const name of propNames) {
+    const value = object[name];
+    if (value && typeof value === "object") {
+      _deepFreeze(value);
+    }
+  }
+  return Object.freeze(object);
+}
+new Proxy(/* @__PURE__ */ Object.create(null), {
+  get: (_, prop) => {
+    console.warn(
+      "Please use `useRuntimeConfig()` instead of accessing config directly."
+    );
+    const runtimeConfig = useRuntimeConfig();
+    if (prop in runtimeConfig) {
+      return runtimeConfig[prop];
+    }
+    return void 0;
+  }
+});
+
+function createContext(opts = {}) {
+  let currentInstance;
+  let isSingleton = false;
+  const checkConflict = (instance) => {
+    if (currentInstance && currentInstance !== instance) {
+      throw new Error("Context conflict");
+    }
+  };
+  let als;
+  if (opts.asyncContext) {
+    const _AsyncLocalStorage = opts.AsyncLocalStorage || globalThis.AsyncLocalStorage;
+    if (_AsyncLocalStorage) {
+      als = new _AsyncLocalStorage();
+    } else {
+      console.warn("[unctx] `AsyncLocalStorage` is not provided.");
+    }
+  }
+  const _getCurrentInstance = () => {
+    if (als) {
+      const instance = als.getStore();
+      if (instance !== void 0) {
+        return instance;
+      }
+    }
+    return currentInstance;
+  };
+  return {
+    use: () => {
+      const _instance = _getCurrentInstance();
+      if (_instance === void 0) {
+        throw new Error("Context is not available");
+      }
+      return _instance;
+    },
+    tryUse: () => {
+      return _getCurrentInstance();
+    },
+    set: (instance, replace) => {
+      if (!replace) {
+        checkConflict(instance);
+      }
+      currentInstance = instance;
+      isSingleton = true;
+    },
+    unset: () => {
+      currentInstance = void 0;
+      isSingleton = false;
+    },
+    call: (instance, callback) => {
+      checkConflict(instance);
+      currentInstance = instance;
+      try {
+        return als ? als.run(instance, callback) : callback();
+      } finally {
+        if (!isSingleton) {
+          currentInstance = void 0;
+        }
+      }
+    },
+    async callAsync(instance, callback) {
+      currentInstance = instance;
+      const onRestore = () => {
+        currentInstance = instance;
+      };
+      const onLeave = () => currentInstance === instance ? onRestore : void 0;
+      asyncHandlers.add(onLeave);
+      try {
+        const r = als ? als.run(instance, callback) : callback();
+        if (!isSingleton) {
+          currentInstance = void 0;
+        }
+        return await r;
+      } finally {
+        asyncHandlers.delete(onLeave);
+      }
+    }
+  };
+}
+function createNamespace(defaultOpts = {}) {
+  const contexts = {};
+  return {
+    get(key, opts = {}) {
+      if (!contexts[key]) {
+        contexts[key] = createContext({ ...defaultOpts, ...opts });
+      }
+      return contexts[key];
+    }
+  };
+}
+const _globalThis = typeof globalThis !== "undefined" ? globalThis : typeof self !== "undefined" ? self : typeof global !== "undefined" ? global : {};
+const globalKey = "__unctx__";
+const defaultNamespace = _globalThis[globalKey] || (_globalThis[globalKey] = createNamespace());
+const getContext = (key, opts = {}) => defaultNamespace.get(key, opts);
+const asyncHandlersKey = "__unctx_async_handlers__";
+const asyncHandlers = _globalThis[asyncHandlersKey] || (_globalThis[asyncHandlersKey] = /* @__PURE__ */ new Set());
+function executeAsync(function_) {
+  const restores = [];
+  for (const leaveHandler of asyncHandlers) {
+    const restore2 = leaveHandler();
+    if (restore2) {
+      restores.push(restore2);
+    }
+  }
+  const restore = () => {
+    for (const restore2 of restores) {
+      restore2();
+    }
+  };
+  let awaitable = function_();
+  if (awaitable && typeof awaitable === "object" && "catch" in awaitable) {
+    awaitable = awaitable.catch((error) => {
+      restore();
+      throw error;
+    });
+  }
+  return [awaitable, restore];
+}
+
+const config = useRuntimeConfig();
+const _routeRulesMatcher = toRouteMatcher(
+  createRouter$1({ routes: config.nitro.routeRules })
+);
+function createRouteRulesHandler(ctx) {
+  return eventHandler((event) => {
+    const routeRules = getRouteRules(event);
+    if (routeRules.headers) {
+      setHeaders(event, routeRules.headers);
+    }
+    if (routeRules.redirect) {
+      let target = routeRules.redirect.to;
+      if (target.endsWith("/**")) {
+        let targetPath = event.path;
+        const strpBase = routeRules.redirect._redirectStripBase;
+        if (strpBase) {
+          targetPath = withoutBase(targetPath, strpBase);
+        }
+        target = joinURL(target.slice(0, -3), targetPath);
+      } else if (event.path.includes("?")) {
+        const query = getQuery$1(event.path);
+        target = withQuery(target, query);
+      }
+      return sendRedirect(event, target, routeRules.redirect.statusCode);
+    }
+    if (routeRules.proxy) {
+      let target = routeRules.proxy.to;
+      if (target.endsWith("/**")) {
+        let targetPath = event.path;
+        const strpBase = routeRules.proxy._proxyStripBase;
+        if (strpBase) {
+          targetPath = withoutBase(targetPath, strpBase);
+        }
+        target = joinURL(target.slice(0, -3), targetPath);
+      } else if (event.path.includes("?")) {
+        const query = getQuery$1(event.path);
+        target = withQuery(target, query);
+      }
+      return proxyRequest(event, target, {
+        fetch: ctx.localFetch,
+        ...routeRules.proxy
+      });
+    }
+  });
+}
+function getRouteRules(event) {
+  event.context._nitro = event.context._nitro || {};
+  if (!event.context._nitro.routeRules) {
+    event.context._nitro.routeRules = getRouteRulesForPath(
+      withoutBase(event.path.split("?")[0], useRuntimeConfig().app.baseURL)
+    );
+  }
+  return event.context._nitro.routeRules;
+}
+function getRouteRulesForPath(path) {
+  return defu({}, ..._routeRulesMatcher.matchAll(path).reverse());
+}
+
+function joinHeaders(value) {
+  return Array.isArray(value) ? value.join(", ") : String(value);
+}
+function normalizeFetchResponse(response) {
+  if (!response.headers.has("set-cookie")) {
+    return response;
+  }
+  return new Response(response.body, {
+    status: response.status,
+    statusText: response.statusText,
+    headers: normalizeCookieHeaders(response.headers)
+  });
+}
+function normalizeCookieHeader(header = "") {
+  return splitCookiesString(joinHeaders(header));
+}
+function normalizeCookieHeaders(headers) {
+  const outgoingHeaders = new Headers();
+  for (const [name, header] of headers) {
+    if (name === "set-cookie") {
+      for (const cookie of normalizeCookieHeader(header)) {
+        outgoingHeaders.append("set-cookie", cookie);
+      }
+    } else {
+      outgoingHeaders.set(name, joinHeaders(header));
+    }
+  }
+  return outgoingHeaders;
+}
+
+function isJsonRequest(event) {
+  if (hasReqHeader(event, "accept", "text/html")) {
+    return false;
+  }
+  return hasReqHeader(event, "accept", "application/json") || hasReqHeader(event, "user-agent", "curl/") || hasReqHeader(event, "user-agent", "httpie/") || hasReqHeader(event, "sec-fetch-mode", "cors") || event.path.startsWith("/api/") || event.path.endsWith(".json");
+}
+function hasReqHeader(event, name, includes) {
+  const value = getRequestHeader(event, name);
+  return value && typeof value === "string" && value.toLowerCase().includes(includes);
+}
+
+const errorHandler$0 = (async function errorhandler(error, event, { defaultHandler }) {
+  if (isJsonRequest(event)) {
+    return;
+  }
+  const defaultRes = await defaultHandler(error, event, { json: true });
+  const statusCode = error.statusCode || 500;
+  if (statusCode === 404 && defaultRes.status === 302) {
+    setResponseHeaders(event, defaultRes.headers);
+    setResponseStatus(event, defaultRes.status, defaultRes.statusText);
+    return send(event, JSON.stringify(defaultRes.body, null, 2));
+  }
+  const errorObject = defaultRes.body;
+  const url = new URL(errorObject.url);
+  errorObject.url = url.pathname + url.search + url.hash;
+  errorObject.message ||= "Server Error";
+  errorObject.data ||= error.data;
+  delete defaultRes.headers["content-type"];
+  delete defaultRes.headers["content-security-policy"];
+  setResponseHeaders(event, defaultRes.headers);
+  const reqHeaders = getRequestHeaders(event);
+  const isRenderingError = event.path.startsWith("/__nuxt_error") || !!reqHeaders["x-nuxt-error"];
+  const res = isRenderingError ? null : await useNitroApp().localFetch(
+    withQuery(joinURL(useRuntimeConfig(event).app.baseURL, "/__nuxt_error"), errorObject),
+    {
+      headers: { ...reqHeaders, "x-nuxt-error": "true" },
+      redirect: "manual"
+    }
+  ).catch(() => null);
+  if (event.handled) {
+    return;
+  }
+  if (!res) {
+    const { template } = await import('./error-500.mjs');
+    setResponseHeader(event, "Content-Type", "text/html;charset=UTF-8");
+    return send(event, template(errorObject));
+  }
+  const html = await res.text();
+  for (const [header, value] of res.headers.entries()) {
+    setResponseHeader(event, header, value);
+  }
+  setResponseStatus(event, res.status && res.status !== 200 ? res.status : defaultRes.status, res.statusText || defaultRes.statusText);
+  return send(event, html);
+});
+
+function defineNitroErrorHandler(handler) {
+  return handler;
+}
+
+const errorHandler$1 = defineNitroErrorHandler(
+  function defaultNitroErrorHandler(error, event) {
+    const res = defaultHandler(error, event);
+    setResponseHeaders(event, res.headers);
+    setResponseStatus(event, res.status, res.statusText);
+    return send(event, JSON.stringify(res.body, null, 2));
+  }
+);
+function defaultHandler(error, event, opts) {
+  const isSensitive = error.unhandled || error.fatal;
+  const statusCode = error.statusCode || 500;
+  const statusMessage = error.statusMessage || "Server Error";
+  const url = getRequestURL(event, { xForwardedHost: true, xForwardedProto: true });
+  if (statusCode === 404) {
+    const baseURL = "/";
+    if (/^\/[^/]/.test(baseURL) && !url.pathname.startsWith(baseURL)) {
+      const redirectTo = `${baseURL}${url.pathname.slice(1)}${url.search}`;
+      return {
+        status: 302,
+        statusText: "Found",
+        headers: { location: redirectTo },
+        body: `Redirecting...`
+      };
+    }
+  }
+  if (isSensitive && !opts?.silent) {
+    const tags = [error.unhandled && "[unhandled]", error.fatal && "[fatal]"].filter(Boolean).join(" ");
+    console.error(`[request error] ${tags} [${event.method}] ${url}
+`, error);
+  }
+  const headers = {
+    "content-type": "application/json",
+    // Prevent browser from guessing the MIME types of resources.
+    "x-content-type-options": "nosniff",
+    // Prevent error page from being embedded in an iframe
+    "x-frame-options": "DENY",
+    // Prevent browsers from sending the Referer header
+    "referrer-policy": "no-referrer",
+    // Disable the execution of any js
+    "content-security-policy": "script-src 'none'; frame-ancestors 'none';"
+  };
+  setResponseStatus(event, statusCode, statusMessage);
+  if (statusCode === 404 || !getResponseHeader(event, "cache-control")) {
+    headers["cache-control"] = "no-cache";
+  }
+  const body = {
+    error: true,
+    url: url.href,
+    statusCode,
+    statusMessage,
+    message: isSensitive ? "Server Error" : error.message,
+    data: isSensitive ? void 0 : error.data
+  };
+  return {
+    status: statusCode,
+    statusText: statusMessage,
+    headers,
+    body
+  };
+}
+
+const errorHandlers = [errorHandler$0, errorHandler$1];
+
+async function errorHandler(error, event) {
+  for (const handler of errorHandlers) {
+    try {
+      await handler(error, event, { defaultHandler });
+      if (event.handled) {
+        return; // Response handled
+      }
+    } catch(error) {
+      // Handler itself thrown, log and continue
+      console.error(error);
+    }
+  }
+  // H3 will handle fallback
+}
+
+const plugins = [
+  
+];
+
+const _lazy_vsWnCD = () => import('../routes/api/hello.get.mjs');
+const _lazy_Zadvsl = () => import('../routes/renderer.mjs');
+
+const handlers = [
+  { route: '/api/hello', handler: _lazy_vsWnCD, lazy: true, middleware: false, method: "get" },
+  { route: '/__nuxt_error', handler: _lazy_Zadvsl, lazy: true, middleware: false, method: undefined },
+  { route: '/**', handler: _lazy_Zadvsl, lazy: true, middleware: false, method: undefined }
+];
+
+function createNitroApp() {
+  const config = useRuntimeConfig();
+  const hooks = createHooks();
+  const captureError = (error, context = {}) => {
+    const promise = hooks.callHookParallel("error", error, context).catch((error_) => {
+      console.error("Error while capturing another error", error_);
+    });
+    if (context.event && isEvent(context.event)) {
+      const errors = context.event.context.nitro?.errors;
+      if (errors) {
+        errors.push({ error, context });
+      }
+      if (context.event.waitUntil) {
+        context.event.waitUntil(promise);
+      }
+    }
+  };
+  const h3App = createApp({
+    debug: destr(false),
+    onError: (error, event) => {
+      captureError(error, { event, tags: ["request"] });
+      return errorHandler(error, event);
+    },
+    onRequest: async (event) => {
+      event.context.nitro = event.context.nitro || { errors: [] };
+      const fetchContext = event.node.req?.__unenv__;
+      if (fetchContext?._platform) {
+        event.context = {
+          ...fetchContext._platform,
+          ...event.context
+        };
+      }
+      if (!event.context.waitUntil && fetchContext?.waitUntil) {
+        event.context.waitUntil = fetchContext.waitUntil;
+      }
+      event.fetch = (req, init) => fetchWithEvent(event, req, init, { fetch: localFetch });
+      event.$fetch = (req, init) => fetchWithEvent(event, req, init, {
+        fetch: $fetch
+      });
+      event.waitUntil = (promise) => {
+        if (!event.context.nitro._waitUntilPromises) {
+          event.context.nitro._waitUntilPromises = [];
+        }
+        event.context.nitro._waitUntilPromises.push(promise);
+        if (event.context.waitUntil) {
+          event.context.waitUntil(promise);
+        }
+      };
+      event.captureError = (error, context) => {
+        captureError(error, { event, ...context });
+      };
+      await nitroApp.hooks.callHook("request", event).catch((error) => {
+        captureError(error, { event, tags: ["request"] });
+      });
+    },
+    onBeforeResponse: async (event, response) => {
+      await nitroApp.hooks.callHook("beforeResponse", event, response).catch((error) => {
+        captureError(error, { event, tags: ["request", "response"] });
+      });
+    },
+    onAfterResponse: async (event, response) => {
+      await nitroApp.hooks.callHook("afterResponse", event, response).catch((error) => {
+        captureError(error, { event, tags: ["request", "response"] });
+      });
+    }
+  });
+  const router = createRouter({
+    preemptive: true
+  });
+  const nodeHandler = toNodeListener(h3App);
+  const localCall = (aRequest) => b(nodeHandler, aRequest);
+  const localFetch = (input, init) => {
+    if (!input.toString().startsWith("/")) {
+      return globalThis.fetch(input, init);
+    }
+    return O(
+      nodeHandler,
+      input,
+      init
+    ).then((response) => normalizeFetchResponse(response));
+  };
+  const $fetch = createFetch({
+    fetch: localFetch,
+    Headers: Headers$1,
+    defaults: { baseURL: config.app.baseURL }
+  });
+  globalThis.$fetch = $fetch;
+  h3App.use(createRouteRulesHandler({ localFetch }));
+  for (const h of handlers) {
+    let handler = h.lazy ? lazyEventHandler(h.handler) : h.handler;
+    if (h.middleware || !h.route) {
+      const middlewareBase = (config.app.baseURL + (h.route || "/")).replace(
+        /\/+/g,
+        "/"
+      );
+      h3App.use(middlewareBase, handler);
+    } else {
+      const routeRules = getRouteRulesForPath(
+        h.route.replace(/:\w+|\*\*/g, "_")
+      );
+      if (routeRules.cache) {
+        handler = cachedEventHandler(handler, {
+          group: "nitro/routes",
+          ...routeRules.cache
+        });
+      }
+      router.use(h.route, handler, h.method);
+    }
+  }
+  h3App.use(config.app.baseURL, router.handler);
+  const app = {
+    hooks,
+    h3App,
+    router,
+    localCall,
+    localFetch,
+    captureError
+  };
+  return app;
+}
+function runNitroPlugins(nitroApp2) {
+  for (const plugin of plugins) {
+    try {
+      plugin(nitroApp2);
+    } catch (error) {
+      nitroApp2.captureError(error, { tags: ["plugin"] });
+      throw error;
+    }
+  }
+}
+const nitroApp = createNitroApp();
+function useNitroApp() {
+  return nitroApp;
+}
+runNitroPlugins(nitroApp);
+
+function defineRenderHandler(render) {
+  const runtimeConfig = useRuntimeConfig();
+  return eventHandler(async (event) => {
+    const nitroApp = useNitroApp();
+    const ctx = { event, render, response: void 0 };
+    await nitroApp.hooks.callHook("render:before", ctx);
+    if (!ctx.response) {
+      if (event.path === `${runtimeConfig.app.baseURL}favicon.ico`) {
+        setResponseHeader(event, "Content-Type", "image/x-icon");
+        return send(
+          event,
+          "data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7"
+        );
+      }
+      ctx.response = await ctx.render(event);
+      if (!ctx.response) {
+        const _currentStatus = getResponseStatus(event);
+        setResponseStatus(event, _currentStatus === 200 ? 500 : _currentStatus);
+        return send(
+          event,
+          "No response returned from render handler: " + event.path
+        );
+      }
+    }
+    await nitroApp.hooks.callHook("render:response", ctx.response, ctx);
+    if (ctx.response.headers) {
+      setResponseHeaders(event, ctx.response.headers);
+    }
+    if (ctx.response.statusCode || ctx.response.statusMessage) {
+      setResponseStatus(
+        event,
+        ctx.response.statusCode,
+        ctx.response.statusMessage
+      );
+    }
+    return ctx.response.body;
+  });
+}
+
+export { useRuntimeConfig as a, getResponseStatus as b, defineRenderHandler as c, defineEventHandler as d, getQuery as e, createError$1 as f, getResponseStatusText as g, getRouteRules as h, createHooks as i, joinRelativeURL as j, getContext as k, toRouteMatcher as l, createRouter$1 as m, defu as n, hasProtocol as o, parseQuery as p, joinURL as q, executeAsync as r, sanitizeStatusCode as s, toNodeListener as t, useNitroApp as u, withQuery as w };
 //# sourceMappingURL=nitro.mjs.map
