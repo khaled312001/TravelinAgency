@@ -74,8 +74,9 @@ export default defineNuxtConfig({
         'object-src': ["'none'"],
         'script-src-attr': ["'none'"],
         'style-src': ["'self'", 'https:', "'unsafe-inline'", 'https://fonts.googleapis.com'],
-        'script-src': ["'self'", 'https:', "'unsafe-inline'", "'unsafe-eval'", 'https://img1.wsimg.com'],
+        'script-src': ["'self'", 'https:', "'unsafe-inline'", "'unsafe-eval'", 'https://img1.wsimg.com', 'https://static.cloudflareinsights.com'],
         'connect-src': ["'self'", 'https:', 'https://api.iconify.design', 'https://img1.wsimg.com'],
+        'frame-src': ["'self'"],
         'upgrade-insecure-requests': process.env.NODE_ENV === 'production' ? [] : false
       }
     }
