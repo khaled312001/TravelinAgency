@@ -11,7 +11,7 @@
         muted 
         playsinline 
         class="hidden md:block w-full h-full object-cover video-element"
-        poster="/images/home/heroSection/hero-image.webp"
+        :poster="getHeroBackground('desktop')"
         key="desktop-video"
       >
         <source src="/videos/hero/desktop/hero-desktop.webm" type="video/webm">
@@ -26,7 +26,7 @@
         playsinline 
         preload="auto" 
         class="md:hidden w-full h-full object-cover video-element"
-        poster="/images/home/heroSection/hero-image.webp"
+        :poster="getHeroBackground('desktop')"
         key="mobile-video"
       >
         <source src="/videos/hero/mobile/hero-mobile-center.webm" type="video/webm">
@@ -89,6 +89,9 @@ import { ref, onMounted, computed } from 'vue'
 import { useIntersectionObserver } from '@vueuse/core'
 import { useI18n } from 'vue-i18n'
 import SlideText from '~/components/ui/SlideText.vue'
+
+// Use centralized image service
+const { getHeroBackground } = useImages()
 
 const { t, locale } = useI18n()
 const emit = defineEmits<{

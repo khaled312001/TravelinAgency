@@ -8,7 +8,7 @@
       <!-- Image Container -->
       <div class="absolute inset-0 bg-gray-100">
         <NuxtImg
-          :src="destination.mainImage"
+          :src="getDestinationImage(destination)"
           :alt="getLocalizedName"
           class="w-full h-full object-cover transition-transform duration-300"
           :class="{ 'scale-110': isHovered }"
@@ -99,6 +99,9 @@ import type { Destination } from '~/types/destination'
 import { ref } from 'vue'
 import { useI18n } from 'vue-i18n'
 
+// Use centralized image service
+const { getImageUrl, getDestinationImage } = useImages()
+
 const props = defineProps<{
   destination: Destination
   delay?: number
@@ -111,7 +114,7 @@ const isHovered = ref(false)
 const handleImageError = (event: Event) => {
   console.error('Image failed to load:', props.destination.mainImage)
   const img = event.target as HTMLImageElement
-  img.src = '/images/hero-bg.jpg'
+  img.src = getImageUrl('/images/hero-bg.jpg')
 }
 
 const getLocalizedName = computed(() => 

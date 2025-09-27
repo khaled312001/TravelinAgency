@@ -100,7 +100,7 @@
               <td class="px-6 py-4 whitespace-nowrap">
                 <div class="flex items-center">
                   <img 
-                    :src="destination.image || destination.image_url || '/images/placeholder.jpg'" 
+                    :src="getDestinationImage(destination)" 
                     :alt="destination.name_ar || destination.name_en"
                     class="h-12 w-12 rounded-lg object-cover ml-4"
                     loading="lazy"
@@ -219,6 +219,9 @@ definePageMeta({
   layout: 'admin',
   middleware: 'admin'
 })
+
+// Use centralized image service
+const { getDestinationImage } = useImages()
 
 // المتغيرات التفاعلية
 const destinations = ref([])

@@ -4,7 +4,7 @@
     <section class="relative bg-cover bg-center py-20">
       <div class="absolute inset-0">
         <NuxtImg
-          src="/images/packages/home/packages-hero-bg.jpeg"
+          :src="getPackagesHeroImage()"
           alt="Stunning beachfront villa with private pool and ocean views"
           width="1920"
           height="1080"
@@ -63,5 +63,8 @@ import type { Package } from '~/composables/usePackages'
 
 import PackageCard from '~/components/packages/PackageCard.vue'
 const { packages, pending, error } = usePackages()
+
+// Use centralized image service
+const { getPackagesHeroImage } = useImages()
 
 </script>

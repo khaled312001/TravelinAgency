@@ -5,7 +5,7 @@
   >
         <div class="relative h-[280px] overflow-hidden">
           <NuxtImg
-            :src="props.package_.image_url"
+            :src="getPackageImage(props.package_)"
             class="h-full w-full object-cover transition-transform duration-300 group-hover:scale-105"
             :alt="props.package_.title_en"
             width="800"
@@ -88,6 +88,9 @@ import type { Package } from '~/composables/usePackages'
 import SaudiRyialSymbol from '~/components/ui/icons/SaudiRyialSymbol.vue'
 import FlightIcon from '~/components/ui/icons/FlightIcon.vue'
 
+// Use centralized image service
+const { getImageUrl, getPackageImage } = useImages()
+
 // Define props first
 const props = defineProps<{
   package_: Package
@@ -113,7 +116,7 @@ const handleImageError = (event: Event) => {
       }
     } else {
       // Ultimate fallback to placeholder
-      img.src = '/images/placeholder.svg'
+      img.src = getImageUrl(null)
     }
   }
 }

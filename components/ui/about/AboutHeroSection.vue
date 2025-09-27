@@ -4,7 +4,7 @@
   >
     <div class="absolute inset-0 w-full h-full">
       <NuxtImg 
-        src="/images/about/hero-bg.jpeg" 
+        :src="getAboutHeroImage()" 
         alt="Business class airplane cabin with premium seating"
         class="w-full h-full object-cover"
         sizes="100vw sm:50vw md:400px"
@@ -34,4 +34,7 @@
 </template>
 <script setup lang="ts">
 const localePath = useLocalePath();
+
+// Use centralized image service
+const { getAboutHeroImage } = useImages();
 </script>

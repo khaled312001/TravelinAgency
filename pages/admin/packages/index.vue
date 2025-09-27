@@ -74,7 +74,7 @@
       <template #column-title="{ item: pkg }">
         <div class="flex items-center">
           <img 
-            :src="pkg.image || pkg.image_url || '/images/placeholder.jpg'" 
+            :src="getPackageImage(pkg)" 
             :alt="pkg.title_ar || pkg.title_en || pkg.title"
             class="h-10 w-10 sm:h-12 sm:w-12 rounded-lg object-cover ml-3 sm:ml-4 flex-shrink-0"
             loading="lazy"
@@ -131,6 +131,9 @@ definePageMeta({
   layout: 'admin',
   middleware: 'admin'
 })
+
+// Use centralized image service
+const { getPackageImage } = useImages()
 
 // المتغيرات التفاعلية
 const packages = ref([])

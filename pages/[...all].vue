@@ -2,7 +2,7 @@
   <NuxtErrorBoundary>
     <div class="min-h-screen flex flex-col items-center justify-center bg-gradient-to-b from-primary-50 to-white dark:from-gray-900 dark:to-gray-800 text-center px-4">
       <img
-        src="/images/404/travel-lost.svg"
+        :src="get404Image()"
         alt="404 Illustration"
         class="w-64 h-64 mx-auto mb-6 animate-float"
         loading="lazy"
@@ -27,6 +27,9 @@
 <script setup lang="ts">
 const localePath = useLocalePath();
 const { t } = useI18n();
+
+// Use centralized image service
+const { get404Image } = useImages();
 useHead(() => ({
  status: 404,
  title: t('error.404.title'),

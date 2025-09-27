@@ -5,7 +5,7 @@
     <section class="relative bg-cover bg-center py-20">
       <div class="absolute inset-0">
         <NuxtImg
-          src="/images/packages/home/packages-hero-bg.jpeg"
+          :src="getPackagesHeroImage()"
           alt="Stunning beachfront villa with private pool and ocean views"
           width="1920"
           height="1080"
@@ -125,6 +125,9 @@ import { useRoute, useRouter } from 'vue-router'
 import { useI18n } from 'vue-i18n'
 import { usePackages } from '~/composables/usePackages'
 import { usePackageSearch } from '~/composables/usePackageSearch'
+
+// Use centralized image service
+const { getPackagesHeroImage } = useImages()
 import type { Package } from '~/composables/usePackages'
 import SaudiRyialSymbol from '~/components/ui/icons/SaudiRyialSymbol.vue'
 import PackageCard from '~/components/packages/PackageCard.vue'
