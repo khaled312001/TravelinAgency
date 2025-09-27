@@ -112,28 +112,32 @@
             <label class="block text-sm font-medium text-gray-700">شعار الموقع</label>
             
             <!-- الشعار الحالي -->
-            <div v-if="settings.site_logo" class="flex items-center space-x-4 space-x-reverse">
-              <div class="relative">
-                <img 
-                  :src="settings.site_logo" 
-                  :alt="settings.site_name_ar"
-                  class="w-20 h-20 object-contain border border-gray-300 rounded-lg bg-gray-50"
-                />
-                <button
-                  @click="removeLogo"
-                  class="absolute -top-2 -right-2 bg-red-500 text-white rounded-full w-6 h-6 flex items-center justify-center text-xs hover:bg-red-600"
-                >
-                  ×
-                </button>
-              </div>
-              <div>
-                <p class="text-sm text-gray-600">الشعار الحالي</p>
-                <p class="text-xs text-gray-500">{{ settings.site_logo }}</p>
+            <div v-if="settings.site_logo" class="mb-4">
+              <p class="text-sm font-medium text-gray-700 mb-2">الشعار الحالي:</p>
+              <div class="flex items-center space-x-4 space-x-reverse">
+                <div class="relative">
+                  <img 
+                    :src="settings.site_logo" 
+                    :alt="settings.site_name_ar"
+                    class="w-24 h-24 object-contain border border-gray-300 rounded-lg bg-gray-50"
+                  />
+                  <button
+                    @click="removeLogo"
+                    class="absolute -top-2 -right-2 bg-red-500 text-white rounded-full w-6 h-6 flex items-center justify-center text-xs hover:bg-red-600"
+                    title="حذف الشعار"
+                  >
+                    ×
+                  </button>
+                </div>
+                <div class="flex-1">
+                  <p class="text-sm text-gray-600">تم رفع الشعار بنجاح</p>
+                  <p class="text-xs text-gray-500">انقر على منطقة الرفع أدناه لتغيير الشعار</p>
+                </div>
               </div>
             </div>
             
             <!-- منطقة رفع الصورة -->
-            <div class="border-2 border-dashed border-gray-300 rounded-lg p-6 text-center hover:border-blue-400 transition-colors">
+            <div class="border-2 border-dashed border-gray-300 rounded-lg p-8 text-center hover:border-blue-400 transition-colors">
               <div 
                 @click="triggerFileInput"
                 @dragover.prevent="handleDragOver"
@@ -142,9 +146,12 @@
                 class="cursor-pointer"
                 :class="{ 'border-blue-400 bg-blue-50': isDragOver }"
               >
-                <Icon name="material-symbols:cloud-upload" class="mx-auto h-12 w-12 text-gray-400 mb-4" />
+                <Icon name="material-symbols:cloud-upload" class="mx-auto h-16 w-16 text-gray-400 mb-4" />
+                <p class="text-lg font-medium text-gray-700 mb-2">
+                  {{ isDragOver ? 'أفلت الصورة هنا' : 'رفع شعار جديد' }}
+                </p>
                 <p class="text-sm text-gray-600 mb-2">
-                  {{ isDragOver ? 'أفلت الصورة هنا' : 'اسحب وأفلت الصورة هنا أو انقر للاختيار' }}
+                  اسحب وأفلت الصورة هنا أو انقر للاختيار من جهازك
                 </p>
                 <p class="text-xs text-gray-500">
                   الأنواع المدعومة: JPG, PNG, GIF, WebP (حد أقصى 5MB)
@@ -160,37 +167,50 @@
             </div>
             
             <!-- معاينة الصورة الجديدة -->
-            <div v-if="imagePreview" class="mt-4">
-              <p class="text-sm font-medium text-gray-700 mb-2">معاينة الشعار الجديد:</p>
+            <div v-if="imagePreview" class="mt-6 p-4 bg-gray-50 rounded-lg">
+              <p class="text-sm font-medium text-gray-700 mb-3">معاينة الشعار الجديد:</p>
               <div class="flex items-center space-x-4 space-x-reverse">
                 <img 
                   :src="imagePreview" 
                   alt="معاينة الشعار"
-                  class="w-20 h-20 object-contain border border-gray-300 rounded-lg bg-gray-50"
+                  class="w-24 h-24 object-contain border border-gray-300 rounded-lg bg-white"
                 />
                 <div class="flex-1">
-                  <p class="text-sm text-gray-600">{{ selectedFile?.name }}</p>
+                  <p class="text-sm font-medium text-gray-700">{{ selectedFile?.name }}</p>
                   <p class="text-xs text-gray-500">{{ formatFileSize(selectedFile?.size) }}</p>
+                  <p class="text-xs text-gray-500 mt-1">انقر على "رفع الشعار" لحفظ التغييرات</p>
                 </div>
-                <button
-                  @click="uploadImage"
-                  :disabled="uploading"
-                  class="px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 disabled:opacity-50 disabled:cursor-not-allowed"
-                >
-                  <Icon v-if="uploading" name="material-symbols:progress-activity" class="animate-spin h-4 w-4 ml-2 inline" />
-                  {{ uploading ? 'جاري الرفع...' : 'رفع الشعار' }}
-                </button>
+                <div class="flex flex-col space-y-2">
+                  <button
+                    @click="uploadImage"
+                    :disabled="uploading"
+                    class="px-6 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 disabled:opacity-50 disabled:cursor-not-allowed flex items-center"
+                  >
+                    <Icon v-if="uploading" name="material-symbols:progress-activity" class="animate-spin h-4 w-4 ml-2" />
+                    {{ uploading ? 'جاري الرفع...' : 'رفع الشعار' }}
+                  </button>
+                  <button
+                    @click="cancelUpload"
+                    :disabled="uploading"
+                    class="px-6 py-2 bg-gray-500 text-white rounded-lg hover:bg-gray-600 disabled:opacity-50"
+                  >
+                    إلغاء
+                  </button>
+                </div>
               </div>
             </div>
             
             <!-- شريط التقدم -->
-            <div v-if="uploading" class="w-full bg-gray-200 rounded-full h-2">
-              <div class="bg-blue-600 h-2 rounded-full transition-all duration-300" :style="{ width: uploadProgress + '%' }"></div>
+            <div v-if="uploading" class="w-full bg-gray-200 rounded-full h-3">
+              <div class="bg-blue-600 h-3 rounded-full transition-all duration-300" :style="{ width: uploadProgress + '%' }"></div>
             </div>
             
             <!-- رسائل الحالة -->
-            <div v-if="uploadMessage" class="p-3 rounded-lg" :class="uploadMessage.type === 'success' ? 'bg-green-50 text-green-700' : 'bg-red-50 text-red-700'">
-              {{ uploadMessage.text }}
+            <div v-if="uploadMessage" class="p-4 rounded-lg" :class="uploadMessage.type === 'success' ? 'bg-green-50 text-green-700 border border-green-200' : 'bg-red-50 text-red-700 border border-red-200'">
+              <div class="flex items-center">
+                <Icon :name="uploadMessage.type === 'success' ? 'material-symbols:check-circle' : 'material-symbols:error'" class="h-5 w-5 ml-2" />
+                {{ uploadMessage.text }}
+              </div>
             </div>
           </div>
         </div>
@@ -729,6 +749,15 @@ const removeLogo = () => {
     settings.value.site_logo = ''
     showUploadMessage('تم حذف الشعار', 'success')
   }
+}
+
+const cancelUpload = () => {
+  imagePreview.value = ''
+  selectedFile.value = null
+  if (fileInput.value) {
+    fileInput.value.value = ''
+  }
+  uploadMessage.value = null
 }
 
 const showUploadMessage = (text, type) => {
