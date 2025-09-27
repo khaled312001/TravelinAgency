@@ -1,0 +1,60 @@
+DirectoryIndex index.php index.html
+
+# Enable rewrite engine
+RewriteEngine On
+
+# Force HTTPS redirect
+RewriteCond %{HTTPS} off
+RewriteRule ^(.*)$ https://%{HTTP_HOST}%{REQUEST_URI} [L,R=301]
+
+# Handle static files directly (CSS, JS, images, etc.) - PRIORITY RULE
+RewriteCond %{REQUEST_FILENAME} -f
+RewriteRule ^ - [L]
+
+# Handle API routes
+RewriteCond %{REQUEST_URI} ^/api/ [NC]
+RewriteRule ^(.*)$ api-handler.php [QSA,L]
+
+# Handle Nuxt.js client-side routing
+RewriteCond %{REQUEST_FILENAME} !-f
+RewriteCond %{REQUEST_FILENAME} !-d
+RewriteRule ^(.*)$ index.php [QSA,L]
+
+# Set proper MIME types for images
+AddType image/svg+xml .svg
+AddType image/webp .webp
+AddType image/avif .avif
+AddType image/jpeg .jpg .jpeg
+AddType image/png .png
+AddType image/gif .gif
+
+# Enable Gzip compression for text files (not images)
+<IfModule mod_deflate.c>
+    AddOutputFilterByType DEFLATE text/plain text/html text/xml text/css application/xml application/xhtml+xml application/rss+xml application/javascript application/x-javascript image/svg+xml
+</IfModule>
+
+# Set cache headers for images
+<IfModule mod_expires.c>
+    ExpiresActive On
+    ExpiresByType image/jpg "access 1 year"
+    ExpiresByType image/jpeg "access 1 year"
+    ExpiresByType image/gif "access 1 year"
+    ExpiresByType image/png "access 1 year"
+    ExpiresByType image/webp "access 1 year"
+    ExpiresByType image/svg+xml "access 1 year"
+    ExpiresByType image/avif "access 1 year"
+    ExpiresByType text/css "access 1 month"
+    ExpiresByType application/javascript "access 1 month"
+    ExpiresByType application/x-javascript "access 1 month"
+    ExpiresDefault "access 2 days"
+</IfModule>
+
+# Security headers
+<IfModule mod_headers.c>
+    # Prevent MIME type sniffing
+    Header always set X-Content-Type-Options nosniff
+    # Prevent clickjacking
+    Header always set X-Frame-Options DENY
+    # XSS protection
+    Header always set X-XSS-Protection "1; mode=block"
+</IfModule>
