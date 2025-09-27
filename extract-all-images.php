@@ -76,19 +76,39 @@ try {
     
     // Check packages table for images
     echo "<h4>📦 Packages Table Images</h4>";
-    $stmt = $pdo->query("SELECT id, name, image_url, images FROM packages");
+    
+    // First, check what columns exist in packages table
+    $stmt = $pdo->query("SHOW COLUMNS FROM packages");
+    $columns = $stmt->fetchAll(PDO::FETCH_COLUMN);
+    
+    // Build dynamic query based on available columns
+    $selectFields = ['id'];
+    if (in_array('name', $columns)) $selectFields[] = 'name';
+    if (in_array('title', $columns)) $selectFields[] = 'title';
+    if (in_array('package_name', $columns)) $selectFields[] = 'package_name';
+    if (in_array('image_url', $columns)) $selectFields[] = 'image_url';
+    if (in_array('images', $columns)) $selectFields[] = 'images';
+    if (in_array('image', $columns)) $selectFields[] = 'image';
+    if (in_array('photo', $columns)) $selectFields[] = 'photo';
+    if (in_array('picture', $columns)) $selectFields[] = 'picture';
+    
+    $query = "SELECT " . implode(', ', $selectFields) . " FROM packages";
+    $stmt = $pdo->query($query);
     $packages = $stmt->fetchAll(PDO::FETCH_ASSOC);
     
     if (count($packages) > 0) {
         echo "<table border='1' style='border-collapse:collapse;width:100%;'>";
-        echo "<tr style='background:#f0f0f0;'><th>ID</th><th>Name</th><th>Image URL</th><th>Images</th></tr>";
+        echo "<tr style='background:#f0f0f0;'>";
+        foreach ($selectFields as $field) {
+            echo "<th>" . ucfirst(str_replace('_', ' ', $field)) . "</th>";
+        }
+        echo "</tr>";
         
         foreach ($packages as $package) {
             echo "<tr>";
-            echo "<td>{$package['id']}</td>";
-            echo "<td>{$package['name']}</td>";
-            echo "<td>{$package['image_url']}</td>";
-            echo "<td>{$package['images']}</td>";
+            foreach ($selectFields as $field) {
+                echo "<td>" . htmlspecialchars($package[$field] ?? 'N/A') . "</td>";
+            }
             echo "</tr>";
         }
         echo "</table>";
@@ -98,19 +118,39 @@ try {
     
     // Check destinations table for images
     echo "<h4>🌍 Destinations Table Images</h4>";
-    $stmt = $pdo->query("SELECT id, name, image_url, images FROM destinations");
+    
+    // First, check what columns exist in destinations table
+    $stmt = $pdo->query("SHOW COLUMNS FROM destinations");
+    $destColumns = $stmt->fetchAll(PDO::FETCH_COLUMN);
+    
+    // Build dynamic query based on available columns
+    $destSelectFields = ['id'];
+    if (in_array('name', $destColumns)) $destSelectFields[] = 'name';
+    if (in_array('title', $destColumns)) $destSelectFields[] = 'title';
+    if (in_array('destination_name', $destColumns)) $destSelectFields[] = 'destination_name';
+    if (in_array('image_url', $destColumns)) $destSelectFields[] = 'image_url';
+    if (in_array('images', $destColumns)) $destSelectFields[] = 'images';
+    if (in_array('image', $destColumns)) $destSelectFields[] = 'image';
+    if (in_array('photo', $destColumns)) $destSelectFields[] = 'photo';
+    if (in_array('picture', $destColumns)) $destSelectFields[] = 'picture';
+    
+    $destQuery = "SELECT " . implode(', ', $destSelectFields) . " FROM destinations";
+    $stmt = $pdo->query($destQuery);
     $destinations = $stmt->fetchAll(PDO::FETCH_ASSOC);
     
     if (count($destinations) > 0) {
         echo "<table border='1' style='border-collapse:collapse;width:100%;'>";
-        echo "<tr style='background:#f0f0f0;'><th>ID</th><th>Name</th><th>Image URL</th><th>Images</th></tr>";
+        echo "<tr style='background:#f0f0f0;'>";
+        foreach ($destSelectFields as $field) {
+            echo "<th>" . ucfirst(str_replace('_', ' ', $field)) . "</th>";
+        }
+        echo "</tr>";
         
         foreach ($destinations as $destination) {
             echo "<tr>";
-            echo "<td>{$destination['id']}</td>";
-            echo "<td>{$destination['name']}</td>";
-            echo "<td>{$destination['image_url']}</td>";
-            echo "<td>{$destination['images']}</td>";
+            foreach ($destSelectFields as $field) {
+                echo "<td>" . htmlspecialchars($destination[$field] ?? 'N/A') . "</td>";
+            }
             echo "</tr>";
         }
         echo "</table>";
@@ -175,7 +215,11 @@ if (isset($_GET['export'])) {
                 'destinations' => $destinations ?? []
             ],
             'export_date' => date('Y-m-d H:i:s'),
-            'total_images' => count($allImages)
+            'total_images' => count($allImages),
+            'database_columns_checked' => [
+                'packages' => $selectFields ?? [],
+                'destinations' => $destSelectFields ?? []
+            ]
         ];
         
         echo json_encode($exportData, JSON_PRETTY_PRINT);
