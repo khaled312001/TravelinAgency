@@ -20,7 +20,7 @@ echo "2. 🧪 Test ultra-simple PHP file..."
 echo "----------------------------------"
 echo "<?php echo 'PHP working'; ?>" > test-ultra-simple.php
 chmod 644 test-ultra-simple.php
-curl -k https://worldtripagency.com/test-ultra-simple.php
+curl -k https://travelin-agency-nlcs.vercel.app/test-ultra-simple.php
 
 echo ""
 echo "3. 🔧 Test ultra-simple API handler..."
@@ -28,7 +28,7 @@ echo "-------------------------------------"
 echo "<?php header('Content-Type: application/json'); echo json_encode(['test' => 'working']); ?>" > api-ultra-simple.php
 chmod 644 api-ultra-simple.php
 cp api-ultra-simple.php api-handler.php
-curl -k https://worldtripagency.com/api/test
+curl -k https://travelin-agency-nlcs.vercel.app/api/test
 
 echo ""
 echo "4. 📁 Check file permissions..."
@@ -46,7 +46,7 @@ echo "6. 🧪 Test with working API handler..."
 echo "-------------------------------------"
 cp api-handler-working.php api-handler.php
 chmod 644 api-handler.php
-curl -k https://worldtripagency.com/api/test
+curl -k https://travelin-agency-nlcs.vercel.app/api/test
 
 echo ""
 echo "7. 📋 Check for any output before headers..."
@@ -82,13 +82,13 @@ console.log('');
 console.log('# 2. Test ultra-simple PHP file');
 console.log('echo "<?php echo \'PHP working\'; ?>" > test-ultra-simple.php');
 console.log('chmod 644 test-ultra-simple.php');
-console.log('curl -k https://worldtripagency.com/test-ultra-simple.php');
+console.log('curl -k https://travelin-agency-nlcs.vercel.app/test-ultra-simple.php');
 console.log('');
 console.log('# 3. Test ultra-simple API handler');
 console.log('echo "<?php header(\'Content-Type: application/json\'); echo json_encode([\'test\' => \'working\']); ?>" > api-ultra-simple.php');
 console.log('chmod 644 api-ultra-simple.php');
 console.log('cp api-ultra-simple.php api-handler.php');
-console.log('curl -k https://worldtripagency.com/api/test');
+console.log('curl -k https://travelin-agency-nlcs.vercel.app/api/test');
 console.log('');
 console.log('# 4. Check file permissions');
 console.log('ls -la api-handler.php index.php');

@@ -34,9 +34,9 @@ In cPanel File Manager, right-click each file/folder and set permissions:
 - All subfolders in output: 755
 
 ### Step 4: Test
-1. Visit: https://worldtripagency.com/simple-test.php
-2. If this works, then visit: https://worldtripagency.com/
-3. If this works, then visit: https://worldtripagency.com/test.php
+1. Visit: https://travelin-agency-nlcs.vercel.app/simple-test.php
+2. If this works, then visit: https://travelin-agency-nlcs.vercel.app/
+3. If this works, then visit: https://travelin-agency-nlcs.vercel.app/test.php
 
 ### Step 5: If Still Getting 500 Error
 

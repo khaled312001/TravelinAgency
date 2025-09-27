@@ -101,5 +101,5 @@ chmod($currentFile, 0644);
 echo "✅ Set permissions on $currentFile\n";
 
 echo "\n🎉 API routing fix completed!\n";
-echo "🧪 Test with: curl -k -X POST https://worldtripagency.com/api/auth/login -H 'Content-Type: application/json' -d '{\"email\":\"admin@wonderland.com\",\"password\":\"admin123\"}'\n";
+echo "🧪 Test with: curl -k -X POST https://travelin-agency-nlcs.vercel.app/api/auth/login -H 'Content-Type: application/json' -d '{\"email\":\"admin@wonderland.com\",\"password\":\"admin123\"}'\n";
 ?>

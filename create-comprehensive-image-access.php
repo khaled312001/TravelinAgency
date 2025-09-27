@@ -151,7 +151,7 @@ $testPaths = [
     '/output/public/images/home/services/support_24_7.jpg'
 ];
 
-$baseUrl = 'https://worldtripagency.com';
+$baseUrl = 'https://travelin-agency-nlcs.vercel.app';
 
 echo "<h4>📋 Testing All Path Variations</h4>";
 foreach ($testPaths as $path) {

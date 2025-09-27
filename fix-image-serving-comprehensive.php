@@ -84,7 +84,7 @@ if (file_exists('.htaccess')) {
 
 // Test web server response
 echo "<h4>🌐 Web Server Response Test</h4>";
-$testUrl = 'https://worldtripagency.com/images/home/logo/WonderlandLogoWhite.svg';
+$testUrl = 'https://travelin-agency-nlcs.vercel.app/images/home/logo/WonderlandLogoWhite.svg';
 echo "<div class='info'>Testing URL: $testUrl</div>";
 
 // Use cURL to test the URL
@@ -179,7 +179,7 @@ echo "<h4>3. Test Direct Image Access</h4>";
 echo "<div class='info'>Test these URLs directly in your browser:</div>";
 echo "<ul>";
 foreach ($testImages as $imagePath) {
-    echo "<li><a href='https://worldtripagency.com$imagePath' target='_blank'>https://worldtripagency.com$imagePath</a></li>";
+    echo "<li><a href='https://travelin-agency-nlcs.vercel.app$imagePath' target='_blank'>https://travelin-agency-nlcs.vercel.app$imagePath</a></li>";
 }
 echo "</ul>";
 

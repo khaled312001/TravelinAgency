@@ -49,11 +49,11 @@ try {
   console.log('');
   
   console.log('# 5. Test the ultra-simple API');
-  console.log('curl -k https://worldtripagency.com/api/test');
+  console.log('curl -k https://travelin-agency-nlcs.vercel.app/api/test');
   console.log('');
   
   console.log('# 6. Test the main website');
-  console.log('curl -k https://worldtripagency.com/');
+  console.log('curl -k https://travelin-agency-nlcs.vercel.app/');
   console.log('');
   
   console.log('# 7. Check server error logs');
@@ -83,8 +83,8 @@ try {
   console.log('');
 
   console.log('🧪 TEST URLS:');
-  console.log('- Ultra-simple API: https://worldtripagency.com/api/test');
-  console.log('- Main website: https://worldtripagency.com/');
+  console.log('- Ultra-simple API: https://travelin-agency-nlcs.vercel.app/api/test');
+  console.log('- Main website: https://travelin-agency-nlcs.vercel.app/');
   console.log('');
 
 } catch (error) {

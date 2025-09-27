@@ -54,12 +54,12 @@ try {
   console.log('');
   
   console.log('# 6. Test database connection');
-  console.log('curl https://worldtripagency.com/test-database-connection.php');
+  console.log('curl https://travelin-agency-nlcs.vercel.app/test-database-connection.php');
   console.log('');
   
   console.log('# 7. Test the APIs');
-  console.log('curl -k https://worldtripagency.com/api/packages');
-  console.log('curl -k https://worldtripagency.com/api/auth/login');
+  console.log('curl -k https://travelin-agency-nlcs.vercel.app/api/packages');
+  console.log('curl -k https://travelin-agency-nlcs.vercel.app/api/auth/login');
   console.log('');
 
   console.log('🔧 WHAT THIS FIX DOES:');
@@ -82,12 +82,12 @@ try {
   console.log('');
 
   console.log('🧪 TEST URLS:');
-  console.log('- Database Test: https://worldtripagency.com/test-database-connection.php');
-  console.log('- API Packages: https://worldtripagency.com/api/packages');
-  console.log('- API Destinations: https://worldtripagency.com/api/destinations');
-  console.log('- Auth Login: https://worldtripagency.com/api/auth/login');
-  console.log('- Admin Login: https://worldtripagency.com/admin/login');
-  console.log('- Main Website: https://worldtripagency.com/');
+  console.log('- Database Test: https://travelin-agency-nlcs.vercel.app/test-database-connection.php');
+  console.log('- API Packages: https://travelin-agency-nlcs.vercel.app/api/packages');
+  console.log('- API Destinations: https://travelin-agency-nlcs.vercel.app/api/destinations');
+  console.log('- Auth Login: https://travelin-agency-nlcs.vercel.app/api/auth/login');
+  console.log('- Admin Login: https://travelin-agency-nlcs.vercel.app/admin/login');
+  console.log('- Main Website: https://travelin-agency-nlcs.vercel.app/');
   console.log('');
 
   console.log('🔐 ADMIN LOGIN CREDENTIALS:');
@@ -109,7 +109,7 @@ try {
   console.log('');
 
   console.log('🚨 IMPORTANT:');
-  console.log('1. First, test the database connection at: https://worldtripagency.com/test-database-connection.php');
+  console.log('1. First, test the database connection at: https://travelin-agency-nlcs.vercel.app/test-database-connection.php');
   console.log('2. If database is not connected, the website will still work with sample data');
   console.log('3. Check the error logs for database connection issues');
   console.log('4. The frontend will no longer crash with undefined data');

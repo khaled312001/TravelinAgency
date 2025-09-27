@@ -266,7 +266,7 @@ EOF
 echo ""
 echo "3. 🧪 Testing the updated website..."
 echo "-----------------------------------"
-curl -k https://worldtripagency.com/ | head -10
+curl -k https://travelin-agency-nlcs.vercel.app/ | head -10
 
 echo ""
 echo "4. 🔍 Checking what Nuxt.js build files exist..."

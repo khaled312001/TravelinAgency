@@ -33,7 +33,7 @@ try {
   console.log('');
   
   console.log('# 3. Test the authentication endpoint');
-  console.log('curl -k -X POST https://worldtripagency.com/api/auth/login \\');
+  console.log('curl -k -X POST https://travelin-agency-nlcs.vercel.app/api/auth/login \\');
   console.log('  -H "Content-Type: application/json" \\');
   console.log('  -d \'{"email":"admin@wonderland.com","password":"admin123"}\'');
   console.log('');
@@ -56,10 +56,10 @@ try {
   console.log('');
 
   console.log('🧪 TEST URLS:');
-  console.log('- Auth Login: https://worldtripagency.com/api/auth/login');
-  console.log('- API Packages: https://worldtripagency.com/api/packages');
-  console.log('- API Destinations: https://worldtripagency.com/api/destinations');
-  console.log('- Admin Login: https://worldtripagency.com/admin/login');
+  console.log('- Auth Login: https://travelin-agency-nlcs.vercel.app/api/auth/login');
+  console.log('- API Packages: https://travelin-agency-nlcs.vercel.app/api/packages');
+  console.log('- API Destinations: https://travelin-agency-nlcs.vercel.app/api/destinations');
+  console.log('- Admin Login: https://travelin-agency-nlcs.vercel.app/admin/login');
   console.log('');
 
   console.log('🔐 ADMIN LOGIN CREDENTIALS:');

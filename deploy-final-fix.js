@@ -54,9 +54,9 @@ chmod 644 .htaccess
 echo "✅ Deployment complete!"
 echo ""
 echo "🧪 TEST THESE URLs:"
-echo "1. Main website: https://worldtripagency.com/"
-echo "2. API test: https://worldtripagency.com/api/test"
-echo "3. Basic PHP: https://worldtripagency.com/test-basic.php"
+echo "1. Main website: https://travelin-agency-nlcs.vercel.app/"
+echo "2. API test: https://travelin-agency-nlcs.vercel.app/api/test"
+echo "3. Basic PHP: https://travelin-agency-nlcs.vercel.app/test-basic.php"
 echo ""
 echo "📋 If tests pass, gradually add complexity back:"
 echo "1. Replace api-handler.php with full version"
@@ -83,7 +83,7 @@ console.log('3. Set permissions:');
 console.log('   chmod 644 index.php api-handler.php .htaccess');
 console.log('');
 console.log('4. Test:');
-console.log('   curl -k https://worldtripagency.com/');
-console.log('   curl -k https://worldtripagency.com/api/test');
+console.log('   curl -k https://travelin-agency-nlcs.vercel.app/');
+console.log('   curl -k https://travelin-agency-nlcs.vercel.app/api/test');
 console.log('');
 console.log('🎯 This should fix the 500 errors!');

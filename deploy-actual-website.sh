@@ -193,7 +193,7 @@ echo ""
 echo "4. 🧪 Testing the actual website..."
 echo "----------------------------------"
 echo "Testing main website:"
-curl -k -I https://worldtripagency.com/ | head -1
+curl -k -I https://travelin-agency-nlcs.vercel.app/ | head -1
 
 echo ""
 echo "Checking if we have the actual Nuxt.js files:"
@@ -202,11 +202,11 @@ ls -la _nuxt/ 2>/dev/null && echo "✅ _nuxt directory found" || echo "❌ _nuxt
 
 echo ""
 echo "Testing API endpoints:"
-curl -k -s https://worldtripagency.com/api/test | head -c 50
+curl -k -s https://travelin-agency-nlcs.vercel.app/api/test | head -c 50
 echo ""
 
 echo "Testing packages API:"
-curl -k -s https://worldtripagency.com/api/packages | grep -o '"id"' | wc -l | xargs echo "Packages found:"
+curl -k -s https://travelin-agency-nlcs.vercel.app/api/packages | grep -o '"id"' | wc -l | xargs echo "Packages found:"
 
 echo ""
 echo "🎉 DEPLOYMENT COMPLETE!"
@@ -217,8 +217,8 @@ echo "✅ All build files have been deployed"
 echo "✅ API endpoints are working"
 echo "✅ Database is connected"
 echo ""
-echo "🌐 Visit your website: https://worldtripagency.com/"
-echo "🔐 Admin panel: https://worldtripagency.com/admin/login"
+echo "🌐 Visit your website: https://travelin-agency-nlcs.vercel.app/"
+echo "🔐 Admin panel: https://travelin-agency-nlcs.vercel.app/admin/login"
 echo ""
 echo "📊 Your website now shows:"
 echo "  • Complete Nuxt.js travel agency interface"

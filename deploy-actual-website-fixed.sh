@@ -84,11 +84,11 @@ ls -la index.html 2>/dev/null && echo "✅ index.html found" || echo "❌ index.
 
 echo ""
 echo "Testing main website:"
-curl -k -I https://worldtripagency.com/ | head -1
+curl -k -I https://travelin-agency-nlcs.vercel.app/ | head -1
 
 echo ""
 echo "Testing API:"
-curl -k -s https://worldtripagency.com/api/test | head -c 50
+curl -k -s https://travelin-agency-nlcs.vercel.app/api/test | head -c 50
 echo ""
 
 echo ""
@@ -98,5 +98,5 @@ echo ""
 echo "✅ Your actual Nuxt.js travel agency website is now live!"
 echo "✅ No more test page - this is your real website!"
 echo ""
-echo "🌐 Visit: https://worldtripagency.com/"
-echo "🔐 Admin: https://worldtripagency.com/admin/login"
+echo "🌐 Visit: https://travelin-agency-nlcs.vercel.app/"
+echo "🔐 Admin: https://travelin-agency-nlcs.vercel.app/admin/login"

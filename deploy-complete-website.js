@@ -324,23 +324,23 @@ echo ""
 echo "4. 🧪 Testing the complete website..."
 echo "------------------------------------"
 echo "Testing main website:"
-curl -k -I https://worldtripagency.com/ | head -1
+curl -k -I https://travelin-agency-nlcs.vercel.app/ | head -1
 
 echo ""
 echo "Testing API endpoints:"
-curl -k -s https://worldtripagency.com/api/test | head -c 100
+curl -k -s https://travelin-agency-nlcs.vercel.app/api/test | head -c 100
 echo ""
 
 echo "Testing packages API:"
-curl -k -s https://worldtripagency.com/api/packages | grep -o '"id"' | wc -l | xargs echo "Packages found:"
+curl -k -s https://travelin-agency-nlcs.vercel.app/api/packages | grep -o '"id"' | wc -l | xargs echo "Packages found:"
 
 echo ""
 echo "Testing destinations API:"
-curl -k -s https://worldtripagency.com/api/destinations | grep -o '"id"' | wc -l | xargs echo "Destinations found:"
+curl -k -s https://travelin-agency-nlcs.vercel.app/api/destinations | grep -o '"id"' | wc -l | xargs echo "Destinations found:"
 
 echo ""
 echo "Testing admin login:"
-curl -k -s -X POST https://worldtripagency.com/api/auth/login \\
+curl -k -s -X POST https://travelin-agency-nlcs.vercel.app/api/auth/login \\
   -H "Content-Type: application/json" \\
   -d '{"email":"admin@wonderland.com","password":"admin123"}' | grep -o '"success"' | head -1
 
@@ -354,8 +354,8 @@ echo "✅ Database is connected and serving data"
 echo "✅ Admin authentication is functional"
 echo "✅ Images and static files are loading"
 echo ""
-echo "🌐 Visit your website: https://worldtripagency.com/"
-echo "🔐 Admin panel: https://worldtripagency.com/admin/login"
+echo "🌐 Visit your website: https://travelin-agency-nlcs.vercel.app/"
+echo "🔐 Admin panel: https://travelin-agency-nlcs.vercel.app/admin/login"
 echo ""
 echo "📊 Website Features:"
 echo "  • 10 Travel packages from your database"
@@ -392,7 +392,7 @@ console.log('# Deploy production index.php');
 console.log('cp index-simple.php index.php');
 console.log('');
 console.log('# Test the website');
-console.log('curl -k -I https://worldtripagency.com/');
+console.log('curl -k -I https://travelin-agency-nlcs.vercel.app/');
 console.log('');
 console.log('🎯 This will give you:');
 console.log('✅ Complete Nuxt.js travel agency website');

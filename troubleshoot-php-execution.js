@@ -150,11 +150,11 @@ chmod 644 test-*.php
 echo "✅ Test files deployed"
 echo ""
 echo "🧪 TEST THESE URLs:"
-echo "1. Basic PHP: https://worldtripagency.com/test-basic.php"
-echo "2. PHP Info: https://worldtripagency.com/test-info.php"
-echo "3. Error Reporting: https://worldtripagency.com/test-errors.php"
-echo "4. JSON API: https://worldtripagency.com/test-json.php"
-echo "5. Database: https://worldtripagency.com/test-database.php"
+echo "1. Basic PHP: https://travelin-agency-nlcs.vercel.app/test-basic.php"
+echo "2. PHP Info: https://travelin-agency-nlcs.vercel.app/test-info.php"
+echo "3. Error Reporting: https://travelin-agency-nlcs.vercel.app/test-errors.php"
+echo "4. JSON API: https://travelin-agency-nlcs.vercel.app/test-json.php"
+echo "5. Database: https://travelin-agency-nlcs.vercel.app/test-database.php"
 echo ""
 echo "🔧 TROUBLESHOOTING STEPS:"
 echo "1. Test each URL above"
@@ -188,16 +188,16 @@ console.log('# 2. Set permissions');
 console.log('chmod 644 test-*.php');
 console.log('');
 console.log('# 3. Test each URL');
-console.log('curl -k https://worldtripagency.com/test-basic.php');
-console.log('curl -k https://worldtripagency.com/test-json.php');
+console.log('curl -k https://travelin-agency-nlcs.vercel.app/test-basic.php');
+console.log('curl -k https://travelin-agency-nlcs.vercel.app/test-json.php');
 console.log('');
 console.log('🧪 TEST URLs:');
 console.log('=============');
-console.log('1. Basic PHP: https://worldtripagency.com/test-basic.php');
-console.log('2. PHP Info: https://worldtripagency.com/test-info.php');
-console.log('3. Error Reporting: https://worldtripagency.com/test-errors.php');
-console.log('4. JSON API: https://worldtripagency.com/test-json.php');
-console.log('5. Database: https://worldtripagency.com/test-database.php');
+console.log('1. Basic PHP: https://travelin-agency-nlcs.vercel.app/test-basic.php');
+console.log('2. PHP Info: https://travelin-agency-nlcs.vercel.app/test-info.php');
+console.log('3. Error Reporting: https://travelin-agency-nlcs.vercel.app/test-errors.php');
+console.log('4. JSON API: https://travelin-agency-nlcs.vercel.app/test-json.php');
+console.log('5. Database: https://travelin-agency-nlcs.vercel.app/test-database.php');
 console.log('');
 console.log('🔍 WHAT TO LOOK FOR:');
 console.log('====================');

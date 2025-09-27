@@ -48,7 +48,7 @@ try {
   console.log('');
   
   console.log('# 5. Test the authentication endpoint');
-  console.log('curl -k -X POST https://worldtripagency.com/api/auth/login \\');
+  console.log('curl -k -X POST https://travelin-agency-nlcs.vercel.app/api/auth/login \\');
   console.log('  -H "Content-Type: application/json" \\');
   console.log('  -d \'{"email":"admin@wonderland.com","password":"admin123"}\'');
   console.log('');
@@ -62,11 +62,11 @@ try {
   console.log('');
 
   console.log('🧪 TEST URLS:');
-  console.log('- Admin Login: https://worldtripagency.com/admin/login');
-  console.log('- Auth Login API: https://worldtripagency.com/api/auth/login');
-  console.log('- Auth Logout API: https://worldtripagency.com/api/auth/logout');
-  console.log('- Auth Me API: https://worldtripagency.com/api/auth/me');
-  console.log('- Main Website: https://worldtripagency.com/');
+  console.log('- Admin Login: https://travelin-agency-nlcs.vercel.app/admin/login');
+  console.log('- Auth Login API: https://travelin-agency-nlcs.vercel.app/api/auth/login');
+  console.log('- Auth Logout API: https://travelin-agency-nlcs.vercel.app/api/auth/logout');
+  console.log('- Auth Me API: https://travelin-agency-nlcs.vercel.app/api/auth/me');
+  console.log('- Main Website: https://travelin-agency-nlcs.vercel.app/');
   console.log('');
 
   console.log('🔧 WHAT THIS FIX DOES:');
@@ -93,7 +93,7 @@ try {
   console.log('1. SSH into your server or use cPanel File Manager');
   console.log('2. Navigate to your public_html directory');
   console.log('3. Run the deployment commands above');
-  console.log('4. Test the admin login at https://worldtripagency.com/admin/login');
+  console.log('4. Test the admin login at https://travelin-agency-nlcs.vercel.app/admin/login');
   console.log('');
 
 } catch (error) {

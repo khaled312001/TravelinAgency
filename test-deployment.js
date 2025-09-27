@@ -122,6 +122,6 @@ console.log('5. ✅ API endpoints configured');
 
 console.log('\n📤 Ready for upload to GoDaddy!');
 console.log('\n🔗 Test URLs after upload:');
-console.log('- https://worldtripagency.com/test.php');
-console.log('- https://worldtripagency.com/api/test');
-console.log('- https://worldtripagency.com/');
+console.log('- https://travelin-agency-nlcs.vercel.app/test.php');
+console.log('- https://travelin-agency-nlcs.vercel.app/api/test');
+console.log('- https://travelin-agency-nlcs.vercel.app/');

@@ -137,13 +137,13 @@ cp .htaccess-working .htaccess
 chmod 644 .htaccess
 
 # 4. Test PHP execution
-curl -k https://worldtripagency.com/test-basic.php
+curl -k https://travelin-agency-nlcs.vercel.app/test-basic.php
 
 # 5. Test API endpoints
-curl -k https://worldtripagency.com/api/test
+curl -k https://travelin-agency-nlcs.vercel.app/api/test
 
 # 6. Test main website
-curl -k https://worldtripagency.com/
+curl -k https://travelin-agency-nlcs.vercel.app/
 
 # 7. If issues persist, restore backup
 # cp .htaccess.backup-* .htaccess
@@ -179,13 +179,13 @@ console.log('2. Set permissions:');
 console.log('   chmod 644 .htaccess');
 console.log('');
 console.log('3. Test PHP execution:');
-console.log('   curl -k https://worldtripagency.com/test-basic.php');
+console.log('   curl -k https://travelin-agency-nlcs.vercel.app/test-basic.php');
 console.log('');
 console.log('4. Test API:');
-console.log('   curl -k https://worldtripagency.com/api/test');
+console.log('   curl -k https://travelin-agency-nlcs.vercel.app/api/test');
 console.log('');
 console.log('5. Test main website:');
-console.log('   curl -k https://worldtripagency.com/');
+console.log('   curl -k https://travelin-agency-nlcs.vercel.app/');
 console.log('');
 console.log('🔧 KEY IMPROVEMENTS:');
 console.log('===================');

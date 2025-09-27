@@ -201,7 +201,7 @@ console.log('# 2. Execute the database setup');
 console.log('mysql -u travel -p travel < setup-database.sql');
 console.log('');
 console.log('# 3. Test the database connection');
-console.log('curl -k https://worldtripagency.com/api/packages');
+console.log('curl -k https://travelin-agency-nlcs.vercel.app/api/packages');
 console.log('');
 console.log('🎯 This will:');
 console.log('✅ Create all necessary database tables');

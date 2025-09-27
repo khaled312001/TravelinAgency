@@ -21,7 +21,7 @@ git pull origin main
 
 ### Step 2: Test the Working File First
 ```bash
-# Visit in browser: https://worldtripagency.com/index-working.php
+# Visit in browser: https://travelin-agency-nlcs.vercel.app/index-working.php
 # This should show a working PHP page with database connection
 ```
 
@@ -43,9 +43,9 @@ chmod 644 .htaccess
 ```
 
 ### Step 4: Test Your Site
-- **Main site**: https://worldtripagency.com/
-- **API test**: https://worldtripagency.com/api/test
-- **API packages**: https://worldtripagency.com/api/packages
+- **Main site**: https://travelin-agency-nlcs.vercel.app/
+- **API test**: https://travelin-agency-nlcs.vercel.app/api/test
+- **API packages**: https://travelin-agency-nlcs.vercel.app/api/packages
 
 ## 🎯 What's Fixed
 

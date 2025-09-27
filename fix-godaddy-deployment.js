@@ -134,7 +134,7 @@ TWILIO_PHONE_NUMBER=your_twilio_phone_number
 SALES_MANAGER_PHONE=your_sales_manager_phone
 
 # Site Configuration
-PUBLIC_SITE_URL=https://worldtripagency.com/
+PUBLIC_SITE_URL=https://travelin-agency-nlcs.vercel.app/
 NODE_ENV=production
 `;
   
@@ -153,7 +153,7 @@ NODE_ENV=production
    - Files: 644
    - .htaccess: 644
 
-3. **Test**: Visit https://worldtripagency.com/test.php to verify PHP is working
+3. **Test**: Visit https://travelin-agency-nlcs.vercel.app/test.php to verify PHP is working
 
 4. **Environment**: Rename .env.example to .env and update with your database credentials
 
@@ -184,7 +184,7 @@ public_html/
 │       └── images/
 └── .env (rename from .env.example)
 
-Your website should now work at: https://worldtripagency.com/
+Your website should now work at: https://travelin-agency-nlcs.vercel.app/
 `;
   
   fs.writeFileSync(path.join(deployDir, 'DEPLOYMENT_INSTRUCTIONS.txt'), instructions);
@@ -193,8 +193,8 @@ Your website should now work at: https://worldtripagency.com/
   console.log('\n🎉 Deployment fix completed!');
   console.log('\n📁 Fixed files are ready in the "godaddy-fixed" folder');
   console.log('📋 Upload the contents of the "godaddy-fixed" folder to your GoDaddy hosting');
-  console.log('🌐 Test at: https://worldtripagency.com/test.php');
-  console.log('🌐 Your website will be available at: https://worldtripagency.com/');
+  console.log('🌐 Test at: https://travelin-agency-nlcs.vercel.app/test.php');
+  console.log('🌐 Your website will be available at: https://travelin-agency-nlcs.vercel.app/');
 
 } catch (error) {
   console.error('❌ Fix failed:', error.message);

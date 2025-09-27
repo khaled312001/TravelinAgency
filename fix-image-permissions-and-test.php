@@ -116,7 +116,7 @@ foreach ($keyImages as $image) {
 
 // Test web access using cURL
 echo "<h4>🌐 Testing Web Access</h4>";
-$baseUrl = 'https://worldtripagency.com';
+$baseUrl = 'https://travelin-agency-nlcs.vercel.app';
 
 foreach ($keyImages as $image) {
     $webPath = str_replace('public', '', $image);
@@ -168,6 +168,6 @@ cp .htaccess .htaccess-backup-$(date +%Y%m%d-%H%M%S)
 cp .htaccess-optimized-images .htaccess
 
 # Test a specific image
-curl -I https://worldtripagency.com/images/home/logo/WonderlandLogoWhite.svg";
+curl -I https://travelin-agency-nlcs.vercel.app/images/home/logo/WonderlandLogoWhite.svg";
 echo "</pre>";
 ?>

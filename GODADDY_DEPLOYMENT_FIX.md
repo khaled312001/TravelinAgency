@@ -69,15 +69,15 @@ Your database is already configured with:
 ### 4. Test Your Deployment
 
 #### Test PHP and Database
-Visit: `https://worldtripagency.com/test.php`
+Visit: `https://travelin-agency-nlcs.vercel.app/test.php`
 - Should show PHP version and database connection status
 
 #### Test API
-Visit: `https://worldtripagency.com/api/test`
+Visit: `https://travelin-agency-nlcs.vercel.app/api/test`
 - Should return: `{"status":"working","database":"connected"}`
 
 #### Test Main Site
-Visit: `https://worldtripagency.com/`
+Visit: `https://travelin-agency-nlcs.vercel.app/`
 - Should load your Nuxt.js application
 
 ## Troubleshooting
@@ -125,7 +125,7 @@ Visit: `https://worldtripagency.com/`
 
 Your `.env` file contains:
 ```env
-PUBLIC_SITE_URL=https://worldtripagency.com/
+PUBLIC_SITE_URL=https://travelin-agency-nlcs.vercel.app/
 NODE_ENV=production
 DB_HOST=localhost
 DB_NAME=travel

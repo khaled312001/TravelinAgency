@@ -25,7 +25,7 @@ find . -name "_nuxt" -type d 2>/dev/null || echo "_nuxt directory not found"
 echo ""
 echo "3. 🧪 Testing static file serving..."
 echo "-----------------------------------"
-curl -k https://worldtripagency.com/test.php
+curl -k https://travelin-agency-nlcs.vercel.app/test.php
 
 echo ""
 echo "4. 🔧 Checking .htaccess for static file handling..."
@@ -65,7 +65,7 @@ EOF
 echo ""
 echo "6. 🧪 Testing the main website..."
 echo "--------------------------------"
-curl -k https://worldtripagency.com/ | head -20
+curl -k https://travelin-agency-nlcs.vercel.app/ | head -20
 
 echo ""
 echo "✅ Nuxt.js assets fix complete!"
@@ -116,6 +116,6 @@ console.log('RewriteRule ^(.*)$ /index.php [QSA,L]');
 console.log('EOF');
 console.log('');
 console.log('# 4. Test the website');
-console.log('curl -k https://worldtripagency.com/');
+console.log('curl -k https://travelin-agency-nlcs.vercel.app/');
 console.log('');
 console.log('🎯 This should fix the missing CSS/JS files!');

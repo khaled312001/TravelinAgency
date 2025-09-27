@@ -30,7 +30,7 @@ $testPaths = [
 ];
 
 echo "<h4>📋 Testing All Possible Image Paths</h4>";
-$baseUrl = 'https://worldtripagency.com';
+$baseUrl = 'https://travelin-agency-nlcs.vercel.app';
 
 foreach ($testPaths as $path) {
     echo "<div class='info'>Testing: $path</div>";
@@ -157,8 +157,8 @@ echo "<h3>🧪 Quick Test Commands</h3>";
 echo "<div class='info'>Run these commands to test different approaches:</div>";
 echo "<pre style='background:#f5f5f5;padding:10px;border:1px solid #ddd;'>";
 echo "# Test direct file access
-curl -I https://worldtripagency.com/images/home/logo/WonderlandLogoWhite.svg
-curl -I https://worldtripagency.com/public/images/home/logo/WonderlandLogoWhite.svg
+curl -I https://travelin-agency-nlcs.vercel.app/images/home/logo/WonderlandLogoWhite.svg
+curl -I https://travelin-agency-nlcs.vercel.app/public/images/home/logo/WonderlandLogoWhite.svg
 
 # Check if files exist
 ls -la public/images/home/logo/

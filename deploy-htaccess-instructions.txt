@@ -11,13 +11,13 @@ cp .htaccess-working .htaccess
 chmod 644 .htaccess
 
 # 4. Test PHP execution
-curl -k https://worldtripagency.com/test-basic.php
+curl -k https://travelin-agency-nlcs.vercel.app/test-basic.php
 
 # 5. Test API endpoints
-curl -k https://worldtripagency.com/api/test
+curl -k https://travelin-agency-nlcs.vercel.app/api/test
 
 # 6. Test main website
-curl -k https://worldtripagency.com/
+curl -k https://travelin-agency-nlcs.vercel.app/
 
 # 7. If issues persist, restore backup
 # cp .htaccess.backup-* .htaccess

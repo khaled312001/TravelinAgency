@@ -97,7 +97,7 @@ TWILIO_PHONE_NUMBER=your_twilio_phone_number
 SALES_MANAGER_PHONE=your_sales_manager_phone
 
 # Site Configuration
-PUBLIC_SITE_URL=https://worldtripagency.com/
+PUBLIC_SITE_URL=https://travelin-agency-nlcs.vercel.app/
 NODE_ENV=production
 `;
 
@@ -130,7 +130,7 @@ Upload the entire contents of this 'deploy' folder to your GoDaddy hosting root 
 - server/ (API routes)
 - .output/ (Nuxt build output)
 
-Your website should now work at: https://worldtripagency.com/
+Your website should now work at: https://travelin-agency-nlcs.vercel.app/
 `;
 
   fs.writeFileSync(path.join(deployDir, 'README.txt'), instructions);
@@ -139,7 +139,7 @@ Your website should now work at: https://worldtripagency.com/
   console.log('\n🎉 Build completed successfully!');
   console.log('\n📁 Deployment files are ready in the "deploy" folder');
   console.log('📋 Upload the contents of the "deploy" folder to your GoDaddy hosting');
-  console.log('🌐 Your website will be available at: https://worldtripagency.com/');
+  console.log('🌐 Your website will be available at: https://travelin-agency-nlcs.vercel.app/');
 
 } catch (error) {
   console.error('❌ Build failed:', error.message);

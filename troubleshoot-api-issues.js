@@ -78,7 +78,7 @@ echo json_encode(['status' => 'minimal test working', 'time' => date('Y-m-d H:i:
 EOF
 
 echo "Testing minimal API:"
-curl -k https://worldtripagency.com/api-test-minimal.php
+curl -k https://travelin-agency-nlcs.vercel.app/api-test-minimal.php
 echo ""
 echo ""
 
@@ -119,7 +119,7 @@ console.log('echo json_encode(["status" => "minimal test working", "time" => dat
 console.log('?>');
 console.log('EOF');
 console.log('');
-console.log('curl -k https://worldtripagency.com/api-test-minimal.php');
+console.log('curl -k https://travelin-agency-nlcs.vercel.app/api-test-minimal.php');
 console.log('');
 console.log('# 5. Check .htaccess');
 console.log('cat .htaccess');

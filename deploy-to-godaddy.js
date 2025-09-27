@@ -88,7 +88,7 @@ TWILIO_PHONE_NUMBER=your_twilio_phone_number
 SALES_MANAGER_PHONE=your_sales_manager_phone
 
 # Site Configuration
-PUBLIC_SITE_URL=https://worldtripagency.com/
+PUBLIC_SITE_URL=https://travelin-agency-nlcs.vercel.app/
 NODE_ENV=production
 `;
 
@@ -128,16 +128,16 @@ All files in this 'godaddy-deploy' folder are ready to be uploaded to your GoDad
 - output/ (Nuxt.js build output)
 
 ## Test Your Website:
-- Main site: https://worldtripagency.com/
-- PHP test: https://worldtripagency.com/test.php
-- API test: https://worldtripagency.com/api/
+- Main site: https://travelin-agency-nlcs.vercel.app/
+- PHP test: https://travelin-agency-nlcs.vercel.app/test.php
+- API test: https://travelin-agency-nlcs.vercel.app/api/
 
 ## Troubleshooting:
 - If you get 500 errors, check the .htaccess file
 - If static files don't load, check the public/ directory
 - If API doesn't work, check the server/ directory
 
-Your website should now work at: https://worldtripagency.com/
+Your website should now work at: https://travelin-agency-nlcs.vercel.app/
 `;
 
   fs.writeFileSync(path.join(deployDir, 'README.txt'), instructions);
@@ -145,7 +145,7 @@ Your website should now work at: https://worldtripagency.com/
 
   console.log('\n🎉 Deployment files are ready!');
   console.log(`\n📁 Upload the contents of the "${deployDir}" folder to your GoDaddy hosting`);
-  console.log('🌐 Your website will be available at: https://worldtripagency.com/');
+  console.log('🌐 Your website will be available at: https://travelin-agency-nlcs.vercel.app/');
   console.log('\n📋 Next steps:');
   console.log('1. Upload all files to public_html directory');
   console.log('2. Rename .env.example to .env and update database credentials');

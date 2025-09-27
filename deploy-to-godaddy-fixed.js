@@ -54,7 +54,7 @@ filesToCopy.forEach(file => {
 const envPath = path.join(__dirname, '.env');
 if (!fs.existsSync(envPath)) {
     const envContent = `# Site Configuration
-PUBLIC_SITE_URL=https://worldtripagency.com/
+PUBLIC_SITE_URL=https://travelin-agency-nlcs.vercel.app/
 NODE_ENV=production
 
 # MySQL Database Configuration (GoDaddy)
@@ -123,6 +123,6 @@ console.log('\n🎉 Deployment fix completed!');
 console.log('\n📋 Next steps:');
 console.log('1. Upload all files to your GoDaddy hosting');
 console.log('2. Ensure file permissions: folders 755, files 644');
-console.log('3. Test your site at https://worldtripagency.com/test.php');
-console.log('4. Test your main site at https://worldtripagency.com/');
-console.log('5. Test API at https://worldtripagency.com/api/test');
+console.log('3. Test your site at https://travelin-agency-nlcs.vercel.app/test.php');
+console.log('4. Test your main site at https://travelin-agency-nlcs.vercel.app/');
+console.log('5. Test API at https://travelin-agency-nlcs.vercel.app/api/test');

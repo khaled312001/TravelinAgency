@@ -99,7 +99,7 @@ DB_NAME=travel
 JWT_SECRET=your-super-secret-jwt-key-change-this-in-production-${Date.now()}
 
 # Site Configuration
-PUBLIC_SITE_URL=https://worldtripagency.com/
+PUBLIC_SITE_URL=https://travelin-agency-nlcs.vercel.app/
 NODE_ENV=production
 
 # Twilio Configuration (Optional)
@@ -165,7 +165,7 @@ console.log('✅ Created deployment instructions');
 console.log('\n🎉 Security Fix Deployment Complete!');
 console.log('\n📁 Files ready in: security-fix-deploy/');
 console.log('📋 Upload the contents to your GoDaddy hosting');
-console.log('🌐 Your secure site will be at: https://worldtripagency.com/');
+console.log('🌐 Your secure site will be at: https://travelin-agency-nlcs.vercel.app/');
 console.log('\n🔒 Security fixes applied:');
 console.log('   ✅ HTTPS redirect');
 console.log('   ✅ Security headers');

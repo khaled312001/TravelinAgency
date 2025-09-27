@@ -21,7 +21,7 @@ foreach ($nuxtHtmlPaths as $nuxtHtmlFile) {
         $nuxtContent = file_get_contents($nuxtHtmlFile);
         
         // Replace any localhost references with your domain
-        $nuxtContent = str_replace('http://localhost:3000', 'https://worldtripagency.com', $nuxtContent);
+        $nuxtContent = str_replace('http://localhost:3000', 'https://travelin-agency-nlcs.vercel.app', $nuxtContent);
         $nuxtContent = str_replace('localhost:3000', 'worldtripagency.com', $nuxtContent);
         
         // Set proper headers
