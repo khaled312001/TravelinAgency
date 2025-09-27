@@ -154,7 +154,7 @@
                   اسحب وأفلت الصورة هنا أو انقر للاختيار من جهازك
                 </p>
                 <p class="text-xs text-gray-500">
-                  الأنواع المدعومة: JPG, PNG, GIF, WebP (حد أقصى 5MB)
+                  الأنواع المدعومة: JPG, PNG, GIF, WebP, SVG (حد أقصى 5MB)
                 </p>
                 <input
                   ref="fileInput"
@@ -666,9 +666,9 @@ const handleFileSelect = (e) => {
 
 const handleFile = (file) => {
   // التحقق من نوع الملف
-  const allowedTypes = ['image/jpeg', 'image/jpg', 'image/png', 'image/gif', 'image/webp']
+  const allowedTypes = ['image/jpeg', 'image/jpg', 'image/png', 'image/gif', 'image/webp', 'image/svg+xml']
   if (!allowedTypes.includes(file.type)) {
-    showUploadMessage('نوع الملف غير مدعوم. يرجى اختيار صورة من نوع JPG, PNG, GIF, أو WebP.', 'error')
+    showUploadMessage('نوع الملف غير مدعوم. يرجى اختيار صورة من نوع JPG, PNG, GIF, WebP, أو SVG.', 'error')
     return
   }
 

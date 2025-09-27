@@ -765,12 +765,12 @@ switch ($cleanUri) {
                 }
                 
                 // Validate file type
-                $allowedTypes = ['image/jpeg', 'image/jpg', 'image/png', 'image/gif', 'image/webp'];
+                $allowedTypes = ['image/jpeg', 'image/jpg', 'image/png', 'image/gif', 'image/webp', 'image/svg+xml'];
                 $fileType = mime_content_type($file['tmp_name']);
                 
                 if (!in_array($fileType, $allowedTypes)) {
                     http_response_code(400);
-                    echo json_encode(["error" => "Invalid file type. Only JPEG, PNG, GIF, and WebP images are allowed."]);
+                    echo json_encode(["error" => "Invalid file type. Only JPEG, PNG, GIF, WebP, and SVG images are allowed."]);
                     exit;
                 }
                 
