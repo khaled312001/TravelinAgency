@@ -55,6 +55,9 @@
       "@nuxt/devtools": [
         "../node_modules/nuxt/node_modules/@nuxt/devtools"
       ],
+      "vue": [
+        "../node_modules/vue"
+      ],
       "@vue/runtime-core": [
         "../node_modules/@vue/runtime-core"
       ],

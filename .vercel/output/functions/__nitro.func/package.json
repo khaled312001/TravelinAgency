@@ -1,5 +1,5 @@
 {
-  "name": "travel-agency-basic-prod",
+  "name": "travel-agency-ultra-simple-prod",
   "version": "0.0.0",
   "type": "module",
   "private": true,
@@ -8,7 +8,6 @@
     "@vue/compiler-core": "3.5.13",
     "@vue/compiler-dom": "3.5.13",
     "@vue/compiler-ssr": "3.5.13",
-    "@vue/devtools-api": "6.6.4",
     "@vue/reactivity": "3.5.13",
     "@vue/runtime-core": "3.5.13",
     "@vue/runtime-dom": "3.5.13",
@@ -22,7 +21,6 @@
     "ufo": "1.6.1",
     "unhead": "2.0.8",
     "vue": "3.5.13",
-    "vue-bundle-renderer": "2.1.1",
-    "vue-router": "4.5.0"
+    "vue-bundle-renderer": "2.1.1"
   }
 }

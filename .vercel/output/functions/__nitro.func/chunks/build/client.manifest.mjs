@@ -4,7 +4,7 @@ const client_manifest = {
     "module": true,
     "prefetch": true,
     "preload": true,
-    "file": "BhOLYkc7.js",
+    "file": "DKVM1C_0.js",
     "name": "admin",
     "src": "middleware/admin.ts",
     "isDynamicEntry": true,
@@ -27,7 +27,7 @@ const client_manifest = {
     "module": true,
     "prefetch": true,
     "preload": true,
-    "file": "BDjMS6mE.js",
+    "file": "DS0qpW2z.js",
     "name": "maintenance",
     "src": "middleware/maintenance.ts",
     "isDynamicEntry": true,
@@ -40,7 +40,7 @@ const client_manifest = {
     "module": true,
     "prefetch": true,
     "preload": true,
-    "file": "9A3s3Dxe.js",
+    "file": "2hbKoQD0.js",
     "name": "entry",
     "src": "node_modules/nuxt/dist/app/entry.js",
     "isEntry": true,
@@ -51,8 +51,7 @@ const client_manifest = {
     ],
     "css": [
       "entry.BFKodIYM.css"
-    ],
-    "_globalCSS": true
+    ]
   },
   "entry.BFKodIYM.css": {
     "file": "entry.BFKodIYM.css",
@@ -60,12 +59,25 @@ const client_manifest = {
     "prefetch": true,
     "preload": true
   },
+  "pages/index.ultra-simple.vue": {
+    "resourceType": "script",
+    "module": true,
+    "prefetch": true,
+    "preload": true,
+    "file": "CT3TbsuA.js",
+    "name": "index.ultra-simple",
+    "src": "pages/index.ultra-simple.vue",
+    "isDynamicEntry": true,
+    "imports": [
+      "node_modules/nuxt/dist/app/entry.js"
+    ]
+  },
   "pages/index.vue": {
     "resourceType": "script",
     "module": true,
     "prefetch": true,
     "preload": true,
-    "file": "hN7Kj5D4.js",
+    "file": "BqPVhe0o.js",
     "name": "index",
     "src": "pages/index.vue",
     "isDynamicEntry": true,
