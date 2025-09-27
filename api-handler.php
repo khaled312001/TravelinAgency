@@ -565,7 +565,7 @@ switch ($cleanUri) {
                 $stmt = $pdo->query("SHOW TABLES LIKE 'bookings'");
                 if ($stmt->rowCount() > 0) {
                     $stmt = $pdo->query("SELECT id, user_id, package_id, destination_id, booking_date, travel_date, passengers, total_amount, status, payment_status, created_at, updated_at FROM bookings ORDER BY created_at DESC");
-                    $bookings = $stmt->fetchAll();
+                    $bookings = $stmt->fetchAll(PDO::FETCH_ASSOC);
                     echo json_encode($bookings, JSON_UNESCAPED_SLASHES);
                 } else {
                     // Return sample bookings data
@@ -603,7 +603,7 @@ switch ($cleanUri) {
                 }
             } catch (Exception $e) {
                 http_response_code(500);
-                echo json_encode(["error" => "Failed to fetch bookings: " . $e->getMessage()]);
+                echo json_encode(["error" => "Failed to fetch bookings: " . $e->getMessage(), "details" => $e->getTraceAsString()]);
             }
         } else {
             http_response_code(405);
@@ -813,6 +813,39 @@ switch ($cleanUri) {
             } catch (Exception $e) {
                 http_response_code(500);
                 echo json_encode(["error" => "Upload failed: " . $e->getMessage()]);
+            }
+        } else {
+            http_response_code(405);
+            echo json_encode(["error" => "Method not allowed"]);
+        }
+        break;
+        
+    case "/api/admin/notifications":
+        if ($_SERVER["REQUEST_METHOD"] === "GET") {
+            try {
+                // Return sample notifications data
+                $notifications = [
+                    [
+                        "id" => 1,
+                        "title" => "New Booking",
+                        "message" => "A new booking has been made for Paris package",
+                        "type" => "booking",
+                        "read" => false,
+                        "created_at" => date('Y-m-d H:i:s')
+                    ],
+                    [
+                        "id" => 2,
+                        "title" => "Contact Message",
+                        "message" => "New contact message received",
+                        "type" => "contact",
+                        "read" => true,
+                        "created_at" => date('Y-m-d H:i:s', strtotime('-1 hour'))
+                    ]
+                ];
+                echo json_encode($notifications, JSON_UNESCAPED_SLASHES);
+            } catch (Exception $e) {
+                http_response_code(500);
+                echo json_encode(["error" => "Failed to fetch notifications: " . $e->getMessage()]);
             }
         } else {
             http_response_code(405);

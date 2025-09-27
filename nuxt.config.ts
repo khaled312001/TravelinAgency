@@ -68,15 +68,15 @@ export default defineNuxtConfig({
       crossOriginEmbedderPolicy: process.env.NODE_ENV === 'production' ? 'require-corp' : false,
       contentSecurityPolicy: {
         'base-uri': ["'self'"],
-        'font-src': ["'self'", 'https:', 'data:', 'https://fonts.googleapis.com', 'https://fonts.gstatic.com'],
+        'font-src': ["'self'", 'https:', 'data:', 'https://fonts.googleapis.com', 'https://fonts.gstatic.com', 'https://api.iconify.design'],
         'form-action': ["'self'"],
         'frame-ancestors': ["'none'"],
         'img-src': ["'self'", 'data:', 'https:', 'https://images.unsplash.com', 'https://images.pexels.com'],
         'object-src': ["'none'"],
         'script-src-attr': ["'none'"],
-        'style-src': ["'self'", 'https:', "'unsafe-inline'", 'https://fonts.googleapis.com'],
+        'style-src': ["'self'", 'https:', "'unsafe-inline'", 'https://fonts.googleapis.com', 'https://api.iconify.design'],
         'script-src': ["'self'", 'https:', "'unsafe-inline'", "'unsafe-eval'", 'https://img1.wsimg.com', 'https://static.cloudflareinsights.com'],
-        'connect-src': ["'self'", 'https:', 'https://api.iconify.design', 'https://img1.wsimg.com'],
+        'connect-src': ["'self'", 'https:', 'https://api.iconify.design', 'https://img1.wsimg.com', 'https://api.iconify.design'],
         'frame-src': ["'self'"],
         'upgrade-insecure-requests': process.env.NODE_ENV === 'production' ? [] : false
       }
