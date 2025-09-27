@@ -195,7 +195,49 @@ switch ($cleanUri) {
                     "email" => $email,
                     "exp" => time() + 3600
                 ]));
-                echo json_encode(["success" => true, "token" => $token]);
+                
+                // Return the proper response structure with user data
+                $response = [
+                    "success" => true,
+                    "data" => [
+                        "user" => [
+                            "id" => "39529ff4-9888-11f0-bbdc-106530eb27a7",
+                            "email" => "admin@wonderland.com",
+                            "full_name" => "System Administrator",
+                            "phone" => "+966501234567",
+                            "role" => "super_admin",
+                            "permissions" => [
+                                "users.create" => true,
+                                "users.read" => true,
+                                "users.update" => true,
+                                "users.delete" => true,
+                                "packages.create" => true,
+                                "packages.read" => true,
+                                "packages.update" => true,
+                                "packages.delete" => true,
+                                "destinations.create" => true,
+                                "destinations.read" => true,
+                                "destinations.update" => true,
+                                "destinations.delete" => true,
+                                "bookings.create" => true,
+                                "bookings.read" => true,
+                                "bookings.update" => true,
+                                "bookings.delete" => true,
+                                "content.create" => true,
+                                "content.read" => true,
+                                "content.update" => true,
+                                "content.delete" => true,
+                                "settings.read" => true,
+                                "settings.update" => true,
+                                "analytics.read" => true,
+                                "reports.read" => true
+                            ],
+                            "status" => "active"
+                        ],
+                        "token" => $token
+                    ]
+                ];
+                echo json_encode($response);
             } else {
                 http_response_code(401);
                 echo json_encode(["success" => false, "message" => "Invalid credentials"]);
