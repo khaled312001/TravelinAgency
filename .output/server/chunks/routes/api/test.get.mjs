@@ -1,0 +1,2 @@
+import{c as o}from"../../_/nitro.mjs";import"node:http";import"node:https";import"node:events";import"node:buffer";import"vue";import"node:fs";import"node:url";import"@iconify/utils";import"node:crypto";import"consola";import"node:module";import"ipx";import"node:path";const t=o((async o=>({status:"ok",message:"API is working",timestamp:(new Date).toISOString(),environment:"production"})));export{t as default};
+//# sourceMappingURL=test.get.mjs.map
