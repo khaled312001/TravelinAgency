@@ -222,9 +222,9 @@
 
         function handleFile(file) {
             // Validate file type
-            const allowedTypes = ['image/jpeg', 'image/jpg', 'image/png', 'image/gif', 'image/webp'];
+            const allowedTypes = ['image/jpeg', 'image/jpg', 'image/png', 'image/gif', 'image/webp', 'image/svg+xml'];
             if (!allowedTypes.includes(file.type)) {
-                showMessage('نوع الملف غير مدعوم. يرجى اختيار صورة من نوع JPG, PNG, GIF, أو WebP.', 'error');
+                showMessage('نوع الملف غير مدعوم. يرجى اختيار صورة من نوع JPG, PNG, GIF, WebP, أو SVG.', 'error');
                 return;
             }
 
