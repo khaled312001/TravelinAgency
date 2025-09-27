@@ -713,7 +713,7 @@ switch ($cleanUri) {
                 http_response_code(500);
                 echo json_encode(["error" => "Failed to fetch site settings: " . $e->getMessage()]);
             }
-        } elseif ($_SERVER["REQUEST_METHOD"] === "POST") {
+        } elseif ($_SERVER["REQUEST_METHOD"] === "POST" || $_SERVER["REQUEST_METHOD"] === "PUT") {
             try {
                 $input = json_decode(file_get_contents("php://input"), true);
                 
