@@ -10,13 +10,9 @@ export default defineNuxtConfig({
   },
 
   modules: [
-    '@nuxt/image',
     '@nuxtjs/tailwindcss',
     '@vueuse/nuxt',
-    'nuxt-schema-org',
-    'nuxt-simple-sitemap',
     '@nuxtjs/i18n',
-    'nuxt-aos',
     '@nuxt/icon'
   ],
 
@@ -62,51 +58,7 @@ export default defineNuxtConfig({
     }
   },
 
-  // Security configuration
-  security: {
-    headers: {
-      crossOriginEmbedderPolicy: process.env.NODE_ENV === 'production' ? 'require-corp' : false,
-      contentSecurityPolicy: {
-        'base-uri': ["'self'"],
-        'font-src': ["'self'", 'https:', 'data:', 'https://fonts.googleapis.com', 'https://fonts.gstatic.com', 'https://api.iconify.design'],
-        'form-action': ["'self'"],
-        'frame-ancestors': ["'none'"],
-        'img-src': ["'self'", 'data:', 'https:', 'https://images.unsplash.com', 'https://images.pexels.com'],
-        'object-src': ["'none'"],
-        'script-src-attr': ["'none'"],
-        'style-src': ["'self'", 'https:', "'unsafe-inline'", 'https://fonts.googleapis.com', 'https://api.iconify.design'],
-        'script-src': ["'self'", 'https:', "'unsafe-inline'", "'unsafe-eval'", 'https://img1.wsimg.com', 'https://static.cloudflareinsights.com'],
-        'connect-src': ["'self'", 'https:', 'https://api.iconify.design', 'https://img1.wsimg.com', 'https://api.iconify.design'],
-        'frame-src': ["'self'"],
-        'upgrade-insecure-requests': process.env.NODE_ENV === 'production' ? [] : false
-      }
-    }
-  },
 
-  image: {
-    provider: 'ipx',
-    dir: 'public',
-    domains: ['images.unsplash.com', 'images.pexels.com'],
-    format: ['jpg', 'jpeg', 'png', 'webp'],
-    screens: {
-      xs: 320,
-      sm: 640,
-      md: 768,
-      lg: 1024,
-      xl: 1280,
-      xxl: 1536,
-    },
-    quality: 80,
-    densities: [1, 2],
-    presets: {
-      default: {
-        modifiers: {
-          format: 'webp',
-          quality: 80
-        }
-      }
-    }
-  },
 
   i18n: {
     vueI18n: './i18n.config.ts',
@@ -155,23 +107,7 @@ export default defineNuxtConfig({
 
   nitro: {
     preset: 'vercel',
-    compressPublicAssets: {
-      gzip: true,
-      brotli: true
-    },
-    minify: true,
-    routeRules: {
-      '/images/**': { static: true },
-      '/icons/**': { static: true },
-      // Disable caching for API routes
-      '/api/**': { 
-        headers: { 
-          'Cache-Control': 'no-cache, no-store, must-revalidate',
-          'Pragma': 'no-cache',
-          'Expires': '0'
-        }
-      }
-    }
+    minify: true
   },
 
   experimental: {
