@@ -704,7 +704,8 @@ switch ($cleanUri) {
                         "default_language" => "ar",
                         "maintenance_mode" => "0",
                         "registration_enabled" => "1",
-                        "email_notifications" => "1"
+                        "email_notifications" => "1",
+                        "site_logo" => "/images/logo.png"
                     ];
                     echo json_encode($defaultSettings, JSON_UNESCAPED_SLASHES);
                 }
@@ -738,6 +739,80 @@ switch ($cleanUri) {
             } catch (Exception $e) {
                 http_response_code(500);
                 echo json_encode(["error" => "Failed to update site settings: " . $e->getMessage()]);
+            }
+        } else {
+            http_response_code(405);
+            echo json_encode(["error" => "Method not allowed"]);
+        }
+        break;
+        
+    case "/api/upload/image":
+        if ($_SERVER["REQUEST_METHOD"] === "POST") {
+            try {
+                // Check if file was uploaded
+                if (!isset($_FILES['image']) || $_FILES['image']['error'] !== UPLOAD_ERR_OK) {
+                    http_response_code(400);
+                    echo json_encode(["error" => "No file uploaded or upload error"]);
+                    exit;
+                }
+                
+                $file = $_FILES['image'];
+                $uploadDir = __DIR__ . '/uploads/';
+                
+                // Create uploads directory if it doesn't exist
+                if (!is_dir($uploadDir)) {
+                    mkdir($uploadDir, 0755, true);
+                }
+                
+                // Validate file type
+                $allowedTypes = ['image/jpeg', 'image/jpg', 'image/png', 'image/gif', 'image/webp'];
+                $fileType = mime_content_type($file['tmp_name']);
+                
+                if (!in_array($fileType, $allowedTypes)) {
+                    http_response_code(400);
+                    echo json_encode(["error" => "Invalid file type. Only JPEG, PNG, GIF, and WebP images are allowed."]);
+                    exit;
+                }
+                
+                // Validate file size (max 5MB)
+                $maxSize = 5 * 1024 * 1024; // 5MB
+                if ($file['size'] > $maxSize) {
+                    http_response_code(400);
+                    echo json_encode(["error" => "File too large. Maximum size is 5MB."]);
+                    exit;
+                }
+                
+                // Generate unique filename
+                $extension = pathinfo($file['name'], PATHINFO_EXTENSION);
+                $filename = 'logo_' . time() . '_' . uniqid() . '.' . $extension;
+                $filepath = $uploadDir . $filename;
+                
+                // Move uploaded file
+                if (move_uploaded_file($file['tmp_name'], $filepath)) {
+                    // Return the URL path
+                    $imageUrl = '/uploads/' . $filename;
+                    
+                    // Update site_logo setting in database
+                    try {
+                        $stmt = $pdo->prepare("INSERT INTO site_settings (setting_key, setting_value) VALUES ('site_logo', ?) ON DUPLICATE KEY UPDATE setting_value = VALUES(setting_value)");
+                        $stmt->execute([$imageUrl]);
+                    } catch (Exception $e) {
+                        // If database update fails, still return success for the upload
+                    }
+                    
+                    echo json_encode([
+                        "success" => true,
+                        "message" => "Image uploaded successfully",
+                        "url" => $imageUrl,
+                        "filename" => $filename
+                    ]);
+                } else {
+                    http_response_code(500);
+                    echo json_encode(["error" => "Failed to save uploaded file"]);
+                }
+            } catch (Exception $e) {
+                http_response_code(500);
+                echo json_encode(["error" => "Upload failed: " . $e->getMessage()]);
             }
         } else {
             http_response_code(405);

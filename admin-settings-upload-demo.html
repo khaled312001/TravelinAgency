@@ -1,0 +1,320 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Admin Settings - Logo Upload</title>
+    <style>
+        body {
+            font-family: 'Arial', sans-serif;
+            margin: 0;
+            padding: 20px;
+            background: #f5f5f5;
+            direction: rtl;
+        }
+        .container {
+            max-width: 800px;
+            margin: 0 auto;
+            background: white;
+            padding: 30px;
+            border-radius: 10px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+        }
+        .form-group {
+            margin-bottom: 20px;
+        }
+        label {
+            display: block;
+            margin-bottom: 8px;
+            font-weight: bold;
+            color: #333;
+        }
+        .upload-area {
+            border: 2px dashed #ddd;
+            border-radius: 8px;
+            padding: 40px;
+            text-align: center;
+            background: #fafafa;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+        .upload-area:hover {
+            border-color: #40a0d8;
+            background: #f0f8ff;
+        }
+        .upload-area.dragover {
+            border-color: #40a0d8;
+            background: #e6f3ff;
+        }
+        .upload-icon {
+            font-size: 48px;
+            color: #ddd;
+            margin-bottom: 10px;
+        }
+        .upload-text {
+            color: #666;
+            margin-bottom: 10px;
+        }
+        .file-input {
+            display: none;
+        }
+        .btn {
+            background: #40a0d8;
+            color: white;
+            border: none;
+            padding: 12px 24px;
+            border-radius: 6px;
+            cursor: pointer;
+            font-size: 16px;
+            transition: background 0.3s ease;
+        }
+        .btn:hover {
+            background: #2d7bb8;
+        }
+        .btn:disabled {
+            background: #ccc;
+            cursor: not-allowed;
+        }
+        .preview {
+            margin-top: 20px;
+            text-align: center;
+        }
+        .preview img {
+            max-width: 200px;
+            max-height: 200px;
+            border-radius: 8px;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+        }
+        .progress {
+            width: 100%;
+            height: 6px;
+            background: #f0f0f0;
+            border-radius: 3px;
+            overflow: hidden;
+            margin: 10px 0;
+            display: none;
+        }
+        .progress-bar {
+            height: 100%;
+            background: #40a0d8;
+            width: 0%;
+            transition: width 0.3s ease;
+        }
+        .message {
+            padding: 12px;
+            border-radius: 6px;
+            margin: 10px 0;
+            display: none;
+        }
+        .message.success {
+            background: #d4edda;
+            color: #155724;
+            border: 1px solid #c3e6cb;
+        }
+        .message.error {
+            background: #f8d7da;
+            color: #721c24;
+            border: 1px solid #f5c6cb;
+        }
+        .current-logo {
+            margin-bottom: 20px;
+            text-align: center;
+        }
+        .current-logo img {
+            max-width: 150px;
+            max-height: 150px;
+            border-radius: 8px;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>إعدادات الموقع - رفع شعار</h1>
+        
+        <div class="form-group">
+            <label>الشعار الحالي:</label>
+            <div class="current-logo" id="currentLogo">
+                <img src="/images/logo.png" alt="Current Logo" id="currentLogoImg" style="display: none;">
+                <p id="noLogoText">لا يوجد شعار محدد</p>
+            </div>
+        </div>
+        
+        <div class="form-group">
+            <label>رفع شعار جديد:</label>
+            <div class="upload-area" id="uploadArea">
+                <div class="upload-icon">📁</div>
+                <div class="upload-text">اسحب وأفلت الصورة هنا أو انقر للاختيار</div>
+                <div class="upload-text" style="font-size: 14px; color: #999;">
+                    الأنواع المدعومة: JPG, PNG, GIF, WebP (حد أقصى 5MB)
+                </div>
+                <input type="file" id="fileInput" class="file-input" accept="image/*">
+            </div>
+        </div>
+        
+        <div class="progress" id="progress">
+            <div class="progress-bar" id="progressBar"></div>
+        </div>
+        
+        <div class="message" id="message"></div>
+        
+        <div class="preview" id="preview" style="display: none;">
+            <h3>معاينة الشعار الجديد:</h3>
+            <img id="previewImg" alt="Preview">
+        </div>
+        
+        <button class="btn" id="uploadBtn" style="display: none;">رفع الشعار</button>
+    </div>
+
+    <script>
+        const uploadArea = document.getElementById('uploadArea');
+        const fileInput = document.getElementById('fileInput');
+        const preview = document.getElementById('preview');
+        const previewImg = document.getElementById('previewImg');
+        const uploadBtn = document.getElementById('uploadBtn');
+        const progress = document.getElementById('progress');
+        const progressBar = document.getElementById('progressBar');
+        const message = document.getElementById('message');
+        const currentLogoImg = document.getElementById('currentLogoImg');
+        const noLogoText = document.getElementById('noLogoText');
+        
+        let selectedFile = null;
+
+        // Load current logo on page load
+        loadCurrentLogo();
+
+        // Upload area click
+        uploadArea.addEventListener('click', () => {
+            fileInput.click();
+        });
+
+        // File input change
+        fileInput.addEventListener('change', handleFileSelect);
+
+        // Drag and drop
+        uploadArea.addEventListener('dragover', (e) => {
+            e.preventDefault();
+            uploadArea.classList.add('dragover');
+        });
+
+        uploadArea.addEventListener('dragleave', () => {
+            uploadArea.classList.remove('dragover');
+        });
+
+        uploadArea.addEventListener('drop', (e) => {
+            e.preventDefault();
+            uploadArea.classList.remove('dragover');
+            const files = e.dataTransfer.files;
+            if (files.length > 0) {
+                handleFile(files[0]);
+            }
+        });
+
+        // Upload button click
+        uploadBtn.addEventListener('click', uploadFile);
+
+        function handleFileSelect(e) {
+            const file = e.target.files[0];
+            if (file) {
+                handleFile(file);
+            }
+        }
+
+        function handleFile(file) {
+            // Validate file type
+            const allowedTypes = ['image/jpeg', 'image/jpg', 'image/png', 'image/gif', 'image/webp'];
+            if (!allowedTypes.includes(file.type)) {
+                showMessage('نوع الملف غير مدعوم. يرجى اختيار صورة من نوع JPG, PNG, GIF, أو WebP.', 'error');
+                return;
+            }
+
+            // Validate file size (5MB)
+            if (file.size > 5 * 1024 * 1024) {
+                showMessage('حجم الملف كبير جداً. الحد الأقصى 5 ميجابايت.', 'error');
+                return;
+            }
+
+            selectedFile = file;
+            
+            // Show preview
+            const reader = new FileReader();
+            reader.onload = (e) => {
+                previewImg.src = e.target.result;
+                preview.style.display = 'block';
+                uploadBtn.style.display = 'block';
+            };
+            reader.readAsDataURL(file);
+        }
+
+        function uploadFile() {
+            if (!selectedFile) return;
+
+            const formData = new FormData();
+            formData.append('image', selectedFile);
+
+            // Show progress
+            progress.style.display = 'block';
+            uploadBtn.disabled = true;
+            uploadBtn.textContent = 'جاري الرفع...';
+
+            // Upload file
+            fetch('/api/upload/image', {
+                method: 'POST',
+                body: formData
+            })
+            .then(response => response.json())
+            .then(data => {
+                progress.style.display = 'none';
+                uploadBtn.disabled = false;
+                uploadBtn.textContent = 'رفع الشعار';
+
+                if (data.success) {
+                    showMessage('تم رفع الشعار بنجاح!', 'success');
+                    // Update current logo display
+                    currentLogoImg.src = data.url;
+                    currentLogoImg.style.display = 'block';
+                    noLogoText.style.display = 'none';
+                    // Hide preview and upload button
+                    preview.style.display = 'none';
+                    uploadBtn.style.display = 'none';
+                    selectedFile = null;
+                    fileInput.value = '';
+                } else {
+                    showMessage('فشل في رفع الشعار: ' + (data.error || 'خطأ غير معروف'), 'error');
+                }
+            })
+            .catch(error => {
+                progress.style.display = 'none';
+                uploadBtn.disabled = false;
+                uploadBtn.textContent = 'رفع الشعار';
+                showMessage('خطأ في الاتصال: ' + error.message, 'error');
+            });
+        }
+
+        function showMessage(text, type) {
+            message.textContent = text;
+            message.className = `message ${type}`;
+            message.style.display = 'block';
+            
+            setTimeout(() => {
+                message.style.display = 'none';
+            }, 5000);
+        }
+
+        function loadCurrentLogo() {
+            fetch('/api/cms/site-settings')
+                .then(response => response.json())
+                .then(data => {
+                    if (data.site_logo && data.site_logo !== '/images/logo.png') {
+                        currentLogoImg.src = data.site_logo;
+                        currentLogoImg.style.display = 'block';
+                        noLogoText.style.display = 'none';
+                    }
+                })
+                .catch(error => {
+                    console.error('Error loading current logo:', error);
+                });
+        }
+    </script>
+</body>
+</html>
