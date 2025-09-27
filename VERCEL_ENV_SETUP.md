@@ -6,7 +6,7 @@ To fix the 500 error on Vercel, you need to set these environment variables in y
 
 ### 1. Go to Vercel Dashboard
 1. Visit [vercel.com](https://vercel.com)
-2. Select your project: `travelin-agency-nlcs`
+2. Select your project: `travelin-agency-coral`
 3. Go to **Settings** → **Environment Variables**
 
 ### 2. Add These Variables
@@ -14,7 +14,7 @@ To fix the 500 error on Vercel, you need to set these environment variables in y
 #### Basic Configuration
 ```
 NODE_ENV=production
-PUBLIC_SITE_URL=https://travelin-agency-nlcs.vercel.app
+PUBLIC_SITE_URL=https://travelin-agency-coral.vercel.app
 ```
 
 #### Database Configuration (Optional - for full functionality)
@@ -66,9 +66,9 @@ Since Vercel doesn't provide MySQL hosting, you have these options:
 
 1. **Redeploy** your project (Vercel will automatically redeploy when you add environment variables)
 2. **Test the endpoints**:
-   - `https://travelin-agency-nlcs.vercel.app/api/test`
-   - `https://travelin-agency-nlcs.vercel.app/api/debug`
-   - `https://travelin-agency-nlcs.vercel.app/api/health`
+   - `https://travelin-agency-coral.vercel.app/api/test`
+   - `https://travelin-agency-coral.vercel.app/api/debug`
+   - `https://travelin-agency-coral.vercel.app/api/health`
 
 ### 5. Quick Test
 
@@ -77,7 +77,7 @@ If you want to test immediately without setting up a database:
 1. Set only these variables:
    ```
    NODE_ENV=production
-   PUBLIC_SITE_URL=https://travelin-agency-nlcs.vercel.app
+   PUBLIC_SITE_URL=https://travelin-agency-coral.vercel.app
    ```
 
 2. The site will work with demo data
