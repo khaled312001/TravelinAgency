@@ -1,0 +1,1 @@
+import{_ as o,c as s,a as n,o as a}from"./9A3s3Dxe.js";const l={};function r(t,e){return a(),s("div",null,e[0]||(e[0]=[n("h1",null,"Hello World",-1),n("p",null,"This is a basic Nuxt app",-1)]))}const i=o(l,[["render",r]]);export{i as default};
