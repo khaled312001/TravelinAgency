@@ -670,11 +670,11 @@ switch ($cleanUri) {
                 $queryParams = $_GET;
                 $publicOnly = isset($queryParams['public_only']) ? $queryParams['public_only'] === 'true' : false;
                 
-                // Check if site_settings table exists
-                $stmt = $pdo->query("SHOW TABLES LIKE 'site_settings'");
+                // Check if cms_site_settings table exists
+                $stmt = $pdo->query("SHOW TABLES LIKE 'cms_site_settings'");
                 if ($stmt->rowCount() > 0) {
-                    $whereClause = $publicOnly ? "WHERE public = 1" : "";
-                    $stmt = $pdo->query("SELECT * FROM site_settings $whereClause ORDER BY setting_key");
+                    $whereClause = $publicOnly ? "WHERE is_public = 1" : "";
+                    $stmt = $pdo->query("SELECT * FROM cms_site_settings $whereClause ORDER BY setting_key");
                     $settings = $stmt->fetchAll();
                     
                     // Convert to key-value pairs
@@ -683,7 +683,12 @@ switch ($cleanUri) {
                         $settingsArray[$setting['setting_key']] = $setting['setting_value'];
                     }
                     
-                    echo json_encode($settingsArray, JSON_UNESCAPED_SLASHES);
+                    echo json_encode([
+                        "success" => true,
+                        "data" => [
+                            "flatObject" => $settingsArray
+                        ]
+                    ], JSON_UNESCAPED_SLASHES);
                 } else {
                     // Return default site settings
                     $defaultSettings = [
@@ -707,7 +712,12 @@ switch ($cleanUri) {
                         "email_notifications" => "1",
                         "site_logo" => "/images/logo.png"
                     ];
-                    echo json_encode($defaultSettings, JSON_UNESCAPED_SLASHES);
+                    echo json_encode([
+                        "success" => true,
+                        "data" => [
+                            "flatObject" => $defaultSettings
+                        ]
+                    ], JSON_UNESCAPED_SLASHES);
                 }
             } catch (Exception $e) {
                 http_response_code(500);
@@ -717,21 +727,26 @@ switch ($cleanUri) {
             try {
                 $input = json_decode(file_get_contents("php://input"), true);
                 
-                // Check if site_settings table exists, create if not
-                $stmt = $pdo->query("SHOW TABLES LIKE 'site_settings'");
+                // Check if cms_site_settings table exists, create if not
+                $stmt = $pdo->query("SHOW TABLES LIKE 'cms_site_settings'");
                 if ($stmt->rowCount() == 0) {
-                    $pdo->exec("CREATE TABLE site_settings (
+                    $pdo->exec("CREATE TABLE cms_site_settings (
                         id INT AUTO_INCREMENT PRIMARY KEY,
                         setting_key VARCHAR(255) UNIQUE NOT NULL,
                         setting_value TEXT,
-                        public BOOLEAN DEFAULT 0,
-                        updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP
+                        setting_type VARCHAR(50) DEFAULT 'text',
+                        category VARCHAR(50) DEFAULT 'general',
+                        description TEXT,
+                        is_public BOOLEAN DEFAULT 0,
+                        created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+                        updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+                        updated_by INT DEFAULT 1
                     )");
                 }
                 
                 // Update settings
                 foreach ($input as $key => $value) {
-                    $stmt = $pdo->prepare("INSERT INTO site_settings (setting_key, setting_value) VALUES (?, ?) ON DUPLICATE KEY UPDATE setting_value = VALUES(setting_value)");
+                    $stmt = $pdo->prepare("INSERT INTO cms_site_settings (setting_key, setting_value, is_public) VALUES (?, ?, 1) ON DUPLICATE KEY UPDATE setting_value = VALUES(setting_value)");
                     $stmt->execute([$key, $value]);
                 }
                 
@@ -794,7 +809,7 @@ switch ($cleanUri) {
                     
                     // Update site_logo setting in database
                     try {
-                        $stmt = $pdo->prepare("INSERT INTO site_settings (setting_key, setting_value) VALUES ('site_logo', ?) ON DUPLICATE KEY UPDATE setting_value = VALUES(setting_value)");
+                        $stmt = $pdo->prepare("INSERT INTO cms_site_settings (setting_key, setting_value, setting_type, category, is_public) VALUES ('site_logo', ?, 'image', 'general', 1) ON DUPLICATE KEY UPDATE setting_value = VALUES(setting_value)");
                         $stmt->execute([$imageUrl]);
                     } catch (Exception $e) {
                         // If database update fails, still return success for the upload

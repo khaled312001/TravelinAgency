@@ -79,25 +79,53 @@ import ContactForm from '~/components/ContactForm.vue'
 const route = useRoute()
 const router = useRouter()
 const { t, locale } = useI18n()
-const { packages, pending, error } = usePackages()
 const showContactForm = ref(false)
 
-// Get package by ID from the packages data
-const package_ = computed(() => {
-  const packageId = route.params.id as string
-  return packages.value?.find(p => p.id === packageId) || null
-})
+// Package data
+const package_ = ref(null)
+const pending = ref(true)
+const error = ref(null)
+
+// Fetch package data directly from API
+const fetchPackage = async () => {
+  try {
+    pending.value = true
+    error.value = null
+    
+    const packageId = route.params.id as string
+    console.log('🔄 Loading package with ID:', packageId)
+    
+    const response = await $fetch(`/api/packages/${packageId}`)
+    console.log('✅ Package data loaded:', response)
+    
+    if (response.package) {
+      package_.value = response.package
+    } else {
+      throw new Error('Package not found')
+    }
+  } catch (err) {
+    console.error('❌ Error loading package:', err)
+    error.value = err
+  } finally {
+    pending.value = false
+  }
+}
 
 // Define page meta for proper routing
 definePageMeta({
   layout: 'default'
 })
 
-// Watch for package data and redirect if not found
-watch([package_, pending], ([newPackage, isPending]) => {
-  if (!newPackage && !isPending) {
-    router.push('/packages')
+// Watch for route changes and fetch new package
+watch(() => route.params.id, (newId) => {
+  if (newId) {
+    fetchPackage()
   }
+}, { immediate: true })
+
+// Load package on mount
+onMounted(() => {
+  fetchPackage()
 })
 
 // SEO

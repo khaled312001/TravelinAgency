@@ -5,21 +5,68 @@ export default defineEventHandler(async (event) => {
     const query = getQuery(event)
     const { category, public_only = false } = query
 
-    let sql = 'SELECT * FROM cms_site_settings WHERE 1=1'
-    const params: any[] = []
+    // Default site settings if database is not available
+    const defaultSettings = [
+      {
+        id: 1,
+        setting_key: 'siteName',
+        setting_value: 'World Trip Agency',
+        category: 'general',
+        is_public: 1,
+        description: 'Site name'
+      },
+      {
+        id: 2,
+        setting_key: 'siteDescription',
+        setting_value: 'Your trusted travel partner for unforgettable experiences',
+        category: 'general',
+        is_public: 1,
+        description: 'Site description'
+      },
+      {
+        id: 3,
+        setting_key: 'contactEmail',
+        setting_value: 'info@worldtripagency.com',
+        category: 'contact',
+        is_public: 1,
+        description: 'Contact email'
+      },
+      {
+        id: 4,
+        setting_key: 'contactPhone',
+        setting_value: '+966 50 123 4567',
+        category: 'contact',
+        is_public: 1,
+        description: 'Contact phone'
+      }
+    ];
 
-    if (category) {
-      sql += ' AND category = ?'
-      params.push(category)
+    let settings;
+
+    try {
+      let sql = 'SELECT * FROM cms_site_settings WHERE 1=1'
+      const params: any[] = []
+
+      if (category) {
+        sql += ' AND category = ?'
+        params.push(category)
+      }
+
+      if (public_only === 'true') {
+        sql += ' AND is_public = 1'
+      }
+
+      sql += ' ORDER BY category, setting_key'
+
+      settings = await executeQuery(sql, params)
+      
+      if (!settings || settings.length === 0) {
+        settings = defaultSettings;
+      }
+    } catch (dbError) {
+      console.log('Database not available, using default settings');
+      settings = defaultSettings;
     }
-
-    if (public_only === 'true') {
-      sql += ' AND is_public = 1'
-    }
-
-    sql += ' ORDER BY category, setting_key'
-
-    const settings = await executeQuery(sql, params)
 
     // Group settings by category
     const groupedSettings = settings.reduce((acc: any, setting: any) => {

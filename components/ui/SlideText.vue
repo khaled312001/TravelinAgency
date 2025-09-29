@@ -16,7 +16,8 @@
 </template>
 
 <script setup lang="ts">
-import { ref, onMounted, onBeforeUnmount, computed, defineProps, withDefaults } from 'vue';
+import { ref, onMounted, onBeforeUnmount, computed } from 'vue';
+// defineProps and withDefaults are compiler macros, no need to import
 
 interface Props {
   phrases: string[];

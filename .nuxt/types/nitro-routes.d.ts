@@ -95,13 +95,23 @@ declare module "nitropack/types" {
     }
     '/api/content': {
       'default': Simplify<Serialize<Awaited<ReturnType<typeof import('../../server/api/content').default>>>>
+      'get': Simplify<Serialize<Awaited<ReturnType<typeof import('../../server/api/content/index.get').default>>>>
     }
     '/api/content/:id': {
       'delete': Simplify<Serialize<Awaited<ReturnType<typeof import('../../server/api/content/[id].delete').default>>>>
       'default': Simplify<Serialize<Awaited<ReturnType<typeof import('../../server/api/content/[id]').default>>>>
     }
+    '/api/content/:id/status': {
+      'put': Simplify<Serialize<Awaited<ReturnType<typeof import('../../server/api/content/[id]/status.put').default>>>>
+    }
+    '/api/content/statuses': {
+      'get': Simplify<Serialize<Awaited<ReturnType<typeof import('../../server/api/content/statuses.get').default>>>>
+    }
     '/api/debug': {
       'get': Simplify<Serialize<Awaited<ReturnType<typeof import('../../server/api/debug.get').default>>>>
+    }
+    '/api/debug/status-file': {
+      'get': Simplify<Serialize<Awaited<ReturnType<typeof import('../../server/api/debug/status-file.get').default>>>>
     }
     '/api/destination-contact-form': {
       'default': Simplify<Serialize<Awaited<ReturnType<typeof import('../../server/api/destination-contact-form').default>>>>
@@ -122,6 +132,9 @@ declare module "nitropack/types" {
     '/api/health': {
       'get': Simplify<Serialize<Awaited<ReturnType<typeof import('../../server/api/health.get').default>>>>
     }
+    '/api/hello': {
+      'get': Simplify<Serialize<Awaited<ReturnType<typeof import('../../server/api/hello.get').default>>>>
+    }
     '/api/images/delete': {
       'post': Simplify<Serialize<Awaited<ReturnType<typeof import('../../server/api/images/delete.post').default>>>>
     }
@@ -141,6 +154,7 @@ declare module "nitropack/types" {
       'post': Simplify<Serialize<Awaited<ReturnType<typeof import('../../server/api/images/upload.post').default>>>>
     }
     '/api/package-contact-form': {
+      'post': Simplify<Serialize<Awaited<ReturnType<typeof import('../../server/api/package-contact-form.post').default>>>>
       'default': Simplify<Serialize<Awaited<ReturnType<typeof import('../../server/api/package-contact-form').default>>>>
     }
     '/api/packages': {
@@ -154,8 +168,20 @@ declare module "nitropack/types" {
       'put': Simplify<Serialize<Awaited<ReturnType<typeof import('../../server/api/packages/[id].put').default>>>>
       'default': Simplify<Serialize<Awaited<ReturnType<typeof import('../../server/api/packages/[id]').default>>>>
     }
+    '/api/packages/local': {
+      'get': Simplify<Serialize<Awaited<ReturnType<typeof import('../../server/api/packages/local.get').default>>>>
+    }
+    '/api/pages/:slug/status': {
+      'get': Simplify<Serialize<Awaited<ReturnType<typeof import('../../server/api/pages/[slug]/status.get').default>>>>
+    }
+    '/api/pages/check-access': {
+      'get': Simplify<Serialize<Awaited<ReturnType<typeof import('../../server/api/pages/check-access.get').default>>>>
+    }
     '/api/public/navigation': {
       'get': Simplify<Serialize<Awaited<ReturnType<typeof import('../../server/api/public/navigation.get').default>>>>
+    }
+    '/api/public/navigation/refresh': {
+      'post': Simplify<Serialize<Awaited<ReturnType<typeof import('../../server/api/public/navigation/refresh.post').default>>>>
     }
     '/api/public/pages/:id': {
       'get': Simplify<Serialize<Awaited<ReturnType<typeof import('../../server/api/public/pages/[id].get').default>>>>
@@ -193,6 +219,9 @@ declare module "nitropack/types" {
     '/api/test': {
       'get': Simplify<Serialize<Awaited<ReturnType<typeof import('../../server/api/test.get').default>>>>
     }
+    '/api/upload/image': {
+      'post': Simplify<Serialize<Awaited<ReturnType<typeof import('../../server/api/upload/image.post').default>>>>
+    }
     '/api/users': {
       'post': Simplify<Serialize<Awaited<ReturnType<typeof import('../../server/api/users.post').default>>>>
       'default': Simplify<Serialize<Awaited<ReturnType<typeof import('../../server/api/users').default>>>>
@@ -205,6 +234,12 @@ declare module "nitropack/types" {
     '/__nuxt_error': {
       'default': Simplify<Serialize<Awaited<ReturnType<typeof import('../../node_modules/nuxt/dist/core/runtime/nitro/handlers/renderer').default>>>>
     }
+    '/__site-config__/debug.json': {
+      'default': Simplify<Serialize<Awaited<ReturnType<typeof import('../../node_modules/nuxt-site-config/dist/runtime/nitro/routes/__site-config__/debug').default>>>>
+    }
+    '/__schema-org__/debug.json': {
+      'default': Simplify<Serialize<Awaited<ReturnType<typeof import('../../node_modules/nuxt-schema-org/dist/runtime/server/routes/__schema-org__/debug').default>>>>
+    }
     '/sitemap_index.xml': {
       'default': Simplify<Serialize<Awaited<ReturnType<typeof import('../../node_modules/nuxt-simple-sitemap/dist/runtime/routes/sitemap_index.xml').default>>>>
     }
@@ -214,6 +249,9 @@ declare module "nitropack/types" {
     '/ar-SA-sitemap.xml': {
       'default': Simplify<Serialize<Awaited<ReturnType<typeof import('../../node_modules/nuxt-simple-sitemap/dist/runtime/middleware/[sitemap]-sitemap.xml').default>>>>
     }
+    '/__sitemap__/debug.json': {
+      'default': Simplify<Serialize<Awaited<ReturnType<typeof import('../../node_modules/nuxt-simple-sitemap/dist/runtime/routes/__sitemap__/debug').default>>>>
+    }
     '/__sitemap__/style.xsl': {
       'default': Simplify<Serialize<Awaited<ReturnType<typeof import('../../node_modules/nuxt-simple-sitemap/dist/runtime/routes/sitemap.xsl').default>>>>
     }
@@ -222,6 +260,9 @@ declare module "nitropack/types" {
     }
     '/api/_nuxt_icon/:collection': {
       'default': Simplify<Serialize<Awaited<ReturnType<typeof import('../../node_modules/@nuxt/icon/dist/runtime/server/api').default>>>>
+    }
+    '/_ipx/**': {
+      'default': Simplify<Serialize<Awaited<ReturnType<typeof import('../../node_modules/@nuxt/image/dist/runtime/ipx').default>>>>
     }
   }
 }

@@ -9,6 +9,33 @@ const localePath = useLocalePath();
 
 const { getWhatsAppUrl, whatsappNumber } = useWhatsApp();
 
+// Load site settings
+const { getSetting } = useSettings()
+
+// Computed properties for site settings
+const siteLogo = computed(() => {
+  const logo = getSetting('site_logo')
+  return logo || '/images/home/logo/WonderlandLogoWhite.svg'
+})
+
+const siteName = computed(() => {
+  const name = getSetting('site_name_ar') || getSetting('site_name_en')
+  return name || 'Wonder Land'
+})
+
+// Listen for settings updates
+onMounted(() => {
+  // Listen for custom event to refresh settings
+  window.addEventListener('settings-updated', async () => {
+    try {
+      const { loadSettings } = useSettings()
+      await loadSettings(true)
+    } catch (error) {
+      console.error('Failed to refresh site settings in footer:', error)
+    }
+  })
+})
+
 // Get current year for copyright
 const currentYear = computed(() => new Date().getFullYear());
 
@@ -50,9 +77,9 @@ const featuredDestinations = ref([
         <!-- 1. Branding & Contact -->
         <div class="space-y-6">
           <NuxtLink :to="localePath('/')" class="inline-flex items-center space-x-3 rtl:space-x-reverse">
-            <NuxtImg src="/images/home/logo/WonderlandLogoWhite.svg" alt="Wonderland Logo" class="h-10"
+            <NuxtImg :src="siteLogo" :alt="siteName + ' Logo'" class="h-10"
               loading="eager" />
-            <span class="text-white font-semibold text-xl">{{ $t('common.app_title') }}</span>
+            <span class="text-white font-semibold text-xl">{{ siteName }}</span>
           </NuxtLink>
           <p class="text-gray-400 text-sm">{{ $t('footer.tagline') }}</p>
           <div class="space-y-3">

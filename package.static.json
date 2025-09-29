@@ -1,0 +1,12 @@
+{
+  "name": "travel-agency-static",
+  "version": "1.0.0",
+  "description": "Static travel agency website",
+  "main": "index.js",
+  "scripts": {
+    "build": "echo 'Static site - no build needed'",
+    "dev": "echo 'Static site - no dev server needed'"
+  },
+  "dependencies": {},
+  "devDependencies": {}
+}

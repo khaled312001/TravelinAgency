@@ -1,0 +1,13 @@
+{
+  "name": "travel-agency-ultra-simple",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "build": "nuxt build",
+    "dev": "nuxt dev",
+    "postinstall": "nuxt prepare"
+  },
+  "dependencies": {
+    "nuxt": "^3.16.2"
+  }
+}

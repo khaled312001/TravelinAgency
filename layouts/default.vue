@@ -6,12 +6,12 @@
         <div class="flex items-center justify-between">
           <NuxtLink :to="localpath('/')" class="flex items-center">
             <NuxtImg 
-              src="/images/home/logo/WonderlandLogo.svg" 
+              :src="siteLogo" 
               class="h-[48px]"
-              alt="Wonder Land Agency Logo" 
+              :alt="siteName + ' Logo'" 
               loading="eager"
             />
-            <span class="font-bold text-lg font-italic text-primary-900">{{$t('common.app_title')}}</span>
+            <span class="font-bold text-lg font-italic text-primary-900">{{ siteName }}</span>
           </NuxtLink>
           
           <div class="hidden md:flex items-center space-x-6 rtl:space-x-reverse">
@@ -110,13 +110,89 @@ const isMenuOpen = ref(false)
 const isTransitioning = ref(false)
 const { startLocaleTransition } = useViewTransition()
 
-const navItems = [
-  { to: '/', label: 'nav.home' },
-  { to: '/packages', label: 'nav.packages' },
-  { to: '/custom-package', label: 'nav.custom_package' },
-  { to: '/about', label: 'nav.about' },
+// Load site settings
+const { loadSettings, getSetting, settings } = useSettings()
+const siteSettings = ref({})
+
+// Computed properties for site settings
+const siteLogo = computed(() => {
+  const logo = getSetting('site_logo')
+  console.log('Current site logo:', logo)
+  return logo || '/images/home/logo/WonderlandLogo.svg'
+})
+
+const siteName = computed(() => {
+  const name = getSetting('site_name_ar') || getSetting('site_name_en')
+  console.log('Current site name:', name)
+  return name || 'Wonder Land'
+})
+
+// Load settings on mount
+onMounted(async () => {
+  try {
+    console.log('Loading settings in layout...')
+    await loadSettings(true) // Load public settings only
+    console.log('Settings loaded in layout:', settings.value)
+  } catch (error) {
+    console.error('Failed to load site settings:', error)
+  }
+})
+
+// Listen for settings updates
+onMounted(() => {
+  // Listen for custom event to refresh settings
+  window.addEventListener('settings-updated', async () => {
+    try {
+      console.log('Settings update event received in layout')
+      await loadSettings(true)
+      console.log('Settings refreshed in layout')
+    } catch (error) {
+      console.error('Failed to refresh site settings:', error)
+    }
+  })
+  
+  // Also listen for storage events (for cross-tab updates)
+  window.addEventListener('storage', (e) => {
+    if (e.key === 'settings-updated') {
+      console.log('Settings storage event received in layout')
+      loadSettings(true)
+    }
+  })
+})
+
+// Dynamic navigation items based on page status
+const navItems = ref([
+  { to: '/', label: 'nav.home', id: 1 },
+  { to: '/packages', label: 'nav.packages', id: 2 },
+  { to: '/custom-package', label: 'nav.custom_package', id: 3 },
+  { to: '/about', label: 'nav.about', id: 4 },
   // { to: '/contact', label: 'nav.contact' }
-]
+])
+
+// Load navigation items based on page status
+const loadNavigationItems = async () => {
+  try {
+    const response = await $fetch('/api/public/navigation')
+    if (response.success && response.data && response.data.menus && response.data.menus.main) {
+      // Filter only published pages
+      const publishedPages = response.data.menus.main.filter(item => item.page_status === 'published')
+      navItems.value = publishedPages.map(item => ({
+        to: item.url,
+        label: `nav.${item.page_slug || 'home'}`,
+        id: item.page_id
+      }))
+    }
+  } catch (error) {
+    // Fallback to default navigation if API fails
+    console.warn('Could not load navigation from API, using default:', error)
+    // Keep the default navItems as fallback
+  }
+}
+
+// Load navigation on mount
+onMounted(() => {
+  loadNavigationItems()
+})
 
 // Use enhanced direction-aware view transition for language switching
 const toggleLanguage = async () => {

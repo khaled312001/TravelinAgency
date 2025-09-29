@@ -252,26 +252,121 @@ const addComponent = (componentTemplate) => {
 
 // إضافة مكونات افتراضية
 const addDefaultComponents = () => {
-  const defaultComponents = [
-    {
-      type: 'hero',
-      props: {
-        title: 'مرحباً بك في Wonder Land',
-        subtitle: 'اكتشف أجمل الوجهات السياحية',
-        backgroundImage: '/images/hero-bg.jpg',
-        buttonText: 'اكتشف الآن',
-        buttonLink: '/packages'
+  const route = useRoute()
+  const pageId = route.query.page
+  
+  // مكونات مختلفة حسب نوع الصفحة
+  let defaultComponents = []
+  
+  if (pageId === '1') {
+    // الصفحة الرئيسية
+    defaultComponents = [
+      {
+        type: 'hero',
+        props: {
+          title: 'مرحباً بك في Wonder Land',
+          subtitle: 'اكتشف أجمل الوجهات السياحية',
+          backgroundImage: '/images/hero-bg.jpg',
+          buttonText: 'اكتشف الآن',
+          buttonLink: '/packages'
+        }
+      },
+      {
+        type: 'about',
+        props: {
+          title: 'من نحن',
+          content: 'نحن وكالة سفر رائدة في المملكة العربية السعودية، نقدم أفضل خدمات السفر والسياحة لعملائنا الكرام.',
+          image: '/images/about.jpg'
+        }
       }
-    },
-    {
-      type: 'about',
-      props: {
-        title: 'من نحن',
-        content: 'نحن وكالة سفر رائدة في المملكة العربية السعودية...',
-        image: '/images/about.jpg'
+    ]
+  } else if (pageId === '2') {
+    // الباقات السياحية
+    defaultComponents = [
+      {
+        type: 'heading',
+        props: {
+          title: 'الباقات السياحية',
+          subtitle: 'اكتشف أفضل العروض والرحلات'
+        }
+      },
+      {
+        type: 'services',
+        props: {
+          title: 'باقاتنا المميزة',
+          services: [
+            { title: 'باقة دبي', description: 'رحلة لمدة 3 أيام', price: '1500 ريال' },
+            { title: 'باقة تركيا', description: 'رحلة لمدة 5 أيام', price: '2500 ريال' },
+            { title: 'باقة ماليزيا', description: 'رحلة لمدة 7 أيام', price: '3500 ريال' }
+          ]
+        }
       }
-    }
-  ]
+    ]
+  } else if (pageId === '3') {
+    // باقة مخصصة
+    defaultComponents = [
+      {
+        type: 'heading',
+        props: {
+          title: 'باقة مخصصة',
+          subtitle: 'صمم رحلتك حسب احتياجاتك'
+        }
+      },
+      {
+        type: 'contact',
+        props: {
+          title: 'تواصل معنا',
+          description: 'أخبرنا عن رحلتك المثالية وسنساعدك في تصميمها'
+        }
+      }
+    ]
+  } else if (pageId === '4') {
+    // من نحن
+    defaultComponents = [
+      {
+        type: 'heading',
+        props: {
+          title: 'من نحن',
+          subtitle: 'تعرف على وكالة السفر وخدماتنا'
+        }
+      },
+      {
+        type: 'about',
+        props: {
+          title: 'قصتنا',
+          content: 'نحن وكالة سفر رائدة في المملكة العربية السعودية، نقدم أفضل خدمات السفر والسياحة لعملائنا الكرام. نسعى دائماً لتوفير تجارب سفر لا تُنسى.',
+          image: '/images/about.jpg'
+        }
+      },
+      {
+        type: 'testimonials',
+        props: {
+          title: 'آراء عملائنا',
+          testimonials: [
+            { name: 'أحمد محمد', text: 'تجربة رائعة، شكراً لكم' },
+            { name: 'فاطمة علي', text: 'خدمة ممتازة ورحلة لا تُنسى' }
+          ]
+        }
+      }
+    ]
+  } else {
+    // مكونات افتراضية عامة
+    defaultComponents = [
+      {
+        type: 'heading',
+        props: {
+          title: 'مرحباً بك',
+          subtitle: 'ابدأ في إنشاء صفحتك'
+        }
+      },
+      {
+        type: 'paragraph',
+        props: {
+          content: 'هذه صفحة جديدة. يمكنك إضافة المكونات التي تريدها من الشريط الجانبي.'
+        }
+      }
+    ]
+  }
   
   defaultComponents.forEach(componentTemplate => {
     addComponent(componentTemplate)

@@ -215,6 +215,11 @@
 import { ref } from 'vue'
 import { useWhatsApp } from '~/composables/useWhatsApp'
 
+// Check if custom-package page is published
+definePageMeta({
+  middleware: 'page-access'
+})
+
 // SEO
 useHead({
   title: 'صمم باقتك المثالية - وكالة السفر',

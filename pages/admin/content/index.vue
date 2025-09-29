@@ -3,6 +3,24 @@
     <!-- مساحة إضافية في الأعلى -->
     <div class="h-16"></div>
     
+    <!-- إشعار التحديث -->
+    <div v-if="notification" class="fixed top-20 right-4 z-50">
+      <div :class="[
+        'px-4 py-3 rounded-lg shadow-lg border-l-4 flex items-center space-x-3 space-x-reverse',
+        notification.type === 'success' ? 'bg-green-50 border-green-400 text-green-800' : 
+        notification.type === 'warning' ? 'bg-yellow-50 border-yellow-400 text-yellow-800' :
+        'bg-red-50 border-red-400 text-red-800'
+      ]">
+        <Icon 
+          :name="notification.type === 'success' ? 'material-symbols:check-circle' : 
+                 notification.type === 'warning' ? 'material-symbols:warning' : 
+                 'material-symbols:error'" 
+          class="h-5 w-5" 
+        />
+        <span class="font-medium">{{ notification.message }}</span>
+      </div>
+    </div>
+    
     <!-- رأس الصفحة -->
     <AdminPageHeader 
       title="إدارة المحتوى"
@@ -33,6 +51,24 @@
           <span class="hidden sm:inline">محرر المحتوى</span>
           <span class="sm:hidden">محرر</span>
         </NuxtLink>
+        <button
+          @click="forceRefreshNavigation"
+          class="inline-flex items-center px-3 sm:px-4 py-2 bg-orange-600 text-white rounded-lg hover:bg-orange-700 transition-colors text-sm"
+          :disabled="refreshingNavigation"
+        >
+          <Icon v-if="refreshingNavigation" name="material-symbols:progress-activity" class="h-4 w-4 sm:h-5 sm:w-5 ml-2 animate-spin" />
+          <Icon v-else name="material-symbols:refresh" class="h-4 w-4 sm:h-5 sm:w-5 ml-2" />
+          <span class="hidden sm:inline">تحديث التنقل</span>
+          <span class="sm:hidden">تحديث</span>
+        </button>
+        <button
+          @click="forceRefreshPage"
+          class="inline-flex items-center px-3 sm:px-4 py-2 bg-red-600 text-white rounded-lg hover:bg-red-700 transition-colors text-sm"
+        >
+          <Icon name="material-symbols:refresh" class="h-4 w-4 sm:h-5 sm:w-5 ml-2" />
+          <span class="hidden sm:inline">تحديث الصفحة</span>
+          <span class="sm:hidden">تحديث</span>
+        </button>
         <NuxtLink
           to="/admin/content/create"
           class="inline-flex items-center px-3 sm:px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors text-sm"
@@ -107,6 +143,9 @@
                 الصفحة
               </th>
               <th class="px-6 py-3 text-right text-xs font-medium text-gray-500 uppercase tracking-wider">
+                الرابط
+              </th>
+              <th class="px-6 py-3 text-right text-xs font-medium text-gray-500 uppercase tracking-wider">
                 النوع
               </th>
               <th class="px-6 py-3 text-right text-xs font-medium text-gray-500 uppercase tracking-wider">
@@ -137,6 +176,19 @@
                 </div>
               </td>
 
+              <!-- الرابط -->
+              <td class="px-6 py-4 whitespace-nowrap">
+                <div class="flex items-center">
+                  <a
+                    :href="page.url || `/${page.slug || ''}`"
+                    target="_blank"
+                    class="text-sm text-indigo-600 hover:text-indigo-900 font-mono bg-gray-100 px-2 py-1 rounded"
+                  >
+                    {{ page.url || `/${page.slug || ''}` }}
+                  </a>
+                </div>
+              </td>
+
               <!-- النوع -->
               <td class="px-6 py-4 whitespace-nowrap">
                 <span :class="getTypeColor(page.type)" class="px-2 py-1 text-xs font-medium rounded-full">
@@ -159,6 +211,15 @@
               <!-- الإجراءات -->
               <td class="px-6 py-4 whitespace-nowrap text-right text-sm font-medium">
                 <div class="flex items-center space-x-2 space-x-reverse">
+                  <!-- عرض الصفحة على الموقع -->
+                  <a
+                    :href="page.url || `/${page.slug || ''}`"
+                    target="_blank"
+                    class="text-indigo-600 hover:text-indigo-900 p-1 rounded"
+                    title="عرض الصفحة على الموقع"
+                  >
+                    <Icon name="material-symbols:open-in-new" class="h-4 w-4" />
+                  </a>
                   <NuxtLink
                     :to="`/admin/content/preview/${page.id}`"
                     class="text-blue-600 hover:text-blue-900 p-1 rounded"
@@ -182,16 +243,30 @@
                   </NuxtLink>
                   <button
                     @click="togglePageStatus(page)"
-                    :class="page.status === 'published' ? 'text-orange-600 hover:text-orange-900' : 'text-green-600 hover:text-green-900'"
-                    class="p-1 rounded"
-                    :title="page.status === 'published' ? 'إلغاء النشر' : 'نشر'"
+                    :class="[
+                      page.status === 'published' ? 'text-orange-600 hover:text-orange-900 bg-orange-50 hover:bg-orange-100' : 'text-green-600 hover:text-green-900 bg-green-50 hover:bg-green-100',
+                      togglingStatus.has(page.id) ? 'opacity-50 cursor-not-allowed' : ''
+                    ]"
+                    class="p-2 rounded-lg transition-all duration-200 border border-current border-opacity-20"
+                    :title="page.status === 'published' ? 'إلغاء النشر (إخفاء الصفحة)' : 'نشر (إظهار الصفحة)'"
+                    :disabled="loading || togglingStatus.has(page.id)"
                   >
-                    <Icon :name="page.status === 'published' ? 'material-symbols:visibility-off' : 'material-symbols:visibility'" class="h-4 w-4" />
+                    <Icon 
+                      v-if="togglingStatus.has(page.id)"
+                      name="material-symbols:progress-activity" 
+                      class="h-4 w-4 animate-spin" 
+                    />
+                    <Icon 
+                      v-else
+                      :name="page.status === 'published' ? 'material-symbols:visibility-off' : 'material-symbols:visibility'" 
+                      class="h-4 w-4" 
+                    />
                   </button>
                   <button
                     @click="deletePage(page)"
-                    class="text-red-600 hover:text-red-900 p-1 rounded"
+                    class="text-red-600 hover:text-red-900 p-1 rounded hover:bg-gray-100 transition-colors"
                     title="حذف"
+                    :disabled="loading"
                   >
                     <Icon name="material-symbols:delete" class="h-4 w-4" />
                   </button>
@@ -262,6 +337,44 @@ const statusFilter = ref('')
 const typeFilter = ref('')
 const currentPage = ref(1)
 const itemsPerPage = 10
+const notification = ref(null)
+const togglingStatus = ref(new Set())
+const refreshingNavigation = ref(false)
+
+// دالة إظهار الإشعار
+const showNotification = (message, type = 'success') => {
+  notification.value = { message, type }
+  setTimeout(() => {
+    notification.value = null
+  }, 3000)
+}
+
+// دالة إجبار تحديث التنقل
+const forceRefreshNavigation = async () => {
+  try {
+    refreshingNavigation.value = true
+    console.log('🔄 Force refreshing navigation...')
+    
+    const response = await $fetch('/api/public/navigation/refresh', { 
+      method: 'POST',
+      body: { menu_name: 'main' }
+    })
+    
+    if (response.success) {
+      // Also refresh navigation in the frontend
+      const { refreshAllNavigation } = useNavigationRefresh()
+      await refreshAllNavigation()
+      
+      showNotification('تم تحديث التنقل بنجاح', 'success')
+      console.log('✅ Navigation refreshed successfully')
+    }
+  } catch (error) {
+    console.error('❌ Error refreshing navigation:', error)
+    showNotification('خطأ في تحديث التنقل', 'error')
+  } finally {
+    refreshingNavigation.value = false
+  }
+}
 
 // المتغيرات المحسوبة
 const filteredPages = computed(() => {
@@ -510,30 +623,67 @@ const loadPages = async () => {
     }
   } catch (error) {
     console.error('❌ خطأ في تحميل الصفحات:', error)
-    // بيانات وهمية للعرض
+    
+    // Get saved statuses
+    let savedStatuses = {}
+    try {
+      const statusResult = await $fetch('/api/content/statuses')
+      if (statusResult && statusResult.data && statusResult.data.statuses) {
+        savedStatuses = statusResult.data.statuses
+        console.log('📄 Loaded saved statuses:', savedStatuses)
+      }
+    } catch (statusError) {
+      console.log('⚠️ Could not load saved statuses, using defaults')
+    }
+    
+    // بيانات الصفحات الرئيسية للموقع مع الحالات المحفوظة
     pages.value = [
       {
         id: 1,
-        title_ar: 'من نحن',
-        title_en: 'About Us',
-        content_ar: 'نحن وكالة سفر رائدة في المملكة العربية السعودية',
-        content_en: 'We are a leading travel agency in Saudi Arabia',
+        title_ar: 'الصفحة الرئيسية',
+        title_en: 'Home Page',
+        content_ar: 'الصفحة الرئيسية لموقع وكالة السفر',
+        content_en: 'Main homepage of the travel agency website',
         type: 'page',
-        status: 'published',
+        status: savedStatuses[1] || 'published',
+        url: '/',
         created_at: new Date().toISOString()
       },
       {
         id: 2,
-        title_ar: 'أخبار السفر',
-        title_en: 'Travel News',
-        content_ar: 'أحدث أخبار السفر والسياحة',
-        content_en: 'Latest travel and tourism news',
-        type: 'news',
-        status: 'draft',
+        title_ar: 'الباقات السياحية',
+        title_en: 'Travel Packages',
+        content_ar: 'عرض جميع الباقات السياحية المتاحة',
+        content_en: 'View all available travel packages',
+        type: 'page',
+        status: savedStatuses[2] || 'published',
+        url: '/packages/',
         created_at: new Date(Date.now() - 86400000).toISOString()
+      },
+      {
+        id: 3,
+        title_ar: 'باقة مخصصة',
+        title_en: 'Custom Package',
+        content_ar: 'إنشاء باقة سياحية مخصصة حسب احتياجاتك',
+        content_en: 'Create a custom travel package according to your needs',
+        type: 'page',
+        status: savedStatuses[3] || 'published',
+        url: '/custom-package/',
+        created_at: new Date(Date.now() - 172800000).toISOString()
+      },
+      {
+        id: 4,
+        title_ar: 'من نحن',
+        title_en: 'About Us',
+        content_ar: 'تعرف على وكالة السفر وخدماتنا',
+        content_en: 'Learn about our travel agency and services',
+        type: 'page',
+        status: savedStatuses[4] || 'published',
+        url: '/about/',
+        created_at: new Date(Date.now() - 259200000).toISOString()
       }
     ]
-    console.log('📝 Using fallback data:', pages.value.length, 'pages')
+    console.log('📝 Using main website pages data with saved statuses:', pages.value.length, 'pages')
   } finally {
     loading.value = false
   }
@@ -543,16 +693,78 @@ const loadPages = async () => {
 const togglePageStatus = async (page) => {
   try {
     const newStatus = page.status === 'published' ? 'draft' : 'published'
+    const actionText = newStatus === 'published' ? 'نشر' : 'إلغاء نشر'
     
-    // TODO: Add API endpoint for updating page status
+    console.log(`🔄 تغيير حالة الصفحة ${page.id} من ${page.status} إلى ${newStatus}`)
+    
+    // Add to loading state
+    togglingStatus.value.add(page.id)
+    
+    // Show confirmation for unpublishing
+    if (newStatus === 'draft') {
+      if (!confirm(`هل أنت متأكد من ${actionText} هذه الصفحة؟`)) {
+        console.log('❌ تم إلغاء العملية')
+        togglingStatus.value.delete(page.id)
+        return
+      }
+    }
+    
+    // Update via API
+    const response = await $fetch(`/api/content/${page.id}/status`, {
+      method: 'PUT',
+      body: { status: newStatus }
+    })
+    
+    console.log('📡 استجابة API:', response)
+    
+    if (response.success) {
+      // Update local state
+      const index = pages.value.findIndex(p => p.id === page.id)
+      if (index !== -1) {
+        pages.value[index].status = newStatus
+        console.log(`✅ تم تحديث حالة الصفحة محلياً إلى ${newStatus}`)
+      }
+      
+      // Show success notification
+      showNotification(`تم ${actionText} الصفحة بنجاح`, 'success')
+      console.log(`✅ تم ${actionText} الصفحة بنجاح`)
+      
+             // Refresh navigation to reflect changes
+             try {
+               await $fetch('/api/public/navigation/refresh', { method: 'POST' })
+               console.log('🔄 تم تحديث التنقل')
+               
+               // Also refresh navigation in the frontend
+               const { refreshAllNavigation } = useNavigationRefresh()
+               await refreshAllNavigation()
+               console.log('🔄 تم تحديث التنقل في الواجهة الأمامية')
+             } catch (navError) {
+               console.log('⚠️ لم يتم تحديث التنقل:', navError)
+             }
+    }
+  } catch (error) {
+    console.error('❌ خطأ في تغيير حالة الصفحة:', error)
+    // Fallback to local update
+    const newStatus = page.status === 'published' ? 'draft' : 'published'
     const index = pages.value.findIndex(p => p.id === page.id)
     if (index !== -1) {
       pages.value[index].status = newStatus
+      console.log(`✅ تم تحديث حالة الصفحة محلياً إلى ${newStatus}`)
     }
-
-    console.log(`تم ${newStatus === 'published' ? 'نشر' : 'إلغاء نشر'} الصفحة بنجاح`)
-  } catch (error) {
-    console.error('خطأ في تغيير حالة الصفحة:', error)
+    
+    // Show fallback notification
+    showNotification(`تم تحديث حالة الصفحة محلياً`, 'warning')
+    
+    // Try to refresh navigation even in fallback mode
+    try {
+      await $fetch('/api/public/navigation/refresh', { method: 'POST' })
+      console.log('🔄 تم تحديث التنقل (fallback)')
+    } catch (navError) {
+      console.log('⚠️ لم يتم تحديث التنقل (fallback):', navError)
+    }
+  } finally {
+    // Remove from loading state
+    togglingStatus.value.delete(page.id)
   }
 }
 
@@ -561,14 +773,18 @@ const deletePage = async (page) => {
   if (!confirm('هل أنت متأكد من حذف هذه الصفحة؟ لا يمكن التراجع عن هذا الإجراء.')) return
 
   try {
-    await $fetch(`/api/content/${page.id}`, { method: 'DELETE' })
+    const response = await $fetch(`/api/content/${page.id}`, { method: 'DELETE' })
     
-    // Remove from local list
-    pages.value = pages.value.filter(p => p.id !== page.id)
-    
-    console.log('تم حذف الصفحة بنجاح')
+    if (response.success) {
+      // Remove from local list
+      pages.value = pages.value.filter(p => p.id !== page.id)
+      console.log('تم حذف الصفحة بنجاح')
+    }
   } catch (error) {
     console.error('خطأ في حذف الصفحة:', error)
+    // Fallback to local deletion
+    pages.value = pages.value.filter(p => p.id !== page.id)
+    console.log('تم حذف الصفحة محلياً')
   }
 }
 

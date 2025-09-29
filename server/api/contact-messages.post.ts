@@ -1,100 +1,130 @@
-import { defineEventHandler, readBody, getRequestIP, getHeader } from 'h3';
+import { defineEventHandler, readBody, createError } from 'h3';
 import { executeQuery } from '~/utils/database';
 
 // POST /api/contact-messages - Create new contact message
 export default defineEventHandler(async (event) => {
   try {
     const body = await readBody(event);
-    
-    const {
-      name,
-      email,
-      phone,
-      subject,
-      message,
-      type = 'general',
-      source = 'website',
-      related_package_id = null,
-      related_destination_id = null
-    } = body;
 
     // Validate required fields
-    if (!name || !message) {
+    if (!body.name || !body.email || !body.message) {
       throw createError({
         statusCode: 400,
-        statusMessage: 'Name and message are required'
+        statusMessage: 'Name, email, and message are required'
       });
     }
 
-    // Log the contact message data
-    console.log('📧 Contact message received:', {
-      name,
-      email: email || null,
-      phone: phone || null,
-      subject: subject || 'استفسار عام',
-      message,
-      type,
-      source,
-      related_package_id,
-      related_destination_id
-    });
-
-    // Try to insert into database, but provide fallback for development
+    // Try to insert into database
     try {
       const result = await executeQuery(`
         INSERT INTO contact_messages (
-          name, email, phone, subject, message, type, status, source,
-          related_package_id, related_destination_id, ip_address, user_agent, created_at, updated_at
-        ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, NOW(), NOW())
+          name,
+          email,
+          phone,
+          subject,
+          message,
+          status,
+          created_at,
+          updated_at
+        ) VALUES (?, ?, ?, ?, ?, 'new', CURRENT_TIMESTAMP, CURRENT_TIMESTAMP)
       `, [
-        name,
-        email || null,
-        phone || null,
-        subject || 'استفسار عام',
-        message,
-        type,
-        'new',
-        source,
-        related_package_id,
-        related_destination_id,
-        getRequestIP(event, { xForwardedFor: true }) || '127.0.0.1',
-        getHeader(event, 'user-agent') || 'Unknown'
+        body.name,
+        body.email,
+        body.phone || '',
+        body.subject || '',
+        body.message
       ]);
-      
-      console.log('✅ Database insert successful:', result);
+
+      // Get the created message
+      const newMessages = await executeQuery(`
+        SELECT 
+          id, 
+          name,
+          email,
+          phone,
+          subject,
+          message,
+          status,
+          created_at,
+          updated_at
+        FROM contact_messages 
+        WHERE id = ?
+      `, [result.insertId]);
+
+      if (!newMessages || newMessages.length === 0) {
+        throw createError({
+          statusCode: 500,
+          statusMessage: 'Failed to retrieve created message'
+        });
+      }
+
+      const messageData = newMessages[0];
 
       return {
         success: true,
-        message: 'Contact message submitted successfully',
-        id: result.insertId || 'success'
+        message: 'Contact message sent successfully',
+        data: {
+          id: messageData.id,
+          name: messageData.name,
+          email: messageData.email,
+          phone: messageData.phone,
+          subject: messageData.subject,
+          message: messageData.message,
+          status: messageData.status,
+          created_at: messageData.created_at
+        }
       };
 
-    } catch (dbError: any) {
-      console.warn('⚠️ Database connection failed, using development fallback:', dbError.message);
+    } catch (dbError) {
+      console.log('Database insert failed:', dbError);
       
-      // Development fallback - just log the message and return success
-      // In production, you might want to send an email or use a different storage method
-      console.log('📝 Development mode: Contact message logged to console');
-      console.log('📧 Contact Details:', {
-        name,
-        email,
-        phone,
-        subject: subject || 'استفسار عام',
-        message,
-        type,
-        source,
-        timestamp: new Date().toISOString()
-      });
-
-      return {
-        success: true,
-        message: 'Contact message received successfully (development mode)',
-        id: 'dev-' + Date.now()
-      };
+      // Fallback: Store in local file
+      try {
+        const fs = await import('fs');
+        const path = await import('path');
+        
+        const messagesFile = path.join(process.cwd(), 'public', 'contact-messages.json');
+        
+        let messages = [];
+        if (fs.existsSync(messagesFile)) {
+          const data = fs.readFileSync(messagesFile, 'utf8');
+          messages = JSON.parse(data);
+        }
+        
+        const newMessage = {
+          id: Date.now(),
+          name: body.name,
+          email: body.email,
+          phone: body.phone || '',
+          subject: body.subject || '',
+          message: body.message,
+          status: 'new',
+          created_at: new Date().toISOString(),
+          updated_at: new Date().toISOString()
+        };
+        
+        messages.push(newMessage);
+        
+        // Write back to file
+        fs.writeFileSync(messagesFile, JSON.stringify(messages, null, 2));
+        
+        return {
+          success: true,
+          message: 'Contact message sent successfully (stored locally)',
+          data: newMessage
+        };
+        
+      } catch (localError) {
+        console.log('Local file storage failed:', localError);
+        throw createError({
+          statusCode: 500,
+          statusMessage: 'Failed to store contact message'
+        });
+      }
     }
 
   } catch (error: any) {
-    console.error('❌ Error processing contact message:', error);
+    console.error('Error creating contact message:', error);
     
     if (error.statusCode) {
       throw error;
@@ -102,7 +132,7 @@ export default defineEventHandler(async (event) => {
     
     throw createError({
       statusCode: 500,
-      statusMessage: 'Failed to process contact message'
+      statusMessage: 'Failed to send contact message'
     });
   }
 });

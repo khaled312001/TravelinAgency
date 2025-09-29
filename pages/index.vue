@@ -114,6 +114,11 @@ onMounted(() => {
   loadHomePageContent()
 })
 
+// Check if home page is published
+definePageMeta({
+  middleware: 'page-access'
+})
+
 // Set page meta
 useHead({
   title: 'Wonder Land - وكالة السفر الرائدة',

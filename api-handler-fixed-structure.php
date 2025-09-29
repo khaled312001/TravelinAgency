@@ -650,6 +650,33 @@ function handleContactMessage() {
 
 // Sample data fallbacks
 function getSamplePackages() {
+    // Load imported packages data
+    $importedPackagesFile = __DIR__ . '/packages-with-local-images.json';
+    if (file_exists($importedPackagesFile)) {
+        $importedPackages = json_decode(file_get_contents($importedPackagesFile), true);
+        if ($importedPackages && is_array($importedPackages)) {
+            // Convert to the expected format
+            $packages = [];
+            foreach ($importedPackages as $package) {
+                $packages[] = [
+                    'id' => (int)$package['id'],
+                    'title' => $package['title'],
+                    'description' => $package['description'],
+                    'price' => (float)$package['price'],
+                    'duration' => $package['duration'],
+                    'image' => '/output/public' . $package['image'],
+                    'featured' => (bool)$package['featured'],
+                    'destination' => $package['destination'],
+                    'status' => $package['status'],
+                    'created_at' => $package['created_at'],
+                    'updated_at' => $package['updated_at']
+                ];
+            }
+            return $packages;
+        }
+    }
+    
+    // Fallback to original sample data if imported packages not available
     return [
         [
             'id' => 1,

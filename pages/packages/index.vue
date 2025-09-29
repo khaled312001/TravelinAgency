@@ -64,4 +64,9 @@ import type { Package } from '~/composables/usePackages'
 import PackageCard from '~/components/packages/PackageCard.vue'
 const { packages, pending, error } = usePackages()
 
+// Check if packages page is published
+definePageMeta({
+  middleware: 'page-access'
+})
+
 </script>

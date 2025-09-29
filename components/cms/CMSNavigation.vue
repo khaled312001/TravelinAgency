@@ -70,13 +70,99 @@ const { getMenu, loadNavigation } = useCMS()
 // State
 const mobileMenuOpen = ref(false)
 
-// Computed
+// Function to check if page is published
+const isPagePublished = async (pageId) => {
+  try {
+    const response = await $fetch('/api/pages/check-access', {
+      query: { path: getPagePath(pageId) }
+    })
+    return response.accessible
+  } catch (error) {
+    return true // Default to showing if check fails
+  }
+}
+
+// Get page path from ID
+const getPagePath = (pageId) => {
+  const paths = {
+    1: '/',
+    2: '/packages/',
+    3: '/custom-package/',
+    4: '/about/'
+  }
+  return paths[pageId] || '/'
+}
+
+// State for page statuses
+const pageStatuses = ref({})
+
+// Load page statuses
+const loadPageStatuses = async () => {
+  try {
+    const paths = ['/', '/packages/', '/custom-package/', '/about/']
+    for (const path of paths) {
+      const response = await $fetch('/api/pages/check-access', {
+        query: { path }
+      })
+      const pageId = getPageIdFromPath(path)
+      pageStatuses.value[pageId] = response.accessible
+    }
+  } catch (error) {
+    console.log('Error loading page statuses:', error)
+  }
+}
+
+// Get page ID from path
+const getPageIdFromPath = (path) => {
+  const pathToId = {
+    '/': 1,
+    '/packages/': 2,
+    '/custom-package/': 3,
+    '/about/': 4
+  }
+  return pathToId[path] || 1
+}
+
+// Computed - filter out unpublished pages
 const mainMenu = computed(() => {
-  return getMenu('main')
+  const menu = getMenu('main')
+  if (!menu || !Array.isArray(menu)) return []
+  
+  // Simple filter - only show published pages
+  return menu.filter(item => {
+    // Check if page is published
+    return item.page_status === 'published'
+  })
 })
+
+// Force refresh navigation
+const forceRefresh = async () => {
+  await loadNavigation('main')
+  await loadPageStatuses()
+}
 
 // Load navigation on mount
 onMounted(async () => {
-  await loadNavigation('main')
+  await forceRefresh()
+})
+
+// Watch for page visibility changes and reload navigation
+const route = useRoute()
+watch(() => route.path, async () => {
+  // Reload navigation when route changes to ensure fresh data
+  await forceRefresh()
+}, { immediate: false })
+
+// Listen for navigation refresh events
+const { listenForNavigationRefresh } = useNavigationRefresh()
+onMounted(() => {
+  listenForNavigationRefresh()
+  
+  // Also listen for custom navigation refresh events
+  if (process.client) {
+    window.addEventListener('navigation-refresh', async () => {
+      await forceRefresh()
+    })
+  }
 })
 </script>

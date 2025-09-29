@@ -165,20 +165,25 @@ watch(notificationOpen, async (isOpen) => {
 })
 
 // تهيئة النظام عند تحميل المكون
+// متغير لحفظ interval
+let notificationInterval = null
+
 onMounted(async () => {
   await loadNotifications()
   await fetchMessageCounts()
   
   // تحديث تلقائي كل 30 ثانية
-  const interval = setInterval(async () => {
+  notificationInterval = setInterval(async () => {
     await loadNotifications()
     await fetchMessageCounts()
   }, 30000)
-  
-  // تنظيف عند إلغاء تحميل المكون
-  onUnmounted(() => {
-    clearInterval(interval)
-  })
+})
+
+// تنظيف عند إلغاء تحميل المكون
+onUnmounted(() => {
+  if (notificationInterval) {
+    clearInterval(notificationInterval)
+  }
 })
 
 // دالة تحميل الإشعارات الحقيقية

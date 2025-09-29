@@ -1,132 +1,260 @@
-import { defineEventHandler, getRouterParam } from 'h3'
-import { executeQuery } from '~/utils/database'
+import { defineEventHandler } from 'h3';
+import { executeQuery } from '~/utils/database';
 
+// GET /api/cms/editor/[id] - Get page data for editor/preview
 export default defineEventHandler(async (event) => {
-  const id = getRouterParam(event, 'id')
+  try {
+    const pageId = getRouterParam(event, 'id');
   
-  if (!id) {
+    if (!pageId) {
     throw createError({
       statusCode: 400,
       statusMessage: 'Page ID is required'
-    })
+      });
   }
 
+    // Try to get page from database first
   try {
-    // Get page data
-    const pages = await executeQuery(`
+      const page = await executeQuery(`
       SELECT 
         id, 
-        title,
-        meta_title,
-        meta_description,
-        'page' as type,
+          title_ar,
+          title_en,
+          content_ar,
+          content_en,
+          type,
         status,
-        template,
+          url,
+          slug,
+          components,
         created_at,
         updated_at
-      FROM cms_pages 
+        FROM content_pages 
       WHERE id = ?
-    `, [id])
-
-    if (!pages || pages.length === 0) {
-      throw createError({
-        statusCode: 404,
-        statusMessage: 'Page not found'
-      })
-    }
-
-    const page = pages[0]
-
-    // Get sections for this page
-    const sections = await executeQuery(`
-      SELECT 
-        id,
-        section_type,
-        title,
-        subtitle,
-        content,
-        background_color,
-        background_image,
-        text_color,
-        order_index,
-        is_active,
-        settings
-      FROM cms_sections 
-      WHERE page_id = ? AND is_active = TRUE
-      ORDER BY order_index ASC
-    `, [id])
-
-    // Convert sections to components
-    const components = sections.map(section => {
-      // Parse settings if it's a JSON string
-      let settings = {}
-      if (section.settings && typeof section.settings === 'string') {
+      `, [pageId]);
+      
+      if (page && page.length > 0) {
+        const pageData = page[0];
+        
+        // Parse components from JSON string
+        let components = [];
         try {
-          settings = JSON.parse(section.settings)
+          if (pageData.components) {
+            components = typeof pageData.components === 'string' 
+              ? JSON.parse(pageData.components) 
+              : pageData.components;
+          }
         } catch (e) {
-          console.error('Error parsing settings:', e)
+          console.log('Error parsing components:', e);
+          components = [];
         }
-      } else if (section.settings) {
-        settings = section.settings
-      }
+        
+        // Format page data for editor/preview
+        const formattedPage = {
+          id: pageData.id,
+          title: pageData.title_ar || pageData.title_en,
+          title_ar: pageData.title_ar,
+          title_en: pageData.title_en,
+          content: pageData.content_ar || pageData.content_en,
+          content_ar: pageData.content_ar,
+          content_en: pageData.content_en,
+          type: pageData.type || 'page',
+          status: pageData.status || 'draft',
+          url: pageData.url || `/${pageData.slug || ''}`,
+          slug: pageData.slug,
+          created_at: pageData.created_at,
+          updated_at: pageData.updated_at,
+          components: components
+        };
 
-      // Create component props based on section type
-      const props = {
-        title: section.title || '',
-        subtitle: section.subtitle || '',
-        content: section.content || '',
-        backgroundImage: section.background_image || '',
-        backgroundColor: section.background_color || '',
-        textColor: section.text_color || '',
-        ...settings // Merge additional settings
+        return {
+          success: true,
+          message: 'Page retrieved successfully from database',
+          page: formattedPage
+        };
       }
+    } catch (dbError) {
+      console.log('Database page not available, using default page data...');
+    }
+    
+    // Fallback to default page data based on ID
+    const defaultPages = {
+      '1': {
+        id: 1,
+        title_ar: 'الصفحة الرئيسية',
+        title_en: 'Home Page',
+        content_ar: 'الصفحة الرئيسية لموقع وكالة السفر',
+        content_en: 'Main homepage of the travel agency website',
+        type: 'page',
+        status: 'published',
+        url: '/',
+        created_at: new Date().toISOString(),
+        updated_at: new Date().toISOString()
+      },
+      '2': {
+        id: 2,
+        title_ar: 'الباقات السياحية',
+        title_en: 'Travel Packages',
+        content_ar: 'عرض جميع الباقات السياحية المتاحة',
+        content_en: 'View all available travel packages',
+        type: 'page',
+        status: 'published',
+        url: '/packages/',
+        created_at: new Date(Date.now() - 86400000).toISOString(),
+        updated_at: new Date(Date.now() - 86400000).toISOString()
+      },
+      '3': {
+        id: 3,
+        title_ar: 'باقة مخصصة',
+        title_en: 'Custom Package',
+        content_ar: 'إنشاء باقة سياحية مخصصة حسب احتياجاتك',
+        content_en: 'Create a custom travel package according to your needs',
+        type: 'page',
+        status: 'published',
+        url: '/custom-package/',
+        created_at: new Date(Date.now() - 172800000).toISOString(),
+        updated_at: new Date(Date.now() - 172800000).toISOString()
+      },
+      '4': {
+        id: 4,
+        title_ar: 'من نحن',
+        title_en: 'About Us',
+        content_ar: 'تعرف على وكالة السفر وخدماتنا',
+        content_en: 'Learn about our travel agency and services',
+        type: 'page',
+        status: 'published',
+        url: '/about/',
+        created_at: new Date(Date.now() - 259200000).toISOString(),
+        updated_at: new Date(Date.now() - 259200000).toISOString()
+      }
+    };
 
-      // Add specific props based on component type
-      if (section.section_type === 'hero') {
-        props.buttonText = settings.buttonText || 'اكتشف الآن'
-        props.buttonLink = settings.buttonLink || '/packages'
-        props.videoBackground = settings.video_background || false
-        props.desktopVideo = settings.desktop_video || ''
-        props.mobileVideo = settings.mobile_video || ''
-        props.posterImage = settings.poster_image || ''
+    const defaultPage = defaultPages[pageId];
+    
+    if (defaultPage) {
+      // إضافة مكونات افتراضية حسب نوع الصفحة
+      let defaultComponents = [];
+      
+      if (pageId === '1') {
+        // الصفحة الرئيسية
+        defaultComponents = [
+          {
+            type: 'hero',
+            props: {
+              title: 'مرحباً بك في Wonder Land',
+              subtitle: 'اكتشف أجمل الوجهات السياحية',
+              backgroundImage: '/images/hero-bg.jpg',
+              buttonText: 'اكتشف الآن',
+              buttonLink: '/packages'
+            }
+          },
+          {
+            type: 'about',
+            props: {
+              title: 'من نحن',
+              content: 'نحن وكالة سفر رائدة في المملكة العربية السعودية، نقدم أفضل خدمات السفر والسياحة لعملائنا الكرام.',
+              image: '/images/about.jpg'
+            }
+          }
+        ];
+      } else if (pageId === '2') {
+        // الباقات السياحية
+        defaultComponents = [
+          {
+            type: 'heading',
+            props: {
+              title: 'الباقات السياحية',
+              subtitle: 'اكتشف أفضل العروض والرحلات'
+            }
+          },
+          {
+            type: 'services',
+            props: {
+              title: 'باقاتنا المميزة',
+              services: [
+                { title: 'باقة دبي', description: 'رحلة لمدة 3 أيام', price: '1500 ريال' },
+                { title: 'باقة تركيا', description: 'رحلة لمدة 5 أيام', price: '2500 ريال' },
+                { title: 'باقة ماليزيا', description: 'رحلة لمدة 7 أيام', price: '3500 ريال' }
+              ]
+            }
+          }
+        ];
+      } else if (pageId === '3') {
+        // باقة مخصصة
+        defaultComponents = [
+          {
+            type: 'heading',
+            props: {
+              title: 'باقة مخصصة',
+              subtitle: 'صمم رحلتك حسب احتياجاتك'
+            }
+          },
+          {
+            type: 'contact',
+            props: {
+              title: 'تواصل معنا',
+              description: 'أخبرنا عن رحلتك المثالية وسنساعدك في تصميمها'
+            }
+          }
+        ];
+      } else if (pageId === '4') {
+        // من نحن
+        defaultComponents = [
+          {
+            type: 'heading',
+            props: {
+              title: 'من نحن',
+              subtitle: 'تعرف على وكالة السفر وخدماتنا'
+            }
+          },
+          {
+            type: 'about',
+            props: {
+              title: 'قصتنا',
+              content: 'نحن وكالة سفر رائدة في المملكة العربية السعودية، نقدم أفضل خدمات السفر والسياحة لعملائنا الكرام. نسعى دائماً لتوفير تجارب سفر لا تُنسى.',
+              image: '/images/about.jpg'
+            }
+          },
+          {
+            type: 'testimonials',
+            props: {
+              title: 'آراء عملائنا',
+              testimonials: [
+                { name: 'أحمد محمد', text: 'تجربة رائعة، شكراً لكم' },
+                { name: 'فاطمة علي', text: 'خدمة ممتازة ورحلة لا تُنسى' }
+              ]
+            }
+          }
+        ];
       }
-
-      return {
-        id: section.id,
-        type: section.section_type,
-        props: props,
-        classes: 'mb-6'
-      }
-    })
 
     return {
       success: true,
+        message: 'Page retrieved successfully from default data',
       page: {
-        id: page.id,
-        title: page.title,
-        title_ar: page.title,
-        title_en: page.meta_title || page.title,
-        content: page.meta_description || '',
-        content_ar: page.meta_description || '',
-        content_en: page.meta_description || '',
-        components: components,
-        type: page.type,
-        status: page.status,
-        template: page.template,
-        created_at: page.created_at,
-        updated_at: page.updated_at
-      }
+          ...defaultPage,
+          title: defaultPage.title_ar || defaultPage.title_en,
+          content: defaultPage.content_ar || defaultPage.content_en,
+          components: defaultComponents
+        }
+      };
+    } else {
+      throw createError({
+        statusCode: 404,
+        statusMessage: 'Page not found'
+      });
     }
-  } catch (error) {
-    console.error('Error fetching page for editor:', error)
+
+  } catch (error: any) {
+    console.error('Error fetching page for editor:', error);
     
     if (error.statusCode) {
-      throw error
+      throw error;
     }
     
     throw createError({
       statusCode: 500,
       statusMessage: 'Failed to fetch page data'
-    })
+    });
   }
-})
+});

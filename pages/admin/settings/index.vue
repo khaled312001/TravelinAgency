@@ -730,8 +730,11 @@ const uploadImage = async () => {
       
       showUploadMessage('تم رفع الشعار بنجاح!', 'success')
       
-      // حفظ الإعدادات تلقائياً
-      await saveSettings()
+      // تحديث الإعدادات في الـ composable مباشرة
+      await updateSettings({ site_logo: response.url })
+      
+      // إعادة تحميل الإعدادات في جميع أنحاء الموقع
+      await refreshSiteSettings()
     } else {
       showUploadMessage('فشل في رفع الشعار: ' + (response.error || 'خطأ غير معروف'), 'error')
     }
@@ -852,6 +855,9 @@ const saveSettings = async () => {
     // تحديث الإعدادات في الـ composable
     await updateSettings(settings.value)
     
+    // إعادة تحميل الإعدادات في جميع أنحاء الموقع
+    await refreshSiteSettings()
+    
     // إظهار رسالة النجاح
     alert('تم حفظ الإعدادات بنجاح')
     
@@ -860,6 +866,32 @@ const saveSettings = async () => {
     alert('حدث خطأ أثناء حفظ الإعدادات')
   } finally {
     saving.value = false
+  }
+}
+
+// إعادة تحميل الإعدادات في جميع أنحاء الموقع
+const refreshSiteSettings = async () => {
+  try {
+    // إعادة تحميل الإعدادات في الـ composable
+    await loadSettingsFromComposable(true)
+    
+    // إرسال إشارة لتحديث الإعدادات في جميع المكونات
+    if (process.client) {
+      window.dispatchEvent(new CustomEvent('settings-updated'))
+      
+      // استخدام localStorage للتحديث عبر التبويبات
+      localStorage.setItem('settings-updated', Date.now().toString())
+      localStorage.removeItem('settings-updated')
+    }
+    
+    // إرسال إشارة لتحديث الإعدادات في جميع المكونات
+    await $fetch('/api/cms/site-settings/refresh', {
+      method: 'POST'
+    }).catch(() => {
+      // تجاهل الخطأ إذا لم يكن الـ endpoint موجود
+    })
+  } catch (error) {
+    console.error('خطأ في إعادة تحميل الإعدادات:', error)
   }
 }
 

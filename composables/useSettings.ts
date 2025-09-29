@@ -149,6 +149,11 @@ export const useSettings = () => {
       // تحديث الإعدادات محلياً
       Object.assign(settings.value, newSettings)
       
+      // إرسال إشارة للتحديث
+      if (process.client) {
+        window.dispatchEvent(new CustomEvent('settings-updated'))
+      }
+      
       return true
     } catch (err) {
       console.error('Error updating settings:', err)

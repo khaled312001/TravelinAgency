@@ -23,12 +23,27 @@ export const useCMS = () => {
   // Load navigation
   const loadNavigation = async (menuName?: string) => {
     try {
-      const url = menuName ? `/api/public/navigation?menu_name=${menuName}` : '/api/public/navigation'
+      const url = menuName ? `/api/public/navigation?menu_name=${menuName}&t=${Date.now()}` : `/api/public/navigation?t=${Date.now()}`
       const response = await $fetch(url)
       navigation.value = response.data.menus
       return response.data.menus
     } catch (error) {
       console.error('Error loading navigation:', error)
+      return {}
+    }
+  }
+
+  // Force refresh navigation
+  const refreshNavigation = async (menuName?: string) => {
+    try {
+      const response = await $fetch('/api/public/navigation/refresh', {
+        method: 'POST',
+        body: { menu_name: menuName || 'main', t: Date.now() }
+      })
+      navigation.value = response.data.menus
+      return response.data.menus
+    } catch (error) {
+      console.error('Error refreshing navigation:', error)
       return {}
     }
   }
@@ -103,6 +118,7 @@ export const useCMS = () => {
     // Methods
     loadSiteSettings,
     loadNavigation,
+    refreshNavigation,
     loadPage,
     getSetting,
     getMenu,
