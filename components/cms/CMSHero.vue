@@ -184,7 +184,14 @@ onMounted(() => {
       ([{ isIntersecting }]) => {
         if (videoRef.value) {
           if (isIntersecting) {
-            videoRef.value.play()
+            // Handle play promise to prevent uncaught errors
+            const playPromise = videoRef.value.play()
+            if (playPromise !== undefined) {
+              playPromise.catch(error => {
+                // Auto-play was prevented, ignore the error
+                console.log('Video autoplay prevented:', error)
+              })
+            }
           } else {
             videoRef.value.pause()
           }
