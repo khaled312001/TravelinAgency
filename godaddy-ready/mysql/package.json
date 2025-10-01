@@ -1,0 +1,29 @@
+{
+  "name": "wonderland-travel-mysql",
+  "version": "1.0.0",
+  "description": "MySQL database setup for Wonder Land Traveling Agency",
+  "main": "config.js",
+  "scripts": {
+    "setup": "node setup.js",
+    "create-admin": "node create-admin.js",
+    "migrate": "mysql -u $DB_USER -p$DB_PASSWORD < schema.sql",
+    "test-connection": "node test-connection.js"
+  },
+  "dependencies": {
+    "mysql2": "^3.6.5",
+    "bcrypt": "^5.1.1",
+    "dotenv": "^16.3.1",
+    "uuid": "^9.0.1"
+  },
+  "devDependencies": {
+    "nodemon": "^3.0.2"
+  },
+  "keywords": [
+    "mysql",
+    "travel",
+    "agency",
+    "database"
+  ],
+  "author": "Wonder Land Traveling Agency",
+  "license": "MIT"
+}
