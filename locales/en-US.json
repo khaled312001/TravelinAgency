@@ -4,8 +4,7 @@
     "packages": "Packages",
     "custom_package": "Custom Package",
     "custom-package": "Custom Package",
-    "about": "About",
-    "contact": "Contact"
+    "about": "About"
   },
   "common": {
     "app_title": "Wonder Land",

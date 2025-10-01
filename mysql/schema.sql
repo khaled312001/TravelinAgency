@@ -428,8 +428,6 @@ INSERT IGNORE INTO cms_site_settings (setting_key, setting_value, setting_type, 
 -- Sample navigation
 INSERT IGNORE INTO cms_navigation (menu_name, title, url, page_id, order_index, is_active) VALUES
 ('main', 'الرئيسية', '/', 1, 1, TRUE),
-('main', 'من نحن', '/about', 2, 2, TRUE),
-('main', 'خدماتنا', '/services', 3, 3, TRUE),
-('main', 'الوجهات', '/destinations', NULL, 4, TRUE),
-('main', 'الحزم', '/packages', NULL, 5, TRUE),
-('main', 'اتصل بنا', '/contact', 4, 6, TRUE);
+('main', 'الباقات', '/packages/', 2, 2, TRUE),
+('main', 'صمم باقتك', '/custom-package/', 3, 3, TRUE),
+('main', 'عن الشركة', '/about/', 4, 4, TRUE);

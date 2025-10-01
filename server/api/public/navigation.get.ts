@@ -28,8 +28,21 @@ export default defineEventHandler(async (event) => {
 
       navigation = await executeQuery(sql, params)
       
-      // Filter out items with unpublished pages
+      // First, fix home URL if it's /home/ to be /
+      navigation = navigation.map(item => {
+        if (item.url === '/home' || item.url === '/home/') {
+          return { ...item, url: '/' }
+        }
+        return item
+      })
+      
+      // Then filter out items with unpublished pages and exclude services/contact
       navigation = navigation.filter(item => {
+        // Exclude services and contact pages (but not home, we already fixed it above)
+        if (item.url === '/services' || item.url === '/services/' || 
+            item.url === '/contact' || item.url === '/contact/') {
+          return false
+        }
         if (!item.page_id) return true // External links are always shown
         return item.page_status === 'published'
       })

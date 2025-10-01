@@ -160,32 +160,46 @@ onMounted(() => {
   })
 })
 
-// Dynamic navigation items based on page status
-const navItems = ref([
+// Dynamic navigation items - start with empty, will load from API or use fallback
+const navItems = ref([])
+
+// Default fallback navigation items
+const defaultNavItems = [
   { to: '/', label: 'nav.home', id: 1 },
   { to: '/packages', label: 'nav.packages', id: 2 },
   { to: '/custom-package', label: 'nav.custom_package', id: 3 },
-  { to: '/about', label: 'nav.about', id: 4 },
-  // { to: '/contact', label: 'nav.contact' }
-])
+  { to: '/about', label: 'nav.about', id: 4 }
+]
 
 // Load navigation items based on page status
 const loadNavigationItems = async () => {
   try {
     const response = await $fetch('/api/public/navigation')
     if (response.success && response.data && response.data.menus && response.data.menus.main) {
-      // Filter only published pages
+      // Filter only published pages and remove duplicates by URL
       const publishedPages = response.data.menus.main.filter(item => item.page_status === 'published')
-      navItems.value = publishedPages.map(item => ({
-        to: item.url,
-        label: `nav.${item.page_slug || 'home'}`,
-        id: item.page_id
-      }))
+      
+      // Create a map to track unique URLs and prevent duplicates
+      const uniqueItems = new Map()
+      publishedPages.forEach(item => {
+        if (!uniqueItems.has(item.url)) {
+          uniqueItems.set(item.url, {
+            to: item.url,
+            label: `nav.${item.page_slug || 'home'}`,
+            id: item.page_id
+          })
+        }
+      })
+      
+      navItems.value = Array.from(uniqueItems.values())
+    } else {
+      // Use default navigation if no data from API
+      navItems.value = defaultNavItems
     }
   } catch (error) {
     // Fallback to default navigation if API fails
     console.warn('Could not load navigation from API, using default:', error)
-    // Keep the default navItems as fallback
+    navItems.value = defaultNavItems
   }
 }
 

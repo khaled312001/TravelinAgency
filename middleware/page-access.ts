@@ -5,6 +5,9 @@ export default defineNuxtRouteMiddleware(async (to) => {
     return
   }
 
+  // Normalize path (handle both with and without trailing slash)
+  const normalizedPath = to.path.endsWith('/') ? to.path : to.path + '/'
+
   // Define page routes and their slugs
   const pageRoutes = {
     '/': '',
@@ -14,8 +17,8 @@ export default defineNuxtRouteMiddleware(async (to) => {
   }
 
   // Check if current route is a main page
-  const slug = pageRoutes[to.path]
-  if (!slug) {
+  const slug = pageRoutes[normalizedPath]
+  if (slug === undefined) {
     return // Not a main page, allow access
   }
 
@@ -49,10 +52,11 @@ export default defineNuxtRouteMiddleware(async (to) => {
       }
     }
   } catch (error) {
-    // If there's any error, show 404
-    throw createError({
-      statusCode: 404,
-      statusMessage: 'Page Not Found'
-    })
+    // Only throw 404 if it's already a createError, otherwise allow access
+    if (error.statusCode === 404) {
+      throw error
+    }
+    // For other errors (like file reading issues), allow access
+    console.warn('Page access middleware error:', error)
   }
 })
