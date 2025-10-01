@@ -25,70 +25,28 @@ Copy-Item -Path ".output\public\*" -Destination "godaddy-ready\" -Recurse -Force
 
 # Step 4: Copy server files
 Write-Host "📋 Copying server files..." -ForegroundColor Yellow
-Copy-Item -Path "api-handler.php" -Destination "godaddy-ready\" -Force
-Copy-Item -Path "page-statuses.json" -Destination "godaddy-ready\" -Force
-Copy-Item -Path "clean-navigation.sql" -Destination "godaddy-ready\" -Force
+
+# Copy the complete API handler (not the basic one)
+if (Test-Path "godaddy-ready\api-handler-complete.php") {
+    Copy-Item -Path "godaddy-ready\api-handler-complete.php" -Destination "godaddy-ready\api-handler.php" -Force
+    Write-Host "✅ Using complete API handler" -ForegroundColor Green
+}
+
+Copy-Item -Path "page-statuses.json" -Destination "godaddy-ready\" -Force -ErrorAction SilentlyContinue
+Copy-Item -Path "clean-navigation.sql" -Destination "godaddy-ready\" -Force -ErrorAction SilentlyContinue
 Copy-Item -Path "public\.htaccess" -Destination "godaddy-ready\" -Force
-Copy-Item -Path "mysql" -Destination "godaddy-ready\" -Recurse -Force
+Copy-Item -Path "mysql" -Destination "godaddy-ready\" -Recurse -Force -ErrorAction SilentlyContinue
 
-# Step 5: Update api-handler.php with production config
-Write-Host "⚙️  Updating database config..." -ForegroundColor Yellow
+# Copy test files
+Copy-Item -Path "godaddy-ready\test-connection.php" -Destination "godaddy-ready\" -Force -ErrorAction SilentlyContinue
 
-$apiHandlerContent = @"
-<?php
-header('Access-Control-Allow-Origin: *');
-header('Access-Control-Allow-Methods: GET, POST, PUT, DELETE, OPTIONS');
-header('Access-Control-Allow-Headers: Content-Type, Authorization');
-header('Content-Type: application/json');
+# Step 5: Update database credentials in API handler
+Write-Host "⚙️  Note: Update database credentials in api-handler.php" -ForegroundColor Yellow
 
-if (`$_SERVER['REQUEST_METHOD'] === 'OPTIONS') {
-    http_response_code(200);
-    exit();
+# If api-handler-complete.php doesn't exist yet, copy it from godaddy-ready
+if (-not (Test-Path "godaddy-ready\api-handler.php")) {
+    Write-Host "⚠️  api-handler.php not found, you'll need to copy api-handler-complete.php manually" -ForegroundColor Yellow
 }
-
-// ⚠️ تحديث بيانات قاعدة البيانات من cPanel
-`$host = 'localhost';
-`$dbname = 'YOUR_DATABASE_NAME';  // ⚠️ حدّث هذا
-`$username = 'YOUR_DATABASE_USER';  // ⚠️ حدّث هذا
-`$password = 'YOUR_DATABASE_PASSWORD';  // ⚠️ حدّث هذا
-
-try {
-    `$pdo = new PDO("mysql:host=`$host;dbname=`$dbname;charset=utf8mb4", `$username, `$password);
-    `$pdo->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
-    `$pdo->setAttribute(PDO::ATTR_DEFAULT_FETCH_MODE, PDO::FETCH_ASSOC);
-} catch(PDOException `$e) {
-    http_response_code(500);
-    echo json_encode(['success' => false, 'error' => 'Database connection failed']);
-    exit();
-}
-
-// Get request path
-`$path = isset(`$_GET['path']) ? `$_GET['path'] : (isset(`$_SERVER['PATH_INFO']) ? trim(`$_SERVER['PATH_INFO'], '/') : '');
-`$method = `$_SERVER['REQUEST_METHOD'];
-
-// Read JSON input for POST/PUT
-`$input = json_decode(file_get_contents('php://input'), true) ?? [];
-
-// Router
-if (strpos(`$path, 'packages') === 0) {
-    if (`$method === 'GET' && !strpos(`$path, '/')) {
-        // GET /api/packages
-        `$stmt = `$pdo->query("SELECT * FROM packages WHERE status = 'published' ORDER BY created_at DESC");
-        echo json_encode(['success' => true, 'data' => `$stmt->fetchAll()]);
-    }
-} elseif (strpos(`$path, 'public/navigation') === 0) {
-    // Navigation API
-    `$stmt = `$pdo->query("SELECT * FROM cms_navigation WHERE menu_name = 'main' AND is_active = 1 ORDER BY order_index");
-    `$navItems = `$stmt->fetchAll();
-    echo json_encode(['success' => true, 'data' => ['menus' => ['main' => `$navItems]]]);
-} else {
-    http_response_code(404);
-    echo json_encode(['success' => false, 'error' => 'Endpoint not found']);
-}
-?>
-"@
-
-Set-Content -Path "godaddy-ready\api-handler.php" -Value $apiHandlerContent -Encoding UTF8
 
 # Step 6: Create README
 Write-Host "📝 Creating instructions..." -ForegroundColor Yellow
@@ -112,25 +70,37 @@ $readmeContent = @"
 2. تحديث بيانات قاعدة البيانات:
    ✓ افتح api-handler.php
    ✓ حدّث:
-     - YOUR_DATABASE_NAME
-     - YOUR_DATABASE_USER
-     - YOUR_DATABASE_PASSWORD
+     - `$dbname = 'travel';
+     - `$username = 'travel';
+     - `$password = 'support@Passord123';
 
-3. رفع الملفات:
+3. رفع الملفات (مهم جداً - يشمل الصور!):
    ✓ امسح كل شيء من public_html/
    ✓ ارفع كل محتويات مجلد godaddy-ready/
-   ✓ تأكد من رفع .htaccess
+   ✓ تأكد من رفع:
+     - .htaccess
+     - مجلد images/ بالكامل (150+ صورة)
+     - api-handler.php
+   ✓ انتظر حتى تنتهي عملية الرفع (قد تستغرق وقتاً)
 
-4. اختبر الموقع:
+4. اختبر الصور:
+   ✓ https://worldtripagency.com/images/home/logo/WonderlandLogo.svg
+   ✓ https://worldtripagency.com/images/packages/imported/package-5.jpeg
+   ✓ يجب أن تعمل الصور بدون 404
+
+5. اختبر الموقع:
    ✓ https://worldtripagency.com/
    ✓ https://worldtripagency.com/packages/
    ✓ https://worldtripagency.com/custom-package/
    ✓ https://worldtripagency.com/about/
 
-5. إنشاء حساب المدير:
+6. إنشاء حساب المدير:
    ✓ ارفع الملف create-admin.php (موجود في mysql/)
    ✓ افتحه في المتصفح مرة واحدة
    ✓ احذفه بعد الاستخدام!
+
+⚠️ ملاحظة هامة:
+إذا لم تظهر الصور، راجع ملف GODADDY_IMAGE_FIX.md
 
 ==============================================
 "@
@@ -142,10 +112,21 @@ Write-Host "✅ Build completed successfully!" -ForegroundColor Green
 Write-Host ""
 Write-Host "📦 الملفات جاهزة في مجلد: godaddy-ready/" -ForegroundColor Cyan
 Write-Host ""
+Write-Host "🖼️  يتضمن الآن:" -ForegroundColor Yellow
+Write-Host "  ✓ جميع الصور (150+ صورة)" -ForegroundColor Green
+Write-Host "  ✓ جميع صفحات HTML" -ForegroundColor Green
+Write-Host "  ✓ ملفات JavaScript و CSS" -ForegroundColor Green
+Write-Host "  ✓ API Handler الكامل" -ForegroundColor Green
+Write-Host ""
 Write-Host "🎯 الخطوات التالية:" -ForegroundColor Yellow
 Write-Host "  1. افتح مجلد godaddy-ready/" -ForegroundColor White
-Write-Host "  2. افتح api-handler.php وحدّث بيانات قاعدة البيانات" -ForegroundColor White
-Write-Host "  3. ارفع كل الملفات إلى public_html/ في GoDaddy" -ForegroundColor White
-Write-Host "  4. اتبع التعليمات في README.txt" -ForegroundColor White
+Write-Host "  2. تأكد من نسخ api-handler-complete.php إلى api-handler.php" -ForegroundColor White
+Write-Host "  3. حدّث بيانات قاعدة البيانات في api-handler.php" -ForegroundColor White
+Write-Host "  4. ارفع كل الملفات إلى public_html/ في GoDaddy" -ForegroundColor White
+Write-Host "  5. انتظر حتى تكتمل عملية رفع الصور" -ForegroundColor White
+Write-Host ""
+Write-Host "📖 للمزيد من التفاصيل، راجع:" -ForegroundColor Cyan
+Write-Host "  - README.txt (في godaddy-ready/)" -ForegroundColor White
+Write-Host "  - GODADDY_IMAGE_FIX.md" -ForegroundColor White
 Write-Host ""
 
