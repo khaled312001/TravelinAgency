@@ -192,15 +192,25 @@ try {
         $admin = $stmt->fetch();
 
         if ($admin && password_verify($password, $admin['password_hash'])) {
-            // Login successful
+            // Login successful - generate a simple token
+            $token = base64_encode(json_encode([
+                'user_id' => $admin['id'],
+                'email' => $admin['email'],
+                'exp' => time() + (60 * 60 * 24) // 24 hours
+            ]));
+            
             echo json_encode([
                 'success' => true,
-                'message' => 'Login successful',
-                'user' => [
-                    'id' => $admin['id'],
-                    'email' => $admin['email'],
-                    'name' => $admin['name'],
-                    'role' => $admin['role']
+                'data' => [
+                    'user' => [
+                        'id' => $admin['id'],
+                        'email' => $admin['email'],
+                        'name' => $admin['name'],
+                        'role' => $admin['role'],
+                        'permissions' => [],
+                        'status' => 'active'
+                    ],
+                    'token' => $token
                 ]
             ]);
             exit();
