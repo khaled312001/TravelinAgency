@@ -177,10 +177,39 @@ try {
     
     // Auth endpoints - return appropriate responses for static site
     if ($path === 'auth/login' && $method === 'POST') {
-        // For static site, auth is not available
-        http_response_code(404);
-        echo json_encode(['success' => false, 'error' => 'Authentication not available on static hosting']);
-        exit();
+        $email = $input['email'] ?? '';
+        $password = $input['password'] ?? '';
+
+        if (empty($email) || empty($password)) {
+            http_response_code(400);
+            echo json_encode(['success' => false, 'error' => 'Email and password are required']);
+            exit();
+        }
+
+        // Check admin_users table
+        $stmt = $pdo->prepare("SELECT id, email, password_hash, name, role FROM admin_users WHERE email = ? LIMIT 1");
+        $stmt->execute([$email]);
+        $admin = $stmt->fetch();
+
+        if ($admin && password_verify($password, $admin['password_hash'])) {
+            // Login successful
+            echo json_encode([
+                'success' => true,
+                'message' => 'Login successful',
+                'user' => [
+                    'id' => $admin['id'],
+                    'email' => $admin['email'],
+                    'name' => $admin['name'],
+                    'role' => $admin['role']
+                ]
+            ]);
+            exit();
+        } else {
+            // Invalid credentials
+            http_response_code(401);
+            echo json_encode(['success' => false, 'error' => 'Invalid email or password']);
+            exit();
+        }
     }
     
     if ($path === 'auth/session' && $method === 'GET') {
