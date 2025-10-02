@@ -17,6 +17,8 @@
     "build-no-postinstall": "NODE_OPTIONS='--max-old-space-size=512' npm install --legacy-peer-deps --ignore-scripts && NODE_OPTIONS='--max-old-space-size=512' npx nuxt prepare && NODE_OPTIONS='--max-old-space-size=512' npx nuxt build",
     "build-direct": "NODE_OPTIONS='--max-old-space-size=512' npm install --legacy-peer-deps --ignore-scripts && NODE_OPTIONS='--max-old-space-size=512' ./node_modules/.bin/nuxt prepare && NODE_OPTIONS='--max-old-space-size=512' ./node_modules/.bin/nuxt build",
     "build-node": "NODE_OPTIONS='--max-old-space-size=512' npm install --legacy-peer-deps --ignore-scripts && NODE_OPTIONS='--max-old-space-size=512' node ./node_modules/.bin/nuxt prepare && NODE_OPTIONS='--max-old-space-size=512' node ./node_modules/.bin/nuxt build",
+    "build-chmod": "NODE_OPTIONS='--max-old-space-size=512' npm install --legacy-peer-deps --ignore-scripts && chmod +x ./node_modules/.bin/nuxt && NODE_OPTIONS='--max-old-space-size=512' ./node_modules/.bin/nuxt prepare && NODE_OPTIONS='--max-old-space-size=512' ./node_modules/.bin/nuxt build",
+    "build-bash": "NODE_OPTIONS='--max-old-space-size=512' npm install --legacy-peer-deps --ignore-scripts && bash -c 'NODE_OPTIONS=\"--max-old-space-size=512\" ./node_modules/.bin/nuxt prepare' && bash -c 'NODE_OPTIONS=\"--max-old-space-size=512\" ./node_modules/.bin/nuxt build'",
     "render-start": "node .output/server/index.mjs",
     "render-setup": "npm run build && node scripts/setup-render.js",
     "postinstall": "echo 'Skipping postinstall for Render'",
