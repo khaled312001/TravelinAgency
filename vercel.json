@@ -1,13 +1,5 @@
 {
-  "functions": {
-    "api/hello.js": {
-      "runtime": "nodejs18.x"
-    }
-  },
-  "rewrites": [
-    {
-      "source": "/(.*)",
-      "destination": "/public/$1"
-    }
-  ]
+  "buildCommand": "npm run build",
+  "installCommand": "npm install",
+  "framework": "nuxtjs"
 }

@@ -2,7 +2,7 @@
 const productionURL = 'https://worldtripagency.com'
 export default defineNuxtConfig({
   devtools: { enabled: false },
-  ssr: false,
+  ssr: true,
   
   devServer: {
     port: 3000,
@@ -165,13 +165,13 @@ export default defineNuxtConfig({
   ],
 
   nitro: {
-    preset: 'static',
+    preset: 'vercel',
     compressPublicAssets: {
       gzip: true,
       brotli: true
     },
     minify: true,
-    // Improve static asset handling for GoDaddy
+    // Improve static asset handling
     publicAssets: [
       {
         dir: 'public',
