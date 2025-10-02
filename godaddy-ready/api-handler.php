@@ -350,6 +350,54 @@ switch ($apiPath) {
         }
         break;
         
+    case '/contact-messages':
+        if ($requestMethod === 'GET') {
+            // Return empty array for now (in production, this would query the database)
+            echo json_encode([
+                'success' => true,
+                'data' => []
+            ]);
+        } else {
+            http_response_code(405);
+            echo json_encode(['error' => 'Method not allowed']);
+        }
+        break;
+        
+    case '/seo':
+        if ($requestMethod === 'GET') {
+            // Return default SEO settings
+            echo json_encode([
+                'success' => true,
+                'data' => [
+                    'title' => 'Wonder Land Travel Agency',
+                    'description' => 'Your trusted travel partner',
+                    'keywords' => 'travel, tourism, packages, destinations'
+                ]
+            ]);
+        } else {
+            http_response_code(405);
+            echo json_encode(['error' => 'Method not allowed']);
+        }
+        break;
+        
+    case '/admin/stats':
+        if ($requestMethod === 'GET') {
+            // Return dummy stats for now
+            echo json_encode([
+                'success' => true,
+                'data' => [
+                    'totalPackages' => 32,
+                    'totalDestinations' => 20,
+                    'totalMessages' => 0,
+                    'totalUsers' => 1
+                ]
+            ]);
+        } else {
+            http_response_code(405);
+            echo json_encode(['error' => 'Method not allowed']);
+        }
+        break;
+        
     default:
         http_response_code(404);
         echo json_encode([
@@ -364,7 +412,10 @@ switch ($apiPath) {
                 '/auth/me',
                 '/auth/verify',
                 '/cms/site-settings',
-                '/contact-messages'
+                '/contact',
+                '/contact-messages',
+                '/seo',
+                '/admin/stats'
             ]
         ]);
         break;
