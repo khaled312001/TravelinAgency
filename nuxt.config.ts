@@ -164,6 +164,21 @@ export default defineNuxtConfig({
     '~/plugins/initial-direction.server.ts'
   ],
 
+  vite: {
+    build: {
+      // Optimize for memory usage
+      chunkSizeWarningLimit: 1000,
+      rollupOptions: {
+        output: {
+          manualChunks: {
+            vendor: ['vue', 'vue-router'],
+            utils: ['@vueuse/core']
+          }
+        }
+      }
+    }
+  },
+
   nitro: {
     preset: 'node-server',
     compressPublicAssets: {
@@ -171,6 +186,10 @@ export default defineNuxtConfig({
       brotli: true
     },
     minify: true,
+    // Optimize for memory usage
+    experimental: {
+      wasm: false
+    },
     // Improve static asset handling
     publicAssets: [
       {
