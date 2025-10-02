@@ -10,28 +10,13 @@ export default defineNuxtConfig({
   },
 
   modules: [
-    '@nuxt/image',
     '@nuxtjs/tailwindcss',
     '@vueuse/nuxt',
-    '@nuxtjs/i18n',
-    'nuxt-aos',
-    '@nuxt/icon'
+    '@nuxtjs/i18n'
   ],
 
-  icon: {
-    collections: ['material-symbols']
-  },
 
   
-  // AOS configuration
-  aos: {
-    offset: 15,
-    duration: 600,
-    easing: 'ease-out-quad',
-    once: true,
-    delay: 100,
-    mirror: true
-  },
 
   runtimeConfig: {
     // MySQL Database configuration
