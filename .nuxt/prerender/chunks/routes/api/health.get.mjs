@@ -1,0 +1,2 @@
+import{defineEventHandler as e}from"file://F:/TravelinAgency/node_modules/h3/dist/index.mjs";const t=e((async e=>{try{const{executeQuery:e}=await import("../../_/database.mjs");return await e("SELECT 1 as test"),{status:"healthy",timestamp:(new Date).toISOString(),environment:"prerender",database:"connected"}}catch(e){return console.error("Health check failed:",e),{status:"unhealthy",timestamp:(new Date).toISOString(),environment:"prerender",database:"disconnected",error:{message:e.message,code:e.code}}}}));export{t as default};
+//# sourceMappingURL=health.get.mjs.map
