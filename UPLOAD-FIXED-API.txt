@@ -1,0 +1,78 @@
+═══════════════════════════════════════════════════════════
+UPLOAD FIXED API HANDLER TO GODADDY
+═══════════════════════════════════════════════════════════
+
+TWO FILES NEED TO BE UPLOADED:
+
+1. FIXED API HANDLER (Critical - fixes login!)
+   Local: F:\TravelinAgency\godaddy-ready\api-handler.php
+   Upload to: ~/public_html/api/api-handler.php
+
+2. DESTINATION IMAGES (Optional - fixes destination image display)
+   Local: F:\TravelinAgency\godaddy-ready\images\destinations\
+   Upload to: ~/public_html/images/destinations/
+
+═══════════════════════════════════════════════════════════
+WHAT WAS FIXED IN api-handler.php:
+═══════════════════════════════════════════════════════════
+
+✅ /auth/login endpoint now returns:
+   { success: true, data: { user: {...}, token: "..." } }
+   (Frontend expects this structure)
+
+✅ Login now sets auth-token cookie automatically
+
+✅ /auth/me endpoint now:
+   - Returns correct structure: { success: true, data: { user: {...} } }
+   - Checks cookie for token (not just Authorization header)
+
+✅ Added missing user fields:
+   - full_name
+   - phone
+   - permissions
+   - status
+
+═══════════════════════════════════════════════════════════
+UPLOAD STEPS (Using SFTP):
+═══════════════════════════════════════════════════════════
+
+1. Open FileZilla/WinSCP
+
+2. Connect to GoDaddy:
+   - Host: [your GoDaddy server]
+   - Port: 22
+   - Username: t3w5k5yx5yrp
+   - Password: [your SSH password]
+
+3. Navigate on server to: public_html/api/
+
+4. BACKUP first (optional but recommended):
+   - Right-click on api-handler.php
+   - Rename to: api-handler.php.backup
+
+5. Upload new file:
+   - From local: F:\TravelinAgency\godaddy-ready\api-handler.php
+   - To server: public_html/api/api-handler.php
+
+6. Optional - Upload destination images:
+   - From local: F:\TravelinAgency\godaddy-ready\images\destinations\
+   - To server: public_html/images/destinations/
+
+═══════════════════════════════════════════════════════════
+TEST LOGIN:
+═══════════════════════════════════════════════════════════
+
+After uploading, try logging in again with:
+
+Email: admin@wonderland.com
+Password: admin123
+
+OR
+
+Email: admin@worldtripagency.com  
+Password: admin123
+
+It should work now! 🎉
+
+═══════════════════════════════════════════════════════════
+

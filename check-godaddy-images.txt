@@ -1,0 +1,47 @@
+SSH COMMANDS TO CHECK IMAGES ON GODADDY
+==========================================
+
+1. Connect to GoDaddy via SSH
+2. Run these commands:
+
+# Check if destinations folder exists
+cd ~/public_html/images
+ls -la
+
+# Check destinations subdirectories
+ls -la destinations/
+ls -la destinations/global/
+ls -la destinations/saudi/
+
+# Count files
+find destinations -type f | wc -l
+
+Expected: ~40-50 destination image files
+Currently: Probably 0 or folder doesn't exist
+
+---
+
+TO FIX:
+1. Use SFTP to upload from:
+   F:\TravelinAgency\godaddy-ready\images\destinations\
+   
+2. Upload TO:
+   ~/public_html/images/destinations/
+   
+3. Make sure to upload ALL subdirectories:
+   - destinations/global/Barcelona/
+   - destinations/global/Cairo/
+   - destinations/global/Georgia/
+   - destinations/global/Istanbul/
+   - destinations/global/London/
+   - destinations/global/Madrid/
+   - destinations/global/Morocco/
+   - destinations/global/Paris/
+   - destinations/global/SharmElSheikh/
+   - destinations/global/Thailand/
+   - destinations/saudi/alula/
+   - destinations/saudi/jeddah/
+   - destinations/saudi/Makkah/
+   - destinations/saudi/Medina/
+   - destinations/saudi/riyadh/
+

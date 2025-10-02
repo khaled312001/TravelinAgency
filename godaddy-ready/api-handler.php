@@ -198,14 +198,30 @@ switch ($apiPath) {
             
             if (isset($validCredentials[$input['email']]) && $validCredentials[$input['email']] === $input['password']) {
                 $token = generateToken(1, $input['email']);
+                
+                // Set token in HTTP-only cookie
+                setcookie('auth-token', $token, [
+                    'expires' => time() + (60 * 60 * 24 * 7), // 7 days
+                    'path' => '/',
+                    'httponly' => true,
+                    'secure' => isset($_SERVER['HTTPS']) && $_SERVER['HTTPS'] === 'on',
+                    'samesite' => 'Lax'
+                ]);
+                
                 echo json_encode([
                     'success' => true,
-                    'token' => $token,
-                    'user' => [
-                        'id' => 1,
-                        'name' => 'Admin User',
-                        'email' => $input['email'],
-                        'role' => 'admin'
+                    'data' => [
+                        'token' => $token,
+                        'user' => [
+                            'id' => 1,
+                            'name' => 'Admin User',
+                            'email' => $input['email'],
+                            'role' => 'admin',
+                            'full_name' => 'Admin User',
+                            'phone' => null,
+                            'permissions' => [],
+                            'status' => 'active'
+                        ]
                     ]
                 ]);
             } else {
@@ -232,18 +248,29 @@ switch ($apiPath) {
             $headers = getallheaders();
             $token = null;
             
+            // Check Authorization header first
             if (isset($headers['Authorization'])) {
                 $token = str_replace('Bearer ', '', $headers['Authorization']);
+            }
+            // Then check cookie
+            elseif (isset($_COOKIE['auth-token'])) {
+                $token = $_COOKIE['auth-token'];
             }
             
             if ($token && verifyToken($token)) {
                 $payload = verifyToken($token);
                 echo json_encode([
                     'success' => true,
-                    'user' => [
-                        'id' => $payload['user_id'],
-                        'email' => $payload['email'],
-                        'role' => 'admin'
+                    'data' => [
+                        'user' => [
+                            'id' => $payload['user_id'],
+                            'email' => $payload['email'],
+                            'role' => 'admin',
+                            'full_name' => 'Admin User',
+                            'phone' => null,
+                            'permissions' => [],
+                            'status' => 'active'
+                        ]
                     ]
                 ]);
             } else {
