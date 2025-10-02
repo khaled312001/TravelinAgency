@@ -1,8 +1,11 @@
 export default defineNuxtRouteMiddleware(async (to) => {
   // Only check specific pages that need access control
   if (to.path === '/about' || to.path === '/about/') {
+    // Skip this check on client-side to avoid build warnings
+    if (process.client) return
+    
     try {
-      // Read page status from file asynchronously
+      // Read page status from file asynchronously (server-side only)
       const fs = await import('fs/promises')
       const path = await import('path')
       const statusFile = path.join(process.cwd(), 'page-statuses.json')
