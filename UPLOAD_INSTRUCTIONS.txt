@@ -1,0 +1,76 @@
+﻿
+========================================================================================
+ GODADDY UPLOAD - STEP BY STEP
+========================================================================================
+
+ COMPLETED:
+  - Built project locally
+  - 161 images ready
+  - 10 HTML files ready  
+  - 280 JS/CSS files ready
+  - GoDaddy public_html backed up and cleaned
+
+========================================================================================
+ NEXT STEPS:
+========================================================================================
+
+STEP 1: Download WinSCP
+------------------------
+https://winscp.net/eng/download.php
+
+STEP 2: Connect to GoDaddy
+---------------------------
+Open WinSCP and enter:
+  Host: sg2plzcpnl508590.prod.sin2.secureserver.net
+  Port: 22
+  Protocol: SFTP
+  Username: t3w5k5yx5yrp
+  Password: [your password]
+
+STEP 3: Upload Files
+--------------------
+LEFT PANEL:  Navigate to F:\TravelinAgency\godaddy-ready\
+RIGHT PANEL: Navigate to /home/t3w5k5yx5yrp/public_html/
+
+SELECT ALL files from LEFT (godaddy-ready)
+DRAG & DROP to RIGHT (public_html)
+
+WAIT for upload to complete (5-10 minutes for 161 images)
+
+STEP 4: Update Database Credentials (IMPORTANT!)
+-------------------------------------------------
+After upload, using cPanel File Manager or WinSCP:
+
+Open: public_html/api-handler.php
+
+Find these lines (around line 58-61, 130-133, etc.):
+  \ = 'u123456789_worldtrip';
+  \ = 'u123456789_admin';
+  \ = 'Admin123!';
+
+Replace ALL instances with YOUR GoDaddy credentials:
+  \ = 'travel';
+  \ = 'travel';
+  \ = 'support@Passord123';
+
+SAVE the file.
+
+STEP 5: Test Your Website
+--------------------------
+Test images:
+  https://worldtripagency.com/images/home/logo/WonderlandLogo.svg
+  https://worldtripagency.com/images/packages/imported/package-5.jpeg
+
+Test API:
+  https://worldtripagency.com/api/packages
+
+Test pages:
+  https://worldtripagency.com/
+  https://worldtripagency.com/packages/
+  https://worldtripagency.com/custom-package/
+  https://worldtripagency.com/about/
+
+========================================================================================
+ DONE! Your website should now be fully working with all images!
+========================================================================================
+
