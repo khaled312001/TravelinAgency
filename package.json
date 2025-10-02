@@ -11,6 +11,7 @@
     "render-build-safe": "npm install --legacy-peer-deps --ignore-scripts && npx nuxt prepare && npm run build",
     "build-render": "NODE_OPTIONS='--max-old-space-size=4096' npm ci --legacy-peer-deps && npx nuxt prepare && NODE_OPTIONS='--max-old-space-size=4096' npx nuxt build",
     "build-memory": "NODE_OPTIONS='--max-old-space-size=2048' npm ci --legacy-peer-deps && NODE_OPTIONS='--max-old-space-size=2048' npx nuxt prepare && NODE_OPTIONS='--max-old-space-size=2048' npx nuxt build",
+    "build-minimal": "NODE_OPTIONS='--max-old-space-size=1024' npm ci --legacy-peer-deps --production && NODE_OPTIONS='--max-old-space-size=1024' npx nuxt prepare && NODE_OPTIONS='--max-old-space-size=1024' npx nuxt build",
     "render-start": "node .output/server/index.mjs",
     "render-setup": "npm run build && node scripts/setup-render.js",
     "postinstall": "npx nuxt prepare",

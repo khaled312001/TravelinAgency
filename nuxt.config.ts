@@ -13,8 +13,6 @@ export default defineNuxtConfig({
     '@nuxt/image',
     '@nuxtjs/tailwindcss',
     '@vueuse/nuxt',
-    'nuxt-schema-org',
-    'nuxt-simple-sitemap',
     '@nuxtjs/i18n',
     'nuxt-aos',
     '@nuxt/icon'
@@ -167,12 +165,13 @@ export default defineNuxtConfig({
   vite: {
     build: {
       // Optimize for memory usage
-      chunkSizeWarningLimit: 1000,
+      chunkSizeWarningLimit: 500,
       rollupOptions: {
         output: {
           manualChunks: {
             vendor: ['vue', 'vue-router'],
-            utils: ['@vueuse/core']
+            utils: ['@vueuse/core'],
+            ui: ['@nuxt/icon', 'nuxt-aos']
           }
         }
       }
