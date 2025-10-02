@@ -5,3 +5,4 @@ export default defineEventHandler(() => {
     environment: process.env.NODE_ENV || 'unknown'
   }
 })
+

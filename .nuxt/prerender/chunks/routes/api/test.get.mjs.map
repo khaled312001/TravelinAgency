@@ -1,1 +1,0 @@
-{"version":3,"file":"test.get.mjs","sources":["../../../../../server/api/test.get.js"],"sourcesContent":null,"names":["test_get","defineEventHandler","async","event","status","message","timestamp","Date","toISOString","environment"],"mappings":"6FAAA,MAAAA,EAAAC,GAAAC,MAAAC,IACA,CACAC,OAAA,KACAC,QAAA,iBACAC,WAAA,IAAAC,MAAAC,cACAC,YAAA"}

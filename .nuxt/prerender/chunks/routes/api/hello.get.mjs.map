@@ -1,1 +1,0 @@
-{"version":3,"file":"hello.get.mjs","sources":["../../../../../server/api/hello.get.ts"],"sourcesContent":null,"names":["hello_get","defineEventHandler","message"],"mappings":"6FAAA,MAAAA,EAAAC,GAAA,KACA,CAAAC,QAAA"}

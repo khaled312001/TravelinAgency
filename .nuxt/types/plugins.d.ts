@@ -30,7 +30,6 @@ type NuxtAppInjections =
   InjectionType<typeof import("../../plugins/floating-vue")> &
   InjectionType<typeof import("../../plugins/packages-auto-refresh.client")> &
   InjectionType<typeof import("../../plugins/settings.client")> &
-  InjectionType<typeof import("../../node_modules/nuxt/dist/pages/runtime/plugins/prerender.server.js")> &
   InjectionType<typeof import("../../node_modules/nuxt-schema-org/dist/runtime/app/plugins/i18n/init.js")>
 
 declare module '#app' {

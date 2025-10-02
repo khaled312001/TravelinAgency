@@ -1,2 +1,0 @@
-import{defineEventHandler as e,setCookie as s,createError as t}from"file://F:/TravelinAgency/node_modules/h3/dist/index.mjs";const o=e((async e=>{try{return s(e,"auth-token","",{httpOnly:!0,secure:!1,sameSite:"lax",maxAge:0,path:"/"}),{success:!0,message:"تم تسجيل الخروج بنجاح"}}catch(e){throw console.error("Logout API error:",e),t({statusCode:500,statusMessage:"حدث خطأ أثناء تسجيل الخروج"})}}));export{o as default};
-//# sourceMappingURL=logout.post.mjs.map

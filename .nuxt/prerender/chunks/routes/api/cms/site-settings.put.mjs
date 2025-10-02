@@ -1,2 +1,0 @@
-import{defineEventHandler as s,readBody as e,createError as t}from"file://F:/TravelinAgency/node_modules/h3/dist/index.mjs";const a=s((async s=>{try{const t=await e(s);return console.log("Settings to save:",t),{success:!0,message:"Settings updated successfully"}}catch(s){throw t({statusCode:500,statusMessage:"Failed to update site settings: "+s.message})}}));export{a as default};
-//# sourceMappingURL=site-settings.put.mjs.map

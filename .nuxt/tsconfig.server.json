@@ -94,9 +94,6 @@
       "#build": [
         "./"
       ],
-      "#build/*": [
-        "./*"
-      ],
       "#internal/nuxt/paths": [
         "../node_modules/nuxt/dist/core/runtime/nitro/utils/paths"
       ],
