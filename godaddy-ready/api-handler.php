@@ -323,6 +323,49 @@ switch ($apiPath) {
         }
         break;
         
+    case '/public/navigation':
+        if ($requestMethod === 'GET') {
+            echo json_encode([
+                'success' => true,
+                'data' => [
+                    [
+                        'id' => 1,
+                        'title' => 'Home',
+                        'url' => '/',
+                        'order' => 1
+                    ],
+                    [
+                        'id' => 2,
+                        'title' => 'Destinations',
+                        'url' => '/destinations',
+                        'order' => 2
+                    ],
+                    [
+                        'id' => 3,
+                        'title' => 'Packages',
+                        'url' => '/packages',
+                        'order' => 3
+                    ],
+                    [
+                        'id' => 4,
+                        'title' => 'About',
+                        'url' => '/about',
+                        'order' => 4
+                    ],
+                    [
+                        'id' => 5,
+                        'title' => 'Contact',
+                        'url' => '/contact',
+                        'order' => 5
+                    ]
+                ]
+            ]);
+        } else {
+            http_response_code(405);
+            echo json_encode(['error' => 'Method not allowed']);
+        }
+        break;
+        
     case '/contact-messages':
         if ($requestMethod === 'POST') {
             $input = json_decode(file_get_contents('php://input'), true);
@@ -407,6 +450,7 @@ switch ($apiPath) {
                 '/test',
                 '/packages',
                 '/destinations',
+                '/public/navigation',
                 '/auth/login',
                 '/auth/logout',
                 '/auth/me',
