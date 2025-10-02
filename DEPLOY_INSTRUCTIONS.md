@@ -1,149 +1,225 @@
 # 🚀 Proper GoDaddy Deployment Instructions
 
-## Current Situation
-- ✅ Images folder exists on server
-- ❌ Entire source repository is in public_html/ (wrong!)
-- ✅ Logo is accessible
+## ⚠️ IMPORTANT: Build LOCALLY, Upload to GoDaddy
 
-## What You Need to Do
+The build process **MUST** run on your Windows computer, NOT on GoDaddy server.
 
-### Step 1: Build Locally (Windows Computer)
+---
 
+## Step 1: Build Locally (On Your Windows Computer)
+
+### Open PowerShell in Project Folder
 ```powershell
-# Make sure you're in the project directory
 cd F:\TravelinAgency
+```
 
-# Build the project
-npm run generate
-
-# Prepare deployment folder
+### Run Build Script
+```powershell
 .\build-for-godaddy.ps1
 ```
 
-This creates `godaddy-ready/` folder with only the necessary files.
+This will:
+- ✅ Install dependencies
+- ✅ Build the Nuxt project
+- ✅ Copy all files including **150+ images**
+- ✅ Create `godaddy-ready/` folder with everything
+
+### Verify Build
+```powershell
+# Check that images were copied
+Get-ChildItem -Path "godaddy-ready\images" -Recurse -File | Measure-Object | Select-Object Count
+
+# Should show ~150+ files
+```
 
 ---
 
-### Step 2: Upload to GoDaddy
+## Step 2: Clean Up GoDaddy Server (Remove Source Code)
 
-#### Option A: Using File Manager (Easiest)
+You currently have the entire GitHub repo on GoDaddy, which is causing conflicts.
 
-1. **Login to GoDaddy cPanel**
-2. **Go to File Manager**
-3. **Navigate to public_html/**
-4. **Create a backup folder first:**
-   - Create folder: `backup_old`
-   - Move everything to `backup_old/` (just in case)
-5. **Delete old files from public_html/** (or move to backup)
-6. **Upload ALL files from `godaddy-ready/` folder**
-7. **Wait for upload to complete**
-
-#### Option B: Using SSH/Terminal (Current Method)
-
-On GoDaddy terminal:
-
+### Connect to GoDaddy via SSH
 ```bash
-# Go to parent directory
-cd ~
+ssh t3w5k5yx5yrp@sg2plzcpnl508590.prod.sin2.secureserver.net
+```
 
-# Backup current public_html
-mv public_html public_html_backup_$(date +%Y%m%d)
+### Run This Cleanup Script
+```bash
+cd ~/public_html
 
-# Create new public_html
+# Backup current directory
+mv public_html public_html_backup_$(date +%Y%m%d_%H%M%S)
+
+# Create fresh public_html
 mkdir public_html
 
-# Now you need to upload files from your local godaddy-ready/ folder
-# Use SCP or SFTP from your Windows computer
+# Now you have a clean slate ready for upload
 ```
 
-Then on your **Windows computer** (use Git Bash or PowerShell with OpenSSH):
+---
 
+## Step 3: Upload Built Files to GoDaddy
+
+### Option A: Using FileZilla (Recommended)
+1. Open FileZilla
+2. Host: `sftp://sg2plzcpnl508590.prod.sin2.secureserver.net`
+3. Username: `t3w5k5yx5yrp`
+4. Port: `22`
+5. Connect
+
+6. Navigate to: `/home/t3w5k5yx5yrp/public_html/`
+7. Upload **ALL** contents from your local `F:\TravelinAgency\godaddy-ready\` folder
+
+**IMPORTANT:** Make sure to upload:
+- ✅ All `.html` files
+- ✅ `_nuxt/` folder (JavaScript/CSS)
+- ✅ `images/` folder (**150+ images** - this will take time!)
+- ✅ `.htaccess` file
+- ✅ `api-handler.php`
+- ✅ `page-statuses.json`
+
+### Option B: Using cPanel File Manager
+1. Go to: https://sg2plzcpnl508590.prod.sin2.secureserver.net:2083
+2. Login with your credentials
+3. Open "File Manager"
+4. Navigate to `public_html/`
+5. Click "Upload"
+6. Drag and drop all files from `F:\TravelinAgency\godaddy-ready\`
+7. **Wait** for the upload to complete (especially images!)
+
+---
+
+## Step 4: Update Database Credentials
+
+### Edit `api-handler.php` on GoDaddy
+1. In cPanel File Manager or via FTP
+2. Open `public_html/api-handler.php`
+3. Update these lines (around line 10-14):
+```php
+$host = 'localhost';
+$dbname = 'travel';      // ⚠️ Update from cPanel
+$username = 'travel';    // ⚠️ Update from cPanel
+$password = 'support@Passord123';  // ⚠️ Update from cPanel
+```
+
+4. Save the file
+
+---
+
+## Step 5: Test the Website
+
+### Test Images
+```
+https://worldtripagency.com/images/home/logo/WonderlandLogo.svg
+https://worldtripagency.com/images/packages/imported/package-5.jpeg
+```
+Should load without 404 errors
+
+### Test API
+```
+https://worldtripagency.com/api/packages
+https://worldtripagency.com/api/cms/site-settings?public_only=true
+```
+Should return JSON data
+
+### Test Pages
+```
+https://worldtripagency.com/
+https://worldtripagency.com/packages/
+https://worldtripagency.com/custom-package/
+https://worldtripagency.com/about/
+```
+All should work with images
+
+---
+
+## ❌ Common Mistakes
+
+### DON'T do this:
 ```bash
-# Upload files via SCP
-scp -r godaddy-ready/* username@yourserver.com:~/public_html/
+# ❌ Don't run on GoDaddy server
+cd ~/public_html
+git clone https://github.com/khaled312001/TravelinAgency.git
+npm run generate  # ❌ No Node.js on GoDaddy
 ```
 
-Replace:
-- `username` with your GoDaddy SSH username
-- `yourserver.com` with your server hostname
+### ✅ DO this instead:
+```powershell
+# ✅ Run on YOUR Windows computer
+cd F:\TravelinAgency
+.\build-for-godaddy.ps1
+
+# Then upload godaddy-ready/ folder contents to GoDaddy
+```
 
 ---
 
-### Step 3: Verify Deployment
+## 📊 Expected File Structure on GoDaddy
 
-Test these URLs:
-
-1. **Homepage:** https://worldtripagency.com/
-2. **Logo:** https://worldtripagency.com/images/home/logo/WonderlandLogo.svg
-3. **Package Image:** https://worldtripagency.com/images/packages/imported/package-5.jpeg
-4. **Packages Page:** https://worldtripagency.com/packages/
-
-All should work without 404 errors!
-
----
-
-## Quick Test First
-
-Before doing all this, **test if your website is already working:**
-
-1. Visit: https://worldtripagency.com/
-2. Check if images show on the homepage
-3. Visit: https://worldtripagency.com/packages/
-4. Check if package images show
-
-**If everything works** → No need to redeploy!
-**If images don't show** → Follow the deployment steps above.
-
----
-
-## Important Notes
-
-- ✅ Built files go to `public_html/` (from `godaddy-ready/`)
-- ❌ Don't clone the Git repository to `public_html/`
-- ✅ Only upload contents of `.output/public/` + API files
-- ❌ Don't upload `node_modules/`, `components/`, `pages/`, etc.
-
----
-
-## What Should Be in public_html/
-
-Correct structure:
+After upload, your `public_html/` should look like:
 ```
 public_html/
 ├── .htaccess
+├── index.html
+├── 200.html
+├── 404.html
 ├── api-handler.php
+├── page-statuses.json
+├── _nuxt/
+│   ├── *.js
+│   └── *.css
 ├── images/
 │   ├── home/
-│   ├── packages/
-│   └── destinations/
-├── _nuxt/
-├── index.html
-├── about/
+│   ├── destinations/
+│   └── packages/
 ├── packages/
+│   └── index.html
 ├── custom-package/
-└── ... (other built files)
+│   └── index.html
+└── about/
+    └── index.html
 ```
 
-Wrong structure (what you have now):
-```
-public_html/
-├── node_modules/     ❌
-├── components/       ❌
-├── pages/            ❌
-├── .nuxt/            ❌
-├── app.vue           ❌
-├── nuxt.config.ts    ❌
-└── ... (source files) ❌
-```
+**NO source code files:** No `.vue`, `.ts`, `nuxt.config.ts`, `package.json`, etc.
 
 ---
 
-## TL;DR
+## 🆘 Troubleshooting
 
-1. Test if website works: https://worldtripagency.com/
-2. If images show → You're done!
-3. If images don't show:
-   - Build locally: `npm run generate && .\build-for-godaddy.ps1`
-   - Upload `godaddy-ready/` to GoDaddy
-   - Replace everything in `public_html/`
+### Images Still 404
+- Check if `images/` folder was uploaded completely
+- Verify file permissions (755 for folders, 644 for files)
+- Check `.htaccess` is present
 
+### API Returns 500
+- Check database credentials in `api-handler.php`
+- Run `test-connection.php` to verify database
+- Check PHP error logs in cPanel
+
+### Pages Show 404
+- Verify `.htaccess` is uploaded
+- Check that `index.html` exists in root
+
+---
+
+## ✅ Final Checklist
+
+- [ ] Built project locally with `.\build-for-godaddy.ps1`
+- [ ] Verified `godaddy-ready/images/` has 150+ files
+- [ ] Cleaned up GoDaddy `public_html/`
+- [ ] Uploaded all files from `godaddy-ready/` to `public_html/`
+- [ ] Waited for complete upload (especially images)
+- [ ] Updated database credentials in `api-handler.php`
+- [ ] Tested image URLs directly
+- [ ] Tested API endpoints
+- [ ] Tested all 4 main pages
+
+---
+
+## 📞 Need Help?
+
+If images still don't show after following all steps, check:
+1. Was the build successful? Check for errors in PowerShell
+2. Were images copied to `godaddy-ready/images/`?
+3. Were images uploaded to GoDaddy `public_html/images/`?
+4. Are file permissions correct? (755/644)
