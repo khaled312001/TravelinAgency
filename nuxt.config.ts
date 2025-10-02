@@ -190,6 +190,12 @@ export default defineNuxtConfig({
           'Expires': '0'
         }
       }
+    },
+    // Ensure proper module resolution
+    esbuild: {
+      options: {
+        target: 'es2020'
+      }
     }
   },
 
