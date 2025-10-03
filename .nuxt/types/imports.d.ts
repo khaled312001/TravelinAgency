@@ -260,6 +260,7 @@ declare global {
   const useI18n: typeof import('../../node_modules/vue-i18n/dist/vue-i18n')['useI18n']
   const useId: typeof import('vue')['useId']
   const useIdle: typeof import('@vueuse/core')['useIdle']
+  const useImage: typeof import('../../node_modules/@nuxt/image/dist/runtime/composables')['useImage']
   const useImageLoader: typeof import('../../composables/useImageLoader')['useImageLoader']
   const useImages: typeof import('../../composables/useImages')['useImages']
   const useInfiniteScroll: typeof import('@vueuse/core')['useInfiniteScroll']
@@ -734,6 +735,7 @@ declare module 'vue' {
     readonly useI18n: UnwrapRef<typeof import('../../node_modules/vue-i18n/dist/vue-i18n')['useI18n']>
     readonly useId: UnwrapRef<typeof import('vue')['useId']>
     readonly useIdle: UnwrapRef<typeof import('@vueuse/core')['useIdle']>
+    readonly useImage: UnwrapRef<typeof import('../../node_modules/@nuxt/image/dist/runtime/composables')['useImage']>
     readonly useImageLoader: UnwrapRef<typeof import('../../composables/useImageLoader')['useImageLoader']>
     readonly useImages: UnwrapRef<typeof import('../../composables/useImages')['useImages']>
     readonly useInfiniteScroll: UnwrapRef<typeof import('@vueuse/core')['useInfiniteScroll']>
